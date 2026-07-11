@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/FIRECONF.html", "destination": "/", "permanent": true }
+  ]
+}
