@@ -217,11 +217,11 @@
   #info .ibody{animation:cardfade .34s ease both;}
   #info li .sub{display:block;padding-left:14px;font-size:12.5px;color:#ccd9ea;margin-top:2px;line-height:1.25;letter-spacing:.2px;}
 
-  #compass{position:absolute;left:20px;bottom:20px;z-index:10;width:46px;height:46px;border-radius:50%;background:var(--glass);backdrop-filter:blur(14px);
-    border:1px solid var(--line);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;animation:rise .7s .12s cubic-bezier(.2,.8,.2,1) both;}
-  #needle{position:relative;width:8px;height:30px;}
-  #needle .n{position:absolute;left:50%;top:0;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:20px solid var(--navy);}
-  #needle .s{position:absolute;left:50%;bottom:0;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:12px solid #b9bcc4;}
+  #compass{position:absolute;left:20px;bottom:20px;z-index:10;width:46px;height:46px;border-radius:50%;background:#141415;
+    border:1px solid rgba(242,240,236,0.12);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;animation:rise .7s .12s cubic-bezier(.2,.8,.2,1) both;}
+  #needle{position:relative;width:14px;height:26px;}
+  #needle .n{position:absolute;left:50%;top:0;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:13px solid #ea3d2f;}
+  #needle .s{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:13px solid #f2f0ec;}
   #compass .nlbl{position:absolute;left:50%;top:5px;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;color:#fff;pointer-events:none;}
 
   #hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;color:var(--ink-soft);
@@ -362,7 +362,7 @@
   .shSoc .hdl{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;flex:1;}
   .shSocLbl{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:1.8px;margin:12px 0 2px;}
   /* map-mode: lift existing UI above the tab bar */
-  body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;zoom:1;}
+  body.shellMap #compass{left:20px;top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;zoom:1;}
   body.shellMap #hint{bottom:calc(22px + var(--sh-barH) + var(--sh-safe));}
   #schedBtn{display:none;} /* replaced by the Schedule tab */
   @media (max-width:520px){
@@ -371,7 +371,7 @@
   /* ---- 3a Campus map screen ---- */
   body.shellMap #infoWrap{display:none;}                                /* legacy card replaced by chips + venue sheet */
   body.shellMap #tools{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);zoom:1;} /* defeat legacy Safari .sz 0.75 zoom that shifted these into the chips */
-  body.shellMap #tools .btn{padding:11px;border-radius:13px;}
+  body.shellMap #tools .btn{padding:11px;border-radius:13px;background:#141415;color:#f2f0ec;border:1px solid rgba(242,240,236,0.12);}
   body.shellMap #tools .btn svg{width:17px;height:17px;}
   body.shellMap #nightBtn.on{background:#3a3a40;color:#fff;border-color:transparent;}
   #shMapTop,#shMapHead,#shMapChips,#shMapSheet{display:none;}
@@ -548,7 +548,7 @@
   </div>
 
   <div id="ftPin"><span class="ftHint">Click for list of vendors</span><div class="pinInner"><div class="pinBody"><div class="pinIcon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v4M8 3v4M10 3v4M6 7h4M8 7v14"/><ellipse cx="16.5" cy="6.4" rx="2.6" ry="3.6"/><path d="M16.5 10v11"/></svg></div></div></div></div>
-  <div id="compass"><div id="needle"><div class="n"></div></div></div>
+  <div id="compass"><div id="needle"><div class="n"></div><div class="s"></div></div></div>
   <div id="hint">DRAG TO TILT &amp; TURN · PINCH OR DOUBLE-TAP TO ZOOM · TAP A BUILDING FOR DETAILS</div>
 
   <div id="schedModal" aria-hidden="true">
