@@ -443,7 +443,7 @@
   #shellInstall.open #shInstArrow.on{display:block;animation:fcFadeIn 0.4s ease 0.55s both;}
   #shInstArrow .nudge{animation:fcNudge 0.9s ease-in-out 0.95s infinite alternate;}
   /* arrow aims past the page edge at the browser's real ... menu, bottom right */
-  #shellInstall.vRight #shInstArrow{right:70px;bottom:calc(4px + var(--sh-safe));}
+  #shellInstall.vRight #shInstArrow{right:80px;bottom:calc(4px + var(--sh-safe));}
   @media (prefers-reduced-motion:reduce){
     #shInstArrow .nudge{animation:none;}
     #shellInstall.open .instBg,#shellInstall.open .instCard,#shellInstall.open #shInstArrow.on{animation-duration:0.01s;animation-delay:0s;}
@@ -2591,8 +2591,10 @@
       if(isIOS()){ /* iOS — Safari and Chrome share the same bottom-right ... menu: coach mark (4a) */
         b.innerHTML='<div class="fcSteps">'+
           '<div class="fcStep"><span class="n">1</span><span class="t">Tap the '+chip+' menu at the <b style="color:#fff;font-weight:700;">bottom right</b></span></div>'+
-          '<div class="fcStep"><span class="n">2</span><span class="t">Choose <b style="color:#fff;font-weight:700;">Add to Home Screen</b> <span style="color:var(--sh-dim);">(or &ldquo;Install app&rdquo;)</span></span></div>'+
-          '<div class="fcStep"><span class="n">3</span><span class="t">Open <b style="color:#fff;font-weight:700;">FIRE CONF</b> from your home screen</span></div>'+
+          '<div class="fcStep"><span class="n">2</span><span class="t">Tap <b style="color:#fff;font-weight:700;">Share</b> '+
+          '<svg width="13" height="16" viewBox="0 0 24 30" fill="none" stroke="#4da3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V3M6.5 8.5L12 3l5.5 5.5"/><path d="M5 13v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V13"/></svg></span></div>'+
+          '<div class="fcStep"><span class="n">3</span><span class="t">Choose <b style="color:#fff;font-weight:700;">Add to Home Screen</b> <span style="color:var(--sh-dim);">(or &ldquo;Install app&rdquo;)</span></span></div>'+
+          '<div class="fcStep"><span class="n">4</span><span class="t">Open <b style="color:#fff;font-weight:700;">FIRE CONF</b> from your home screen</span></div>'+
           '</div>';
         setCoach(true);
         return;
