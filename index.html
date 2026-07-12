@@ -2213,13 +2213,13 @@
       upcoming.forEach(function(s){
         var k=s.t+'|'+s.title;
         if(seen[k]){ seen[k].count++; s.evts.forEach(function(e){ if(seen[k].evtSet.indexOf(e)<0) seen[k].evtSet.push(e); }); }
-        else { seen[k]={ t:s.t, title:s.title, evtLabel:s.evtLabel, count:1, evtSet:s.evts.slice() }; merged.push(seen[k]); }
+        else { seen[k]={ t:s.t, title:s.title, evtLabel:s.evtLabel, color:s.color, count:1, evtSet:s.evts.slice() }; merged.push(seen[k]); }
       });
       merged.slice(0,3).forEach(function(s){
         var evtLabel = s.count>=3 ? 'All venues'
           : (s.evtLabel || (s.evtSet.length>1 ? s.evtSet.join(' & ').replace(' Week','') : s.evtSet[0]));
         var title = s.count>1 && /Session$/.test(s.title) ? s.title+'s' : s.title;
-        var upColor = /Water Day/.test(s.title)?'#3f8dff' : /Field Day/.test(s.title)?'#ff5c1f' : /Burn Your Junk/.test(s.title)?'#ff4d4d' : /Preservice/.test(s.title)?'#9a9aa2' : '';
+        var upColor = /Water Day|Field Day|Burn Your Junk|Preservice/.test(s.title) ? (s.color||'') : '';
         var row=document.createElement('div'); row.className='shRow'; row.style.cursor='pointer';
         row.innerHTML='<span style="flex:1;min-width:0;"><span style="display:block;font-size:11px;color:var(--sh-mut);">'+s.t+' &middot; '+esc(evtLabel)+'</span>'+
           '<span style="display:block;font-weight:700;font-size:14.5px;margin-top:2px;'+(upColor?'color:'+upColor+';':'')+'">'+esc(title)+'</span></span>'+
@@ -2268,10 +2268,10 @@
           var liveNow=isToday(selDay) && m>=s.m && m<s.end;
           var row=document.createElement('div'); row.className='shSess';
           var tIcon='', tColor='';
-          if(/Water Day/.test(s.title)){ tColor='#3f8dff'; tIcon='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex:0 0 auto;"><path d="M12 2.5c3.6 4.2 6 7.4 6 10.5a6 6 0 0 1-12 0c0-3.1 2.4-6.3 6-10.5z"/></svg>'; }
-          if(/Field Day/.test(s.title)){ tColor='#ff5c1f'; tIcon='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex:0 0 auto;"><path d="M5 3v18h2v-7h4.6l1 2H19V6h-5.4l-1-2H5z"/></svg>'; }
-          if(/Preservice/.test(s.title)) tColor='#9a9aa2';
-          if(/Burn Your Junk/.test(s.title)){ tColor='#ff4d4d'; } if(/Burn Your Junk/.test(s.title)) tIcon='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" style="flex:0 0 auto;"><path d="M12 2c0 0 .9 2.4.9 4.3 0 1.8-1.2 3.2-3 3.2s-3-1.4-3-3.2l0-.3C5.3 8 4.5 10.3 4.5 12.5 4.5 16.6 7.9 20 12 20s7.5-3.4 7.5-7.5C19.5 7.7 16.6 4.2 12 2zM12 17.5c-1.6 0-2.9-1.2-2.9-2.8 0-1.4 1-2.5 2.5-2.8 1.6-.3 3.2-1.1 4.1-2.3.4 1.2.6 2.4.6 3.6 0 2.4-1.9 4.3-4.3 4.3z"/></svg>';
+          if(/Water Day/.test(s.title)){ tIcon='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex:0 0 auto;"><path d="M12 2.5c3.6 4.2 6 7.4 6 10.5a6 6 0 0 1-12 0c0-3.1 2.4-6.3 6-10.5z"/></svg>'; }
+          if(/Field Day/.test(s.title)){ tIcon='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex:0 0 auto;"><path d="M5 3v18h2v-7h4.6l1 2H19V6h-5.4l-1-2H5z"/></svg>'; }
+          if(/Burn Your Junk/.test(s.title)) tIcon='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" style="flex:0 0 auto;"><path d="M12 2c0 0 .9 2.4.9 4.3 0 1.8-1.2 3.2-3 3.2s-3-1.4-3-3.2l0-.3C5.3 8 4.5 10.3 4.5 12.5 4.5 16.6 7.9 20 12 20s7.5-3.4 7.5-7.5C19.5 7.7 16.6 4.2 12 2zM12 17.5c-1.6 0-2.9-1.2-2.9-2.8 0-1.4 1-2.5 2.5-2.8 1.6-.3 3.2-1.1 4.1-2.3.4 1.2.6 2.4.6 3.6 0 2.4-1.9 4.3-4.3 4.3z"/></svg>';
+          if(tIcon || /Preservice/.test(s.title)) tColor=s.color;
           var lead = tIcon ? '<span style="width:14px;display:flex;justify-content:center;flex:0 0 auto;color:'+(tColor||'#fff')+';">'+tIcon+'</span>'
                            : '<span style="width:14px;display:flex;justify-content:center;flex:0 0 auto;"><span class="shDot" style="width:8px;height:8px;background:'+s.color+';"></span></span>';
           row.innerHTML=lead+
