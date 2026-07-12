@@ -2084,10 +2084,10 @@
         s.push({t:'4:00 PM',m:960,end:1020,title:'Registration — Groups',venue:'Opening Night · Youth & Kids check-in',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
         s.push({t:'5:00 PM',m:1020,end:1140,title:'Registration — General',venue:'Opening Night · Youth & Kids check-in',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
       }
-      if(day===14) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Wear clothes to get wet & dirty — bring a towel',evts:['Youth Week'],groups:['youth'],color:BLU,route:null});
-      if(day===15) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Kids Tent & Studio B · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
+      if(day===14) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Please bring a modest bathing suit and towel.',evts:['Youth Week'],groups:['youth'],color:BLU,route:null});
+      if(day===15) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Please bring a modest bathing suit and towel.',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
       if(day===16) s.push({t:'2:00 PM',m:840,end:960,title:'Field Day — Crucible Obstacle Course',venue:'Wear clothes to get wet & dirty — towel recommended',evts:['Youth Week'],groups:['youth'],color:BLU,route:null});
-      if(day===17) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Kids Tent & Studio B · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
+      if(day===17) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Please bring a modest bathing suit and towel.',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
       if(day>=13&&day<=17) s.push({t:'5:00 PM',m:1020,end:1140,title:'Preservice Activities',venue:'River Pavilion & Kids Tent',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
       s.push({t:'7:00 PM',m:1140,end:1320,title:'Evening Session',venue:'Main Sanctuary · doors 6:00 PM',evts:['Campmeeting'],groups:['camp'],color:ORG,route:'main',approxEnd:true});
       if(day>=13&&day<=17){
@@ -2265,9 +2265,12 @@
         rows.forEach(function(s){
           var liveNow=isToday(selDay) && m>=s.m && m<s.end;
           var row=document.createElement('div'); row.className='shSess';
+          var tIcon='';
+          if(/Water Day/.test(s.title)) tIcon='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex:0 0 auto;"><path d="M12 2.5c3.6 4.2 6 7.4 6 10.5a6 6 0 0 1-12 0c0-3.1 2.4-6.3 6-10.5z"/></svg>';
+          if(/Burn Your Junk/.test(s.title)) tIcon='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" style="flex:0 0 auto;"><path d="M12 2c0 0 .9 2.4.9 4.3 0 1.8-1.2 3.2-3 3.2s-3-1.4-3-3.2l0-.3C5.3 8 4.5 10.3 4.5 12.5 4.5 16.6 7.9 20 12 20s7.5-3.4 7.5-7.5C19.5 7.7 16.6 4.2 12 2zM12 17.5c-1.6 0-2.9-1.2-2.9-2.8 0-1.4 1-2.5 2.5-2.8 1.6-.3 3.2-1.1 4.1-2.3.4 1.2.6 2.4.6 3.6 0 2.4-1.9 4.3-4.3 4.3z"/></svg>';
           row.innerHTML='<span class="shDot" style="width:8px;height:8px;background:'+s.color+';"></span>'+
             '<span class="tm">'+s.t+'</span>'+(liveNow?'<span class="shNowTag">NOW</span>':'')+
-            '<span style="flex:1;min-width:0;"><span style="display:block;font-weight:700;font-size:14px;">'+esc(s.title)+'</span>'+
+            '<span style="flex:1;min-width:0;"><span style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:14px;">'+tIcon+'<span>'+esc(s.title)+'</span></span>'+
             '<span style="display:block;font-size:11.5px;color:var(--sh-mut);margin-top:1px;">'+esc(s.venue)+'</span></span>'+
             (s.route?'<button class="shMapBtn">Map</button>':'');
           var mb=row.querySelector('.shMapBtn');
