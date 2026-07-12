@@ -35,9 +35,11 @@
   .ghost{flex:0 0 auto;background:none;border:1.5px solid #34343a;color:var(--lt);font-weight:600;
     font-size:12.5px;padding:8px 16px;border-radius:18px;}
   .seg{display:flex;gap:6px;}
-  .seg button{flex:1;background:var(--card);border:1.5px solid #34343a;border-radius:12px;padding:11px 0;
+  .seg button{flex:1;background:var(--card);border:1.5px solid #34343a;border-radius:12px;padding:9px 0 8px;
     font-size:12.5px;color:var(--lt);font-weight:600;}
   .seg button.on{border-color:var(--org);background:rgba(255,92,31,.10);color:#fff;}
+  .seg .cnt{display:block;font-family:ui-monospace,monospace;font-size:15px;font-weight:800;color:var(--dim);margin-top:3px;}
+  .seg button.on .cnt{color:var(--org);}
   .hcard{background:var(--card);border-radius:14px;padding:13px 15px;margin-bottom:10px;}
   .hcard .ht{font-weight:700;font-size:14.5px;}
   .hcard .hb{font-size:13px;color:var(--lt);margin-top:4px;line-height:1.5;white-space:pre-wrap;}
@@ -70,12 +72,12 @@
     <label for="url">Link (opens when tapped — optional)</label>
     <input id="url" placeholder="/schedule" value="/">
 
-    <label>Send to</label>
+    <label>Send to (subscribed devices)</label>
     <div class="seg" id="segGroup">
-      <button type="button" data-g="all" class="on">Everyone</button>
-      <button type="button" data-g="youth">Youth</button>
-      <button type="button" data-g="kids">Kids</button>
-      <button type="button" data-g="admin">Team</button>
+      <button type="button" data-g="all" class="on">Everyone<span class="cnt" id="cntAll">–</span></button>
+      <button type="button" data-g="youth">Youth<span class="cnt" id="cntYouth">–</span></button>
+      <button type="button" data-g="kids">Kids<span class="cnt" id="cntKids">–</span></button>
+      <button type="button" data-g="admin">Team<span class="cnt" id="cntAdmin">–</span></button>
     </div>
 
     <div class="row">
@@ -111,14 +113,32 @@
       'background:var(--bg);font-family:ui-monospace,monospace;font-size:18px;font-weight:700;letter-spacing:4px;color:#ff6b6b;">NO ACCESS</div>';
   }
 
+  function setCounts(c){
+    if(!c) return;
+    document.getElementById('cntAll').textContent=(c.all!=null?c.all:'–');
+    document.getElementById('cntYouth').textContent=(c.youth!=null?c.youth:'–');
+    document.getElementById('cntKids').textContent=(c.kids!=null?c.kids:'–');
+    document.getElementById('cntAdmin').textContent=(c.admin!=null?c.admin:'–');
+  }
+  function refreshCounts(){
+    if(!idToken) return;
+    fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({action:'send',idToken:idToken,dryRun:true})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(j.ok) setCounts(j.counts); })
+      .catch(function(){});
+  }
+
   function onCred(resp){
     idToken=resp.credential;
     // Verify against the server-side allowlist before revealing anything.
     fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
         body:JSON.stringify({action:'send',idToken:idToken,dryRun:true})})
-      .then(function(r){ return r.json().then(function(j){ return r.status===200 && j.ok; }); })
-      .then(function(allowed){
+      .then(function(r){ return r.json().then(function(j){ return {allowed:r.status===200&&j.ok, j:j}; }); })
+      .then(function(res){
+        var allowed=res.allowed;
         if(!allowed) return denyAccess();
+        setCounts(res.j.counts);
         try{
           var claims=JSON.parse(atob(idToken.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
           document.getElementById('who').textContent='Signed in as '+claims.email;
@@ -168,11 +188,12 @@
         if(!res.j.ok) return show('Error ('+res.status+'): '+(res.j.error||'unknown'), false);
         if(res.j.dryRun){
           var c=res.j.counts||{};
-          return show('✓ '+res.j.total+' device(s) in '+GROUP_LABEL[res.j.group||'all']+'  ·  storage: '+res.j.mode
-            +'\nEveryone '+(c.all||0)+'  ·  Youth '+(c.youth||0)+'  ·  Kids '+(c.kids||0)+'  ·  Team '+(c.admin||0), true);
+          setCounts(c);
+          return show('✓ '+res.j.total+' device(s) in '+GROUP_LABEL[res.j.group||'all']+'  ·  storage: '+res.j.mode, true);
         }
         show('✓ Sent: '+res.j.sent+' ('+GROUP_LABEL[res.j.group||'all']+')  ·  Failed: '+res.j.failed
           +'  ·  Pruned dead: '+res.j.pruned+'  ·  Total: '+res.j.total, true);
+        refreshCounts();
       })
       .catch(function(e){ show('Network error: '+e, false); });
   }
