@@ -2417,7 +2417,7 @@
       if(!swReg) return;
       swReg.pushManager.getSubscription().then(function(sub){
         if(sub){
-          return fetch('/api/subscribe',{method:'DELETE',headers:{'content-type':'application/json'},body:JSON.stringify({endpoint:sub.endpoint})})
+          return fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'unsubscribe',endpoint:sub.endpoint})})
             .catch(function(){}).then(function(){ return sub.unsubscribe(); })
             .then(function(){ trackEvent('alerts_off'); refreshAlertsRow(); });
         }
@@ -2425,7 +2425,7 @@
           if(perm!=='granted'){ refreshAlertsRow(); return; }
           return swReg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:b64ToU8(VAPID_PUB) })
             .then(function(newSub){
-              return fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({subscription:newSub})})
+              return fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'subscribe',subscription:newSub})})
                 .then(function(r){ if(!r.ok) throw new Error('subscribe api failed'); trackEvent('alerts_on'); refreshAlertsRow(); });
             });
         });

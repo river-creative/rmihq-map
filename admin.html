@@ -60,7 +60,7 @@
   keyEl.addEventListener('change',function(){ localStorage.setItem('fc_admin_key',keyEl.value.trim()); });
 
   function post(dryRun){
-    var payload={ key:keyEl.value.trim(), dryRun:!!dryRun,
+    var payload={ action:'send', key:keyEl.value.trim(), dryRun:!!dryRun,
       title:document.getElementById('title').value.trim(),
       body:document.getElementById('body').value.trim(),
       url:document.getElementById('url').value.trim()||'/' };
@@ -68,7 +68,7 @@
     if(!dryRun && (!payload.title||!payload.body)){ show('Title and message are required.', false); return; }
     if(!dryRun && !confirm('Send this alert to ALL subscribed devices now?')) return;
     show((dryRun?'Counting…':'Sending…'), true);
-    fetch('/api/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)})
+    fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {status:r.status, j:j}; }); })
       .then(function(res){
         if(!res.j.ok) return show('Error ('+res.status+'): '+(res.j.error||'unknown'), false);
