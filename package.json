@@ -1,0 +1,9 @@
+{
+  "name": "fire-conf-map",
+  "private": true,
+  "description": "Fire Conference 2026 event app — static shell + push notification API",
+  "dependencies": {
+    "@vercel/blob": "^1.1.1",
+    "web-push": "^3.6.7"
+  }
+}

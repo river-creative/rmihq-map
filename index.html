@@ -12,6 +12,10 @@
 </script>
 <title>Fire Conference 2026 | Drs. Rodney & Adonica Howard-Browne | Tampa, FL</title>
 <meta name="apple-mobile-web-app-title" content="FIRE CONF">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#141415">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- Google tag (gtag.js) — Fire Conference GA4 property -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVBXMKZHM4"></script>
 <script>
@@ -596,6 +600,7 @@
     </div>
     <div class="shScroll" style="padding-top:18px;position:relative;">
       <div style="display:flex;flex-direction:column;gap:8px;">
+        <button class="shMenuRow" id="shMenuAlerts"><span>Event Alerts<span id="shAlertsState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Checking&hellip;</span></span><svg id="shAlertsBell" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sh-mut);flex:0 0 auto;"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
         <a class="shMenuRow" href="https://revival.com" target="_blank" rel="noopener"><span>Revival.com</span><span style="color:var(--sh-mut);font-size:14px;">&nearr;</span></a>
         <button class="shMenuRow" id="shMenuFaq"><span>FAQs</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
         <button class="shMenuRow" id="shMenuVendors"><span>Vendors</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
@@ -2384,6 +2389,49 @@
     window.__shellVenue=function(key){ if(VENUES[key]){ clearRoute(); openSheet(key); } };
     window.__shellVendors=function(){ showTab('vendors'); };
 
+    /* ---- PWA: service worker + push alerts ---- */
+    var VAPID_PUB='BC1IM4Rg5zroB2B2saiVV7mWHSHnKGLMkwsnNFwF4-XDR51se01R48Ceh8cZAauATX5lqzW0uuDmoeGQ_uRDaec';
+    function b64ToU8(s){ var p='='.repeat((4-s.length%4)%4); var b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));
+      var a=new Uint8Array(b.length); for(var i=0;i<b.length;i++) a[i]=b.charCodeAt(i); return a; }
+    var swReg=null;
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/sw.js').then(function(r){ swReg=r; refreshAlertsRow(); })
+        .catch(function(){ refreshAlertsRow(); });
+    }
+    function isStandalone(){ return (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone===true; }
+    function isIOS(){ return /iP(hone|ad|od)/.test(navigator.userAgent); }
+    function pushSupported(){ return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+    function setAlertsState(txt,on){ var s=el('shAlertsState'); if(!s) return; s.textContent=txt;
+      var bell=el('shAlertsBell'); if(bell) bell.style.color=on?'var(--sh-org)':'var(--sh-mut)'; }
+    function refreshAlertsRow(){
+      if(!pushSupported()){ setAlertsState(isIOS()&&!isStandalone()?'Add to Home Screen to enable':'Not supported on this browser'); return; }
+      if(Notification.permission==='denied'){ setAlertsState('Blocked — allow in Settings'); return; }
+      if(!swReg){ setAlertsState('Loading…'); return; }
+      swReg.pushManager.getSubscription().then(function(sub){ setAlertsState(sub?'On — session alerts enabled':'Off — tap to enable', !!sub); });
+    }
+    function toggleAlerts(){
+      if(!pushSupported()){
+        if(isIOS()&&!isStandalone()) alert('To get event alerts:\n\n1. Tap the Share button\n2. Tap "Add to Home Screen"\n3. Open FIRE CONF from your home screen\n4. Turn on Event Alerts in the Menu');
+        return;
+      }
+      if(!swReg) return;
+      swReg.pushManager.getSubscription().then(function(sub){
+        if(sub){
+          return fetch('/api/subscribe',{method:'DELETE',headers:{'content-type':'application/json'},body:JSON.stringify({endpoint:sub.endpoint})})
+            .catch(function(){}).then(function(){ return sub.unsubscribe(); })
+            .then(function(){ trackEvent('alerts_off'); refreshAlertsRow(); });
+        }
+        return Notification.requestPermission().then(function(perm){
+          if(perm!=='granted'){ refreshAlertsRow(); return; }
+          return swReg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:b64ToU8(VAPID_PUB) })
+            .then(function(newSub){
+              return fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({subscription:newSub})})
+                .then(function(r){ if(!r.ok) throw new Error('subscribe api failed'); trackEvent('alerts_on'); refreshAlertsRow(); });
+            });
+        });
+      }).catch(function(e){ setAlertsState('Error — try again'); });
+    }
+
     /* ---- analytics: virtual page views + key events ---- */
     function track(path,title){ if(window.gtag) gtag('event','page_view',{ page_path:path, page_title:title||('FIRE CONF · '+path.replace('/','')) }); }
     function trackEvent(name,params){ if(window.gtag) gtag('event',name,params||{}); }
@@ -2511,6 +2559,7 @@
     el('shFullSched').addEventListener('click', function(){ showTab('schedule'); });
     el('shMenuVendors').addEventListener('click', function(){ showTab('vendors'); });
     el('shMenuFaq').addEventListener('click', function(){ openFaq(); });
+    el('shMenuAlerts').addEventListener('click', function(){ toggleAlerts(); });
     el('shFaqClose').addEventListener('click', function(){ closeFaq(); });
     /* block Safari pinch-zoom on every page except the map (the 3D map and the
        booth-layout iframe handle their own pinch gestures) */
