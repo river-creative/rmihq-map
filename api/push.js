@@ -1,9 +1,33 @@
 // Single push endpoint (one function so the in-memory fallback shares state):
 //   POST { action:"subscribe",   subscription }          -> store subscription
 //   POST { action:"unsubscribe", endpoint }              -> remove subscription
-//   POST { action:"send", key, title, body, url?, dryRun? } -> broadcast (PUSH_ADMIN_KEY gated)
+//   POST { action:"send", key|idToken, title, body, url?, dryRun? } -> broadcast (PUSH_ADMIN_KEY / allowlist gated)
+//   POST { action:"history", key|idToken }                  -> log of sent broadcasts (same gate)
 const webpush = require('web-push');
-const { saveSub, removeSub, listSubs, pruneSub } = require('./_store');
+const { saveSub, removeSub, listSubs, pruneSub, logSend, listLog } = require('./_store');
+
+// auth: static admin key (programmatic) OR a Google ID token from an allowed account
+async function authSender(body) {
+  const adminKey = process.env.PUSH_ADMIN_KEY;
+  if (adminKey && body.key === adminKey) return { authed: true, sender: 'API key' };
+  if (!body.idToken) return { authed: false };
+  try {
+    const info = await (await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(body.idToken))).json();
+    const email = String(info.email || '').toLowerCase();
+    const okToken = info.aud === process.env.GOOGLE_CLIENT_ID && info.email_verified === 'true';
+    const allowEmails = (process.env.PUSH_ALLOWED_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+    let authed;
+    if (allowEmails.length) {
+      authed = okToken && allowEmails.includes(email);   // strict allowlist when configured
+    } else {
+      const domains = (process.env.PUSH_ALLOWED_DOMAINS || 'revival.com').split(',').map(s => s.trim().toLowerCase());
+      authed = okToken && domains.includes(email.split('@')[1] || '');
+    }
+    return { authed, sender: email };
+  } catch (e) {
+    return { authed: false };
+  }
+}
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
@@ -35,22 +59,7 @@ module.exports = async (req, res) => {
       if (!adminKey || !pub || !priv) {
         return res.status(503).json({ ok: false, error: 'push env vars not configured' });
       }
-      // auth: static admin key (programmatic) OR a Google ID token from an allowed domain
-      let authed = body.key === adminKey;
-      if (!authed && body.idToken) {
-        try {
-          const info = await (await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(body.idToken))).json();
-          const email = String(info.email || '').toLowerCase();
-          const okToken = info.aud === process.env.GOOGLE_CLIENT_ID && info.email_verified === 'true';
-          const allowEmails = (process.env.PUSH_ALLOWED_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-          if (allowEmails.length) {
-            authed = okToken && allowEmails.includes(email);   // strict allowlist when configured
-          } else {
-            const domains = (process.env.PUSH_ALLOWED_DOMAINS || 'revival.com').split(',').map(s => s.trim().toLowerCase());
-            authed = okToken && domains.includes(email.split('@')[1] || '');
-          }
-        } catch (e) { authed = false; }
-      }
+      const { authed, sender } = await authSender(body);
       if (!authed) return res.status(401).json({ ok: false, error: 'unauthorized' });
 
       const { subs, mode } = await listSubs();
@@ -77,7 +86,25 @@ module.exports = async (req, res) => {
           else { failed++; if (errors.length < 3) errors.push(code || String(e && e.message).slice(0, 80)); }
         }
       }));
+      // Log the broadcast; a logging failure must never fail the send itself.
+      try {
+        await logSend({
+          ts: new Date().toISOString(),
+          sender,
+          title: String(body.title).slice(0, 120),
+          body: String(body.body).slice(0, 400),
+          url: body.url || '/',
+          sent, failed, pruned, total: subs.length,
+        });
+      } catch (e) { /* ignore */ }
       return res.status(200).json({ ok: true, sent, failed, pruned, total: subs.length, mode, errors });
+    }
+
+    if (body.action === 'history') {
+      const { authed } = await authSender(body);
+      if (!authed) return res.status(401).json({ ok: false, error: 'unauthorized' });
+      const { entries, mode } = await listLog();
+      return res.status(200).json({ ok: true, entries, mode });
     }
 
     return res.status(400).json({ ok: false, error: 'unknown action' });

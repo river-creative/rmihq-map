@@ -31,7 +31,14 @@
   #gate p{font-size:13px;color:var(--mut);line-height:1.55;margin:0 0 16px;}
   #gsi{display:flex;justify-content:center;}
   #who{display:none;font-size:12px;color:var(--mut);margin-bottom:4px;}
-  #composer{display:none;}
+  #composer,#history{display:none;}
+  .ghost{flex:0 0 auto;background:none;border:1.5px solid #34343a;color:var(--lt);font-weight:600;
+    font-size:12.5px;padding:8px 16px;border-radius:18px;}
+  .hcard{background:var(--card);border-radius:14px;padding:13px 15px;margin-bottom:10px;}
+  .hcard .ht{font-weight:700;font-size:14.5px;}
+  .hcard .hb{font-size:13px;color:var(--lt);margin-top:4px;line-height:1.5;white-space:pre-wrap;}
+  .hcard .hm{font-family:ui-monospace,monospace;font-size:10.5px;color:var(--dim);margin-top:9px;line-height:1.7;}
+  #histList .empty{color:var(--mut);font-size:13px;text-align:center;padding:26px 0;}
 </style>
 </head>
 <body>
@@ -43,7 +50,10 @@
   </div>
 
   <div id="composer">
-    <h1><img src="/apple-touch-icon.png" alt="" style="width:22px;height:22px;">Send Event Alert</h1>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <h1><img src="/apple-touch-icon.png" alt="" style="width:22px;height:22px;">Send Event Alert</h1>
+      <button id="histLink" class="ghost">History</button>
+    </div>
     <div class="sub">FIRE CONFERENCE 2026 · PUSH BROADCAST</div>
     <div id="who"></div>
 
@@ -65,6 +75,15 @@
 
     <p class="warn">⚠️ “Send to everyone” pushes immediately to every subscribed device — there is no undo.
     Use “Dry run” to check how many devices are subscribed. Sessions expire after about an hour — just sign in again.</p>
+  </div>
+
+  <div id="history">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <h1><img src="/apple-touch-icon.png" alt="" style="width:22px;height:22px;">Message History</h1>
+      <button id="histBack" class="ghost">← Compose</button>
+    </div>
+    <div class="sub">SENT ALERTS · NEWEST FIRST</div>
+    <div id="histList"></div>
   </div>
 
 <script>
@@ -131,6 +150,58 @@
   function show(msg, good){ out.style.display='block'; out.textContent=msg; out.className=good?'ok':'bad'; }
   document.getElementById('dry').addEventListener('click',function(){ post(true); });
   document.getElementById('send').addEventListener('click',function(){ post(false); });
+
+  /* ---- message history ---- */
+  var histList=document.getElementById('histList');
+
+  function fmtTime(iso){
+    try{
+      var d=new Date(iso);
+      return d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    }catch(e){ return iso||''; }
+  }
+
+  function renderHistory(entries){
+    histList.innerHTML='';
+    if(!entries.length){
+      var em=document.createElement('div'); em.className='empty'; em.textContent='No alerts sent yet.';
+      histList.appendChild(em); return;
+    }
+    entries.forEach(function(e){
+      var card=document.createElement('div'); card.className='hcard';
+      var t=document.createElement('div'); t.className='ht'; t.textContent=e.title||'(no title)';
+      var b=document.createElement('div'); b.className='hb'; b.textContent=e.body||'';
+      var m=document.createElement('div'); m.className='hm';
+      m.textContent=fmtTime(e.ts)+'  ·  '+(e.sender||'unknown')
+        +'\n✓ '+(e.sent||0)+' sent'
+        +(e.failed?'  ·  '+e.failed+' failed':'')
+        +(e.pruned?'  ·  '+e.pruned+' pruned':'')
+        +(e.url&&e.url!=='/'?'  ·  → '+e.url:'');
+      card.appendChild(t); card.appendChild(b); card.appendChild(m);
+      histList.appendChild(card);
+    });
+  }
+
+  function openHistory(){
+    document.getElementById('composer').style.display='none';
+    document.getElementById('history').style.display='block';
+    histList.innerHTML='<div class="empty">Loading…</div>';
+    fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({action:'history',idToken:idToken})})
+      .then(function(r){ return r.json().then(function(j){ return {status:r.status, j:j}; }); })
+      .then(function(res){
+        if(res.status===401){ histList.innerHTML='<div class="empty">Session expired — reload and sign in again.</div>'; return; }
+        if(!res.j.ok) throw new Error(res.j.error||'unknown');
+        renderHistory(res.j.entries||[]);
+      })
+      .catch(function(e){ histList.innerHTML='<div class="empty">Could not load history: '+String(e.message||e)+'</div>'; });
+  }
+
+  document.getElementById('histLink').addEventListener('click',openHistory);
+  document.getElementById('histBack').addEventListener('click',function(){
+    document.getElementById('history').style.display='none';
+    document.getElementById('composer').style.display='block';
+  });
 </script>
 </body>
 </html>

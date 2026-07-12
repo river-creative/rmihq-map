@@ -4,9 +4,11 @@
 const crypto = require('crypto');
 
 const PREFIX = 'push-subs/';
+const LOG_PREFIX = 'push-log/';
 const hasBlob = () => !!process.env.BLOB_READ_WRITE_TOKEN;
 
 const mem = (globalThis.__pushSubs = globalThis.__pushSubs || new Map());
+const memLog = (globalThis.__pushLog = globalThis.__pushLog || []);
 
 function idFor(endpoint) {
   return crypto.createHash('sha256').update(endpoint).digest('hex');
@@ -74,4 +76,44 @@ async function pruneSub(pathname) {
   }
 }
 
-module.exports = { saveSub, removeSub, listSubs, pruneSub };
+async function logSend(entry) {
+  if (hasBlob()) {
+    const { put } = require('@vercel/blob');
+    const id = Date.now() + '-' + crypto.randomBytes(4).toString('hex');
+    await put(LOG_PREFIX + id + '.json', JSON.stringify(entry), {
+      access: 'private',
+      addRandomSuffix: false,
+      contentType: 'application/json',
+      allowOverwrite: true,
+    });
+    return { mode: 'blob' };
+  }
+  memLog.push(entry);
+  return { mode: 'memory' };
+}
+
+async function listLog() {
+  if (hasBlob()) {
+    const { list } = require('@vercel/blob');
+    const entries = [];
+    let cursor;
+    do {
+      const page = await list({ prefix: LOG_PREFIX, cursor, limit: 1000 });
+      for (const item of page.blobs) {
+        try {
+          const url = item.downloadUrl || item.url;
+          const res = await fetch(url, {
+            headers: { authorization: 'Bearer ' + process.env.BLOB_READ_WRITE_TOKEN },
+          });
+          if (res.ok) entries.push(await res.json());
+        } catch (e) { /* skip unreadable blob */ }
+      }
+      cursor = page.cursor;
+    } while (cursor);
+    entries.sort((a, b) => String(b.ts || '').localeCompare(String(a.ts || '')));
+    return { entries, mode: 'blob' };
+  }
+  return { entries: [...memLog].reverse(), mode: 'memory' };
+}
+
+module.exports = { saveSub, removeSub, listSubs, pruneSub, logSend, listLog };
