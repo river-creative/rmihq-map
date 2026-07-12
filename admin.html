@@ -74,15 +74,29 @@
 
   var idToken=null, out=document.getElementById('out');
 
+  function denyAccess(){
+    idToken=null;
+    document.body.innerHTML='<div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;'+
+      'background:var(--bg);font-family:ui-monospace,monospace;font-size:18px;font-weight:700;letter-spacing:4px;color:#ff6b6b;">NO ACCESS</div>';
+  }
+
   function onCred(resp){
     idToken=resp.credential;
-    try{
-      var claims=JSON.parse(atob(idToken.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-      document.getElementById('who').textContent='Signed in as '+claims.email;
-      document.getElementById('who').style.display='block';
-    }catch(e){}
-    document.getElementById('gate').style.display='none';
-    document.getElementById('composer').style.display='block';
+    // Verify against the server-side allowlist before revealing anything.
+    fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({action:'send',idToken:idToken,dryRun:true})})
+      .then(function(r){ return r.json().then(function(j){ return r.status===200 && j.ok; }); })
+      .then(function(allowed){
+        if(!allowed) return denyAccess();
+        try{
+          var claims=JSON.parse(atob(idToken.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+          document.getElementById('who').textContent='Signed in as '+claims.email;
+          document.getElementById('who').style.display='block';
+        }catch(e){}
+        document.getElementById('gate').style.display='none';
+        document.getElementById('composer').style.display='block';
+      })
+      .catch(denyAccess);
   }
 
   window.onload=function(){
