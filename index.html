@@ -2662,6 +2662,34 @@
       });
     })();
 
+    /* ---- TEMPORARY viewport debug (standalone only) — remove after nav-bar fix ---- */
+    (function(){
+      var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+      if(!standalone && location.search.indexOf('vvdebug')<0) return;
+      var d=document.createElement('div');
+      d.style.cssText='position:fixed;top:40%;left:10px;right:10px;z-index:99;background:rgba(0,0,0,0.85);color:#0f0;'+
+        'font:11px/1.6 monospace;padding:10px;border-radius:10px;pointer-events:none;white-space:pre;';
+      document.body.appendChild(d);
+      var probe=document.createElement('div');
+      probe.style.cssText='position:fixed;visibility:hidden;padding-bottom:env(safe-area-inset-bottom,0px);padding-top:env(safe-area-inset-top,0px);';
+      document.body.appendChild(probe);
+      function upd(){
+        var bar=document.getElementById('shellBar').getBoundingClientRect();
+        var vv=window.visualViewport||{};
+        var cs=getComputedStyle(probe);
+        d.textContent=
+          'innerH: '+window.innerHeight+'  screenH: '+screen.height+'\n'+
+          'docClientH: '+document.documentElement.clientHeight+'\n'+
+          'vv.h: '+(vv.height&&vv.height.toFixed(1))+'  vv.offTop: '+(vv.offsetTop!=null?vv.offsetTop.toFixed(1):'-')+'  vv.scale: '+(vv.scale||'-')+'\n'+
+          'safeTop: '+cs.paddingTop+'  safeBottom: '+cs.paddingBottom+'\n'+
+          'bar.top: '+bar.top.toFixed(1)+'  bar.bottom: '+bar.bottom.toFixed(1)+'\n'+
+          'GAP (innerH - bar.bottom): '+(window.innerHeight-bar.bottom).toFixed(1)+'\n'+
+          'scrollY: '+window.scrollY+'  bodyScrollTop: '+document.body.scrollTop;
+      }
+      upd(); setInterval(upd, 600);
+      if(window.visualViewport){ visualViewport.addEventListener('resize',upd); visualViewport.addEventListener('scroll',upd); }
+    })();
+
     /* ---- analytics: virtual page views + key events ---- */
     function track(path,title){ if(window.gtag) gtag('event','page_view',{ page_path:path, page_title:title||('FIRE CONF · '+path.replace('/','')) }); }
     function trackEvent(name,params){ if(window.gtag) gtag('event',name,params||{}); }
