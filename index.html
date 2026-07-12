@@ -661,7 +661,7 @@
   <div id="shellMenu" class="shellScreen">
     <div style="position:absolute;top:0;left:0;right:0;height:220px;background:radial-gradient(120% 100% at 50% 0%, rgba(255,92,31,0.16) 0%, rgba(20,20,21,0) 70%);pointer-events:none;"></div>
     <div class="shHead" style="position:relative;">
-      <span class="shTitle">Menu</span>
+      <span class="shTitle" id="shMenuTitle">Menu</span>
       <button id="shMenuClose" aria-label="Close menu">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
       </button>
@@ -670,6 +670,10 @@
       <div style="display:flex;flex-direction:column;gap:8px;">
         <button class="shMenuRow" id="shMenuInstall" style="display:none;"><span>Get the App</span><span style="color:var(--sh-mut);font-size:14px;">&darr;</span></button>
         <button class="shMenuRow" id="shMenuAlerts"><span>Event Alerts<span id="shAlertsState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Checking&hellip;</span></span><svg id="shAlertsBell" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sh-mut);flex:0 0 auto;"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+        <div id="shTopics" style="display:none;flex-direction:column;gap:8px;">
+          <button class="shMenuRow" id="shTopicYouth" style="margin-left:18px;"><span>Youth Week Alerts<span id="shTopicYouthState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Off</span></span><span id="shTopicYouthDot" style="width:10px;height:10px;border-radius:50%;background:var(--sh-mut);opacity:.35;flex:0 0 auto;"></span></button>
+          <button class="shMenuRow" id="shTopicKids" style="margin-left:18px;"><span>Kids Week Alerts<span id="shTopicKidsState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Off</span></span><span id="shTopicKidsDot" style="width:10px;height:10px;border-radius:50%;background:var(--sh-mut);opacity:.35;flex:0 0 auto;"></span></button>
+        </div>
         <a class="shMenuRow" href="https://revival.com" target="_blank" rel="noopener"><span>Revival.com</span><span style="color:var(--sh-mut);font-size:14px;">&nearr;</span></a>
         <button class="shMenuRow" id="shMenuFaq"><span>FAQs</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
         <button class="shMenuRow" id="shMenuVendors"><span>Vendors</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
@@ -2531,10 +2535,45 @@
     function setAlertsState(txt,on){ var s=el('shAlertsState'); if(!s) return; s.textContent=txt;
       var bell=el('shAlertsBell'); if(bell) bell.style.color=on?'var(--sh-org)':'var(--sh-mut)'; }
     function refreshAlertsRow(){
-      if(!pushSupported()){ setAlertsState(isIOS()&&!isStandalone()?'Add to Home Screen to enable':'Not supported on this browser'); return; }
-      if(Notification.permission==='denied'){ setAlertsState('Blocked — allow in Settings'); return; }
-      if(!swReg){ setAlertsState('Loading…'); return; }
-      swReg.pushManager.getSubscription().then(function(sub){ setAlertsState(sub?'On — updates & event news enabled':'Off — tap to enable', !!sub); });
+      if(!pushSupported()){ setAlertsState(isIOS()&&!isStandalone()?'Add to Home Screen to enable':'Not supported on this browser'); showTopics(false); return; }
+      if(Notification.permission==='denied'){ setAlertsState('Blocked — allow in Settings'); showTopics(false); return; }
+      if(!swReg){ setAlertsState('Loading…'); showTopics(false); return; }
+      swReg.pushManager.getSubscription().then(function(sub){
+        setAlertsState(sub?'On — updates & event news enabled':'Off — tap to enable', !!sub);
+        showTopics(!!sub);
+      });
+    }
+
+    /* ---- alert groups: everyone is "All"; Youth/Kids are opt-in extras ---- */
+    function getGroups(){ try{ var g=JSON.parse(localStorage.getItem('fc_groups')||'[]'); return Array.isArray(g)?g:[]; }catch(e){ return []; } }
+    function hasGroup(g){ return getGroups().indexOf(g)>=0; }
+    function setGroup(g,on){
+      var gs=getGroups().filter(function(x){ return x!==g; });
+      if(on) gs.push(g);
+      localStorage.setItem('fc_groups', JSON.stringify(gs));
+      trackEvent((on?'group_on_':'group_off_')+g);
+      syncGroups();
+      refreshTopicRows();
+    }
+    function syncGroups(){
+      /* re-save the existing subscription with the current group tags */
+      if(!swReg) return;
+      swReg.pushManager.getSubscription().then(function(sub){
+        if(!sub) return;
+        fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
+          body:JSON.stringify({action:'subscribe',subscription:sub,groups:getGroups()})}).catch(function(){});
+      });
+    }
+    function showTopics(on){ var t=el('shTopics'); if(t) t.style.display=on?'flex':'none'; if(on) refreshTopicRows(); }
+    function refreshTopicRows(){
+      [['youth','shTopicYouthState','shTopicYouthDot','var(--sh-blu)'],
+       ['kids','shTopicKidsState','shTopicKidsDot','var(--sh-grn)']].forEach(function(p){
+        var st=el(p[1]), dot=el(p[2]); if(!st||!dot) return;
+        var on=hasGroup(p[0]);
+        st.textContent=on?'On':'Off';
+        dot.style.background=on?p[3]:'var(--sh-mut)';
+        dot.style.opacity=on?'1':'.35';
+      });
     }
     function toggleAlerts(){
       if(!pushSupported()){
@@ -2552,7 +2591,7 @@
           if(perm!=='granted'){ refreshAlertsRow(); return; }
           return swReg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:b64ToU8(VAPID_PUB) })
             .then(function(newSub){
-              return fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'subscribe',subscription:newSub})})
+              return fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'subscribe',subscription:newSub,groups:getGroups()})})
                 .then(function(r){ if(!r.ok) throw new Error('subscribe api failed'); trackEvent('alerts_on'); refreshAlertsRow(); });
             });
         });
@@ -2784,6 +2823,35 @@
     el('shMenuFaq').addEventListener('click', function(){ openFaq(); });
     el('shMenuAlerts').addEventListener('click', function(){ toggleAlerts(); });
     el('shAskGo').addEventListener('click', function(){ closeAsk(); toggleAlerts(); });
+    el('shTopicYouth').addEventListener('click', function(){ setGroup('youth', !hasGroup('youth')); });
+    el('shTopicKids').addEventListener('click', function(){ setGroup('kids', !hasGroup('kids')); });
+
+    /* hidden team-alerts unlock: 7 quick taps on the Menu title, then the team code */
+    var admTaps=0, admTimer=null;
+    el('shMenuTitle').addEventListener('click', function(){
+      admTaps++;
+      clearTimeout(admTimer); admTimer=setTimeout(function(){ admTaps=0; }, 2500);
+      if(admTaps<7) return;
+      admTaps=0;
+      if(hasGroup('admin')){
+        if(confirm('Team alerts are ON for this device. Turn them off?')) setGroup('admin', false);
+        return;
+      }
+      var code=prompt('Team code:');
+      if(code===null) return;
+      if(String(code).trim().toLowerCase()==='fireteam26'){
+        setGroup('admin', true);
+        if(swReg){
+          swReg.pushManager.getSubscription().then(function(sub){
+            alert(sub?'Team alerts enabled for this device.':'Team alerts saved — now turn on Event Alerts above to receive them.');
+          });
+        } else {
+          alert('Team alerts saved — now turn on Event Alerts above to receive them.');
+        }
+      } else {
+        alert('Incorrect code.');
+      }
+    });
     el('shAskLater').addEventListener('click', function(){ closeAsk(); trackEvent('alerts_prompt_dismissed'); });
     el('shAskBg').addEventListener('click', function(){ closeAsk(); });
     el('shInstLater').addEventListener('click', function(){ closeInstall(); trackEvent('install_prompt_dismissed'); });

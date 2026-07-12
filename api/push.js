@@ -6,6 +6,11 @@
 const webpush = require('web-push');
 const { saveSub, removeSub, listSubs, pruneSub, logSend, listLog } = require('./_store');
 
+// Everyone is implicitly in "all"; these are the opt-in extras a device may carry.
+const VALID_GROUPS = ['youth', 'kids', 'admin'];
+
+function subGroups(sub) { return Array.isArray(sub.groups) ? sub.groups : []; }
+
 // auth: static admin key (programmatic) OR a Google ID token from an allowed account
 async function authSender(body) {
   const adminKey = process.env.PUSH_ADMIN_KEY;
@@ -42,8 +47,10 @@ module.exports = async (req, res) => {
       if (!sub || !sub.endpoint || !sub.keys || !sub.keys.p256dh || !sub.keys.auth) {
         return res.status(400).json({ ok: false, error: 'invalid subscription' });
       }
-      const { mode } = await saveSub(sub);
-      return res.status(200).json({ ok: true, mode });
+      const groups = (Array.isArray(body.groups) ? body.groups : [])
+        .map((g) => String(g).toLowerCase()).filter((g) => VALID_GROUPS.includes(g));
+      const { mode } = await saveSub(Object.assign({}, sub, { groups }));
+      return res.status(200).json({ ok: true, mode, groups });
     }
 
     if (body.action === 'unsubscribe') {
@@ -62,8 +69,12 @@ module.exports = async (req, res) => {
       const { authed, sender } = await authSender(body);
       if (!authed) return res.status(401).json({ ok: false, error: 'unauthorized' });
 
+      const group = VALID_GROUPS.includes(body.group) ? body.group : 'all';
       const { subs, mode } = await listSubs();
-      if (body.dryRun) return res.status(200).json({ ok: true, dryRun: true, total: subs.length, mode });
+      const counts = { all: subs.length };
+      for (const g of VALID_GROUPS) counts[g] = subs.filter((x) => subGroups(x.sub).includes(g)).length;
+      const targets = group === 'all' ? subs : subs.filter((x) => subGroups(x.sub).includes(group));
+      if (body.dryRun) return res.status(200).json({ ok: true, dryRun: true, group, total: targets.length, counts, mode });
       if (!body.title || !body.body) return res.status(400).json({ ok: false, error: 'title and body required' });
 
       webpush.setVapidDetails(process.env.VAPID_SUBJECT || 'mailto:tony@kingsarmscoffee.com', pub, priv);
@@ -76,7 +87,7 @@ module.exports = async (req, res) => {
       });
 
       let sent = 0, failed = 0, pruned = 0; const errors = [];
-      await Promise.all(subs.map(async ({ sub, pathname }) => {
+      await Promise.all(targets.map(async ({ sub, pathname }) => {
         try {
           await webpush.sendNotification(sub, payload, { TTL: 3600 });
           sent++;
@@ -91,13 +102,14 @@ module.exports = async (req, res) => {
         await logSend({
           ts: new Date().toISOString(),
           sender,
+          group,
           title: String(body.title).slice(0, 120),
           body: String(body.body).slice(0, 400),
           url: body.url || '/',
-          sent, failed, pruned, total: subs.length,
+          sent, failed, pruned, total: targets.length,
         });
       } catch (e) { /* ignore */ }
-      return res.status(200).json({ ok: true, sent, failed, pruned, total: subs.length, mode, errors });
+      return res.status(200).json({ ok: true, sent, failed, pruned, total: targets.length, group, mode, errors });
     }
 
     if (body.action === 'history') {
