@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>FIRE CONF.</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root{ --bg:#141415; --card:#1f1f22; --card2:#2a2a2f; --mut:#9a9aa2; --dim:#77777e; --lt:#cfcfd4; --org:#ff5c1f; }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:#fff;font-family:'Archivo',system-ui,sans-serif;padding:26px 20px 60px;max-width:520px;margin-inline:auto;}
+  h1{font-size:22px;font-weight:800;margin:0 0 2px;display:flex;align-items:center;gap:9px;}
+  .sub{font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:1.6px;color:var(--mut);margin-bottom:22px;}
+  label{display:block;font-size:12px;font-weight:700;color:var(--lt);margin:16px 2px 6px;}
+  input,textarea{width:100%;background:var(--card);border:1.5px solid #34343a;border-radius:14px;color:#fff;
+    font-family:inherit;font-size:15px;padding:13px 14px;outline:none;}
+  input:focus,textarea:focus{border-color:var(--org);}
+  textarea{min-height:90px;resize:vertical;}
+  .row{display:flex;gap:9px;margin-top:22px;}
+  button{flex:1;border:0;border-radius:22px;padding:14px 0;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+  #send{background:var(--org);color:#fff;}
+  #dry{background:none;border:1.5px solid #34343a;color:var(--lt);font-weight:600;}
+  button:active{transform:scale(.98);}
+  #out{margin-top:18px;background:var(--card);border-radius:14px;padding:13px 14px;font-family:ui-monospace,monospace;
+    font-size:12px;color:var(--mut);white-space:pre-wrap;display:none;line-height:1.6;}
+  .warn{font-size:11.5px;color:var(--dim);margin-top:26px;line-height:1.55;}
+  .ok{color:#5ecb8e;} .bad{color:#ff6b6b;}
+  #gate{background:var(--card);border-radius:16px;padding:22px 18px;text-align:center;margin-top:8px;}
+  #gate p{font-size:13px;color:var(--mut);line-height:1.55;margin:0 0 16px;}
+  #gsi{display:flex;justify-content:center;}
+  #who{display:none;font-size:12px;color:var(--mut);margin-bottom:4px;}
+  #composer{display:none;}
+</style>
+</head>
+<body>
+  <div id="gate" style="margin-top:26vh;background:none;">
+    <img src="/apple-touch-icon.png" alt="" style="width:64px;height:64px;display:block;margin:0 auto 14px;">
+    <div style="font-weight:800;font-size:19px;letter-spacing:3px;color:var(--org);text-align:center;margin-bottom:26px;">FIRE CONF.</div>
+    <div id="gsi"></div>
+    <p id="gateErr" class="bad" style="display:none;margin-top:14px;text-align:center;"></p>
+  </div>
+
+  <div id="composer">
+    <h1><img src="/apple-touch-icon.png" alt="" style="width:22px;height:22px;">Send Event Alert</h1>
+    <div class="sub">FIRE CONFERENCE 2026 · PUSH BROADCAST</div>
+    <div id="who"></div>
+
+    <label for="title">Title</label>
+    <input id="title" maxlength="120" placeholder="Schedule update">
+
+    <label for="body">Message</label>
+    <textarea id="body" maxlength="400" placeholder="Tonight&#8217;s evening session now starts at 7:30 PM — doors 6:30."></textarea>
+
+    <label for="url">Link (opens when tapped — optional)</label>
+    <input id="url" placeholder="/schedule" value="/">
+
+    <div class="row">
+      <button id="dry">Dry run (count devices)</button>
+      <button id="send">Send to everyone</button>
+    </div>
+
+    <div id="out"></div>
+
+    <p class="warn">⚠️ “Send to everyone” pushes immediately to every subscribed device — there is no undo.
+    Use “Dry run” to check how many devices are subscribed. Sessions expire after about an hour — just sign in again.</p>
+  </div>
+
+<script>
+  /* Set after creating the OAuth client in Google Cloud Console (Web application,
+     authorized JS origins: https://map.fire.revival.com + the preview URL). */
+  var GOOGLE_CLIENT_ID='751395401871-dckb8hmlq8f9itmn5ur2dp0vpd29aa38.apps.googleusercontent.com';
+
+  var idToken=null, out=document.getElementById('out');
+
+  function onCred(resp){
+    idToken=resp.credential;
+    try{
+      var claims=JSON.parse(atob(idToken.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+      document.getElementById('who').textContent='Signed in as '+claims.email;
+      document.getElementById('who').style.display='block';
+    }catch(e){}
+    document.getElementById('gate').style.display='none';
+    document.getElementById('composer').style.display='block';
+  }
+
+  window.onload=function(){
+    if(GOOGLE_CLIENT_ID.indexOf('PASTE')===0){
+      document.getElementById('gateErr').textContent='Unavailable.';
+      document.getElementById('gateErr').style.display='block';
+      return;
+    }
+    google.accounts.id.initialize({ client_id:GOOGLE_CLIENT_ID, callback:onCred });
+    google.accounts.id.renderButton(document.getElementById('gsi'), { theme:'filled_black', size:'large', text:'signin_with' });
+  };
+
+  function post(dryRun){
+    var payload={ action:'send', idToken:idToken, dryRun:!!dryRun,
+      title:document.getElementById('title').value.trim(),
+      body:document.getElementById('body').value.trim(),
+      url:document.getElementById('url').value.trim()||'/' };
+    if(!idToken){ show('Sign in first.', false); return; }
+    if(!dryRun && (!payload.title||!payload.body)){ show('Title and message are required.', false); return; }
+    if(!dryRun && !confirm('Send this alert to ALL subscribed devices now?')) return;
+    show((dryRun?'Counting…':'Sending…'), true);
+    fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){ return r.json().then(function(j){ return {status:r.status, j:j}; }); })
+      .then(function(res){
+        if(res.status===401){ return show('Not authorized.', false); }
+        if(!res.j.ok) return show('Error ('+res.status+'): '+(res.j.error||'unknown'), false);
+        if(res.j.dryRun) return show('✓ '+res.j.total+' device(s) subscribed  ·  storage: '+res.j.mode, true);
+        show('✓ Sent: '+res.j.sent+'  ·  Failed: '+res.j.failed+'  ·  Pruned dead: '+res.j.pruned+'  ·  Total: '+res.j.total, true);
+      })
+      .catch(function(e){ show('Network error: '+e, false); });
+  }
+  function show(msg, good){ out.style.display='block'; out.textContent=msg; out.className=good?'ok':'bad'; }
+  document.getElementById('dry').addEventListener('click',function(){ post(true); });
+  document.getElementById('send').addEventListener('click',function(){ post(false); });
+</script>
+</body>
+</html>

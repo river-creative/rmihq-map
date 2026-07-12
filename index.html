@@ -12,6 +12,10 @@
 </script>
 <title>Fire Conference 2026 | Drs. Rodney & Adonica Howard-Browne | Tampa, FL</title>
 <meta name="apple-mobile-web-app-title" content="FIRE CONF">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#141415">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <!-- Google tag (gtag.js) — Fire Conference GA4 property -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVBXMKZHM4"></script>
 <script>
@@ -270,7 +274,20 @@
   .shScroll::-webkit-scrollbar{display:none;}
   /* always-scrollable: zero-width float taller than the container forces iOS elastic bounce on every page */
   .shScroll::before{content:"";float:left;width:0;height:calc(100% + 1px);}
-  .shScroll{touch-action:pan-y;}
+  .shScroll{touch-action:pan-y;overscroll-behavior-y:contain;} /* keep the elastic bounce inside the scroller */
+  html,body{overscroll-behavior:none;} /* never chain overscroll to the document (drags fixed nav in standalone) */
+  /* installed app: the home-indicator inset already provides clearance — tuck the bar like a native tab bar */
+  @media (display-mode: standalone){
+    #shellBar{padding-bottom:max(6px, calc(var(--sh-safe) - 14px));}
+    :root{--sh-barH:50px;}
+  }
+  /* pull-to-refresh (installed app only — iOS standalone has no native gesture) */
+  #shPtr{position:fixed;top:calc(max(10px,env(safe-area-inset-top,10px)));left:50%;margin-left:-19px;z-index:92;
+    width:38px;height:38px;border-radius:50%;background:#1f1f22;border:1px solid rgba(255,255,255,0.09);
+    box-shadow:0 8px 24px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;
+    transform:translateY(-70px);opacity:0;pointer-events:none;}
+  #shPtr svg{width:17px;height:17px;transition:transform .15s ease;}
+  #shPtr.spin svg{animation:spin 0.8s linear infinite;}
   .shWk,.shChips,.shCovers,#shMapChips{touch-action:pan-x;}
   #shellBar{touch-action:manipulation;}
   .shHead{display:flex;align-items:center;justify-content:space-between;gap:10px;box-sizing:border-box;
@@ -396,6 +413,64 @@
   .faqA{max-height:0;overflow:hidden;padding:0 16px;color:var(--sh-mut);font-size:13.5px;line-height:1.6;
     transition:max-height .32s ease, padding .32s ease;}
   .faqItem.open .faqA{max-height:500px;padding:0 16px 14px;}
+  /* ---- Get-the-app install coach mark (design 4a "Spotlight sheet") ---- */
+  @keyframes fcFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fcSheetUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fcNudge { from { transform: translate(0, 0); } to { transform: translate(6px, 9px); } }
+  #shellInstall{position:fixed;inset:0;z-index:85;display:none;font-family:'Archivo',sans-serif;}
+  #shellInstall.open{display:block;}
+  #shellInstall .instBg{position:absolute;inset:0;background:rgba(5,5,8,0.66);}
+  #shellInstall.open .instBg{animation:fcFadeIn 0.5s ease both;}
+  #shellInstall .instCard{position:fixed;left:12px;right:12px;bottom:calc(120px + var(--sh-safe));
+    background:#1f1f22;border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:18px;
+    box-shadow:0 24px 70px rgba(0,0,0,0.6);color:#fff;}
+  #shellInstall.open .instCard{animation:fcSheetUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.12s both;}
+  #shellInstall.closing .instCard,#shellInstall.closing .instBg{transition:opacity .25s ease;opacity:0;animation:none;}
+  .fcSteps{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+  .fcStep{display:flex;align-items:center;gap:11px;background:#26262b;border-radius:14px;padding:11px 13px;
+    font-size:13.5px;color:var(--sh-lt);}
+  .fcStep .n{width:22px;height:22px;border-radius:50%;background:#2f2f35;color:#fff;font-size:11.5px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .fcStep .t{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap;}
+  .fcChip{width:30px;height:20px;border-radius:6px;background:#3a3b41;display:inline-flex;align-items:center;
+    justify-content:center;gap:3px;flex:0 0 auto;}
+  .fcChip i{width:3.5px;height:3.5px;border-radius:50%;background:#e8e9ee;}
+  #shInstLater{width:100%;height:44px;border-radius:14px;background:none;border:1.5px solid #34343a;
+    color:var(--sh-lt);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}
+  #shInstGo{width:100%;height:44px;border-radius:14px;border:0;font-size:14px;font-weight:700;font-family:inherit;
+    background:var(--sh-org);color:#fff;cursor:pointer;display:none;}
+  @keyframes fcPulse { 0% { box-shadow: 0 0 0 0 rgba(255,92,31,0.55); } 70% { box-shadow: 0 0 0 14px rgba(255,92,31,0); } 100% { box-shadow: 0 0 0 14px rgba(255,92,31,0); } }
+  @keyframes fcNudgeDown { from { transform: translate(0,0); } to { transform: translate(0,9px); } }
+  #shInstArrow{position:fixed;display:none;pointer-events:none;}
+  #shellInstall.open #shInstArrow.on{display:block;animation:fcFadeIn 0.4s ease 0.55s both;}
+  #shInstArrow .nudge{animation:fcNudge 0.9s ease-in-out 0.95s infinite alternate;}
+  #shInstTarget{position:fixed;display:none;width:48px;height:48px;border-radius:50%;background:#3a3b41;
+    border:2px solid #ff5c1f;align-items:center;justify-content:center;pointer-events:none;gap:4px;}
+  #shellInstall.open #shInstTarget.on{display:flex;animation:fcPulse 1.8s ease-out 0.95s infinite, fcFadeIn 0.4s ease 0.55s both;}
+  #shInstTarget i{width:4.5px;height:4.5px;border-radius:50%;background:#e8e9ee;}
+  /* coach target: the ... menu, bottom right on iOS Safari and Chrome alike */
+  #shellInstall.vRight #shInstArrow{right:74px;bottom:calc(70px + var(--sh-safe));}
+  #shellInstall.vRight #shInstTarget{right:30px;bottom:calc(12px + var(--sh-safe));}
+  @media (prefers-reduced-motion:reduce){
+    #shInstArrow .nudge{animation:none;}
+    #shellInstall.open #shInstTarget.on{animation:fcFadeIn 0.01s both;}
+    #shellInstall.open .instBg,#shellInstall.open .instCard,#shellInstall.open #shInstArrow.on{animation-duration:0.01s;animation-delay:0s;}
+  }
+  /* ---- first-launch Event Alerts prompt (installed app only) ---- */
+  #shellAsk{position:fixed;inset:0;z-index:85;display:none;font-family:'Archivo',sans-serif;}
+  #shellAsk.open{display:block;}
+  #shellAsk .instBg2{position:absolute;inset:0;background:rgba(5,5,8,0.66);}
+  #shellAsk.open .instBg2{animation:fcFadeIn 0.5s ease both;}
+  #shellAsk .instCard2{position:fixed;left:12px;right:12px;bottom:calc(120px + var(--sh-safe));
+    background:#1f1f22;border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:18px;
+    box-shadow:0 24px 70px rgba(0,0,0,0.6);color:#fff;}
+  #shellAsk.open .instCard2{animation:fcSheetUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.12s both;}
+  #shellAsk.closing .instCard2,#shellAsk.closing .instBg2{transition:opacity .25s ease;opacity:0;animation:none;}
+  #shAskGo{width:100%;height:44px;border-radius:14px;border:0;font-size:14px;font-weight:700;font-family:inherit;
+    background:var(--sh-org);color:#fff;cursor:pointer;}
+  #shAskLater{width:100%;height:44px;border-radius:14px;background:none;border:1.5px solid #34343a;
+    color:var(--sh-lt);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}
+  .shAskBell{width:46px;height:46px;border-radius:12px;background:rgba(255,92,31,0.14);display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
   /* ---- Pavilion Lobby modal restyled to the 3a shell ---- */
   #pavModal{background:var(--sh-bg);z-index:78;} /* above shell screens (70) and menu sheet (76), below tab bar (80) */
   #pavModal .schedBg{display:none;}
@@ -601,6 +676,8 @@
     </div>
     <div class="shScroll" style="padding-top:18px;position:relative;">
       <div style="display:flex;flex-direction:column;gap:8px;">
+        <button class="shMenuRow" id="shMenuInstall" style="display:none;"><span>Get the App</span><span style="color:var(--sh-mut);font-size:14px;">&darr;</span></button>
+        <button class="shMenuRow" id="shMenuAlerts"><span>Event Alerts<span id="shAlertsState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Checking&hellip;</span></span><svg id="shAlertsBell" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sh-mut);flex:0 0 auto;"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
         <a class="shMenuRow" href="https://revival.com" target="_blank" rel="noopener"><span>Revival.com</span><span style="color:var(--sh-mut);font-size:14px;">&nearr;</span></a>
         <button class="shMenuRow" id="shMenuFaq"><span>FAQs</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
         <button class="shMenuRow" id="shMenuVendors"><span>Vendors</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
@@ -619,6 +696,44 @@
         <a class="shSoc" href="https://instagram.com/fireconf.yth" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;color:var(--sh-blu);" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none"/></svg><span class="hdl">@fireconf.yth</span><span style="color:var(--sh-dim);font-size:12px;">&nearr;</span></a>
         <div class="shSocLbl" style="color:#5ecb8e;">KIDS WEEK</div>
         <a class="shSoc" href="https://instagram.com/fireconf.kids" target="_blank" rel="noopener" style="padding-bottom:13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;color:var(--sh-grn);" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none"/></svg><span class="hdl">@fireconf.kids</span><span style="color:var(--sh-dim);font-size:12px;">&nearr;</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div id="shellInstall" aria-hidden="true">
+    <div class="instBg" id="shInstBg"></div>
+    <div class="instCard">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="icon-192.png" alt="" style="width:46px;height:46px;border-radius:12px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:800;font-size:17px;color:#fff;">Get The FIRE CONF. Web App</div>
+          <div style="font-size:12px;color:var(--sh-mut);margin-top:2px;">Faster Access &bull; Event Alerts &bull; Offline Mode</div>
+        </div>
+      </div>
+      <div id="shInstBody"></div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+        <button id="shInstGo">Add to Home Screen</button>
+        <button id="shInstLater">Not now</button>
+      </div>
+    </div>
+    <div id="shInstArrow"><div class="nudge" id="shInstArrowSvg"></div></div>
+    <div id="shInstTarget"></div>
+  </div>
+
+  <div id="shellAsk" aria-hidden="true">
+    <div class="instBg2" id="shAskBg"></div>
+    <div class="instCard2">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="shAskBell"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff5c1f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:800;font-size:17px;color:#fff;">Turn On Event Alerts</div>
+          <div style="font-size:12px;color:var(--sh-mut);margin-top:2px;">App Updates &bull; Schedule Changes &bull; Event News</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--sh-mut);line-height:1.55;margin-top:12px;">Be the first to know when the schedule changes or there&rsquo;s news during Fire Conference week.</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+        <button id="shAskGo">Enable Alerts</button>
+        <button id="shAskLater">Not now</button>
       </div>
     </div>
   </div>
@@ -642,6 +757,8 @@
   </div>
   <div id="shMapChips"></div>
   <div id="shMapSheet"></div>
+
+  <div id="shPtr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#ff5c1f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.8-6.3"/><path d="M3.5 4.5v4h4"/></svg></div>
 
   <nav id="shellBar" aria-label="App navigation">
     <button class="shTab" data-tab="today" aria-label="Today">
@@ -2389,6 +2506,162 @@
     window.__shellVenue=function(key){ if(VENUES[key]){ clearRoute(); openSheet(key); } };
     window.__shellVendors=function(){ showTab('vendors'); };
 
+    /* ---- PWA: service worker + push alerts ---- */
+    var VAPID_PUB='BC1IM4Rg5zroB2B2saiVV7mWHSHnKGLMkwsnNFwF4-XDR51se01R48Ceh8cZAauATX5lqzW0uuDmoeGQ_uRDaec';
+    function b64ToU8(s){ var p='='.repeat((4-s.length%4)%4); var b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));
+      var a=new Uint8Array(b.length); for(var i=0;i<b.length;i++) a[i]=b.charCodeAt(i); return a; }
+    var swReg=null;
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/sw.js').then(function(r){ swReg=r; refreshAlertsRow(); maybeAskAlerts(); })
+        .catch(function(){ refreshAlertsRow(); });
+    }
+    function maybeAskAlerts(){
+      /* second prompt: fires on first launch of the installed app, before any decision */
+      if(!isStandalone() || !pushSupported() || Notification.permission!=='default') return;
+      if(localStorage.getItem('fc_alerts_prompted')==='1') return;
+      swReg.pushManager.getSubscription().then(function(sub){
+        if(sub) return;
+        setTimeout(function(){
+          localStorage.setItem('fc_alerts_prompted','1');
+          el('shellAsk').classList.add('open');
+          trackEvent('alerts_prompt_shown');
+        }, 1200);
+      });
+    }
+    function closeAsk(){
+      var s=el('shellAsk');
+      if(!s.classList.contains('open')) return;
+      s.classList.add('closing');
+      setTimeout(function(){ s.classList.remove('open'); s.classList.remove('closing'); }, 260);
+    }
+    function isStandalone(){ return (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone===true; }
+    function isIOS(){ return /iP(hone|ad|od)/.test(navigator.userAgent); }
+    function pushSupported(){ return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+    function setAlertsState(txt,on){ var s=el('shAlertsState'); if(!s) return; s.textContent=txt;
+      var bell=el('shAlertsBell'); if(bell) bell.style.color=on?'var(--sh-org)':'var(--sh-mut)'; }
+    function refreshAlertsRow(){
+      if(!pushSupported()){ setAlertsState(isIOS()&&!isStandalone()?'Add to Home Screen to enable':'Not supported on this browser'); return; }
+      if(Notification.permission==='denied'){ setAlertsState('Blocked — allow in Settings'); return; }
+      if(!swReg){ setAlertsState('Loading…'); return; }
+      swReg.pushManager.getSubscription().then(function(sub){ setAlertsState(sub?'On — updates & event news enabled':'Off — tap to enable', !!sub); });
+    }
+    function toggleAlerts(){
+      if(!pushSupported()){
+        if(isIOS()&&!isStandalone()) alert('To get event alerts:\n\n1. Tap the Share button\n2. Tap "Add to Home Screen"\n3. Open FIRE CONF from your home screen\n4. Turn on Event Alerts in the Menu');
+        return;
+      }
+      if(!swReg) return;
+      swReg.pushManager.getSubscription().then(function(sub){
+        if(sub){
+          return fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'unsubscribe',endpoint:sub.endpoint})})
+            .catch(function(){}).then(function(){ return sub.unsubscribe(); })
+            .then(function(){ trackEvent('alerts_off'); refreshAlertsRow(); });
+        }
+        return Notification.requestPermission().then(function(perm){
+          if(perm!=='granted'){ refreshAlertsRow(); return; }
+          return swReg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:b64ToU8(VAPID_PUB) })
+            .then(function(newSub){
+              return fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'subscribe',subscription:newSub})})
+                .then(function(r){ if(!r.ok) throw new Error('subscribe api failed'); trackEvent('alerts_on'); refreshAlertsRow(); });
+            });
+        });
+      }).catch(function(e){ setAlertsState('Error — try again'); });
+    }
+
+    /* ---- Get-the-app install prompt ---- */
+    var deferredInstall=null;
+    window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredInstall=e;
+      var mi=el('shMenuInstall'); if(mi && !isStandalone()) mi.style.display='flex';
+      maybeAutoPrompt(); });
+    window.addEventListener('appinstalled', function(){ localStorage.setItem('fc_installed','1');
+      trackEvent('pwa_installed'); closeInstall(); var mi=el('shMenuInstall'); if(mi) mi.style.display='none'; });
+    function installEligible(){
+      return !isStandalone() && localStorage.getItem('fc_installed')!=='1';
+    }
+    var ARROW_CURVE='<svg width="46" height="86" viewBox="0 0 46 86" fill="none"><path d="M10 6 Q 12 46 34 72" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/><path d="M34 72 L19 68" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/><path d="M34 72 L31 56" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/></svg>';
+    function setCoach(on){
+      var s=el('shellInstall'), arrow=el('shInstArrow'), target=el('shInstTarget');
+      s.classList.remove('vRight');
+      arrow.classList.remove('on'); target.classList.remove('on');
+      if(!on || window.innerWidth>=520) return;
+      s.classList.add('vRight'); el('shInstArrowSvg').innerHTML=ARROW_CURVE; target.innerHTML='<i></i><i></i><i></i>';
+      arrow.classList.add('on'); target.classList.add('on');
+    }
+    function renderInstallBody(){
+      var b=el('shInstBody'), go=el('shInstGo');
+      setCoach(null);
+      var chip='<span class="fcChip"><i></i><i></i><i></i></span>';
+      if(deferredInstall){ /* Android/desktop Chrome: real one-tap install button */
+        b.innerHTML='<div style="font-size:13px;color:var(--sh-mut);line-height:1.5;margin-top:10px;">One tap and the FIRE CONF app is on your home screen.</div>';
+        go.style.display='block';
+        return;
+      }
+      go.style.display='none';
+      if(isIOS()){ /* iOS — Safari and Chrome share the same bottom-right ... menu: coach mark (4a) */
+        b.innerHTML='<div class="fcSteps">'+
+          '<div class="fcStep"><span class="n">1</span><span class="t">Tap the '+chip+' menu at the <b style="color:#fff;font-weight:700;">bottom right</b></span></div>'+
+          '<div class="fcStep"><span class="n">2</span><span class="t">Choose <b style="color:#fff;font-weight:700;">Add to Home Screen</b> <span style="color:var(--sh-dim);">(or &ldquo;Install app&rdquo;)</span></span></div>'+
+          '<div class="fcStep"><span class="n">3</span><span class="t">Open <b style="color:#fff;font-weight:700;">FIRE CONF</b> from your home screen</span></div>'+
+          '</div>';
+        setCoach(true);
+        return;
+      }
+      /* desktop / top-right-menu browsers: text-only fallback (no arrow) */
+      b.innerHTML='<div style="font-size:13px;color:var(--sh-mut);line-height:1.55;margin-top:10px;">Open your browser menu and choose <b style="color:#fff;">Add to Home Screen</b> (or &ldquo;Install app&rdquo;).</div>';
+    }
+    function openInstall(){
+      if(!installEligible()) return;
+      renderInstallBody();
+      el('shellInstall').classList.add('open');
+      trackEvent('install_prompt_shown',{platform: deferredInstall?'android':'ios_or_other'});
+    }
+    function closeInstall(){
+      var s=el('shellInstall');
+      if(!s.classList.contains('open')) return;
+      s.classList.add('closing');
+      setTimeout(function(){ s.classList.remove('open'); s.classList.remove('closing'); }, 260);
+    }
+    var autoPrompted=false;
+    function maybeAutoPrompt(){
+      if(autoPrompted || !installEligible() || localStorage.getItem('fc_install_seen')==='1') return;
+      autoPrompted=true;
+      setTimeout(function(){ localStorage.setItem('fc_install_seen','1'); openInstall(); }, 1400);
+    }
+
+    /* ---- pull-to-refresh: installed app only ---- */
+    (function(){
+      if(!(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches) && navigator.standalone!==true) return;
+      var ptr=el('shPtr'), startY=0, pulling=false, dist=0, THRESH=78;
+      function setPtr(d){
+        var t=Math.min(d,110);
+        ptr.style.opacity=Math.min(1, t/45);
+        ptr.style.transform='translateY('+(-70+t)+'px)';
+        ptr.querySelector('svg').style.transform='rotate('+(t*2.4)+'deg)';
+      }
+      function resetPtr(){ ptr.style.transition='transform .25s ease, opacity .25s ease'; ptr.style.transform='translateY(-70px)'; ptr.style.opacity='0';
+        setTimeout(function(){ ptr.style.transition=''; ptr.classList.remove('spin'); },260); }
+      document.addEventListener('touchstart', function(e){
+        var sc=e.target.closest('.shScroll');
+        pulling=false; dist=0;
+        if(!sc || sc.scrollTop>1) return;
+        if(document.body.classList.contains('shellMap')) return;
+        startY=e.touches[0].clientY; pulling=true;
+      }, {passive:true});
+      document.addEventListener('touchmove', function(e){
+        if(!pulling) return;
+        var dy=e.touches[0].clientY-startY;
+        if(dy<=0){ dist=0; setPtr(0); return; }
+        dist=dy*0.5; setPtr(dist);
+      }, {passive:true});
+      document.addEventListener('touchend', function(){
+        if(!pulling) return;
+        pulling=false;
+        if(dist>THRESH){ ptr.classList.add('spin'); trackEvent('pull_refresh'); setTimeout(function(){ location.reload(); }, 250); }
+        else resetPtr();
+        dist=0;
+      });
+    })();
+
     /* ---- analytics: virtual page views + key events ---- */
     function track(path,title){ if(window.gtag) gtag('event','page_view',{ page_path:path, page_title:title||('FIRE CONF · '+path.replace('/','')) }); }
     function trackEvent(name,params){ if(window.gtag) gtag('event',name,params||{}); }
@@ -2516,6 +2789,20 @@
     el('shFullSched').addEventListener('click', function(){ showTab('schedule'); });
     el('shMenuVendors').addEventListener('click', function(){ showTab('vendors'); });
     el('shMenuFaq').addEventListener('click', function(){ openFaq(); });
+    el('shMenuAlerts').addEventListener('click', function(){ toggleAlerts(); });
+    el('shAskGo').addEventListener('click', function(){ closeAsk(); toggleAlerts(); });
+    el('shAskLater').addEventListener('click', function(){ closeAsk(); trackEvent('alerts_prompt_dismissed'); });
+    el('shAskBg').addEventListener('click', function(){ closeAsk(); });
+    el('shInstLater').addEventListener('click', function(){ closeInstall(); trackEvent('install_prompt_dismissed'); });
+    el('shInstBg').addEventListener('click', function(){ closeInstall(); });
+    el('shInstGo').addEventListener('click', function(){
+      if(!deferredInstall) return;
+      deferredInstall.prompt();
+      deferredInstall.userChoice.then(function(c){ trackEvent('install_prompt_choice',{outcome:c.outcome}); deferredInstall=null; closeInstall(); });
+    });
+    el('shMenuInstall').addEventListener('click', function(){ closeMenu(); localStorage.removeItem('fc_install_seen'); autoPrompted=false; renderInstallBody(); el('shellInstall').classList.add('open'); });
+    if(installEligible() && !isStandalone()){ var mi=el('shMenuInstall'); if(mi && (isIOS()||true)) mi.style.display='flex'; }
+    maybeAutoPrompt();
     el('shFaqClose').addEventListener('click', function(){ closeFaq(); });
     /* block Safari pinch-zoom on every page except the map (the 3D map and the
        booth-layout iframe handle their own pinch gestures) */
