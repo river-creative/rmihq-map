@@ -35,7 +35,19 @@ module.exports = async (req, res) => {
       if (!adminKey || !pub || !priv) {
         return res.status(503).json({ ok: false, error: 'push env vars not configured' });
       }
-      if (body.key !== adminKey) return res.status(401).json({ ok: false, error: 'bad key' });
+      // auth: static admin key (programmatic) OR a Google ID token from an allowed domain
+      let authed = body.key === adminKey;
+      if (!authed && body.idToken) {
+        try {
+          const info = await (await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(body.idToken))).json();
+          const domains = (process.env.PUSH_ALLOWED_DOMAINS || 'revival.com').split(',').map(s => s.trim().toLowerCase());
+          const emailDomain = String(info.email || '').split('@')[1] || '';
+          authed = info.aud === process.env.GOOGLE_CLIENT_ID &&
+                   info.email_verified === 'true' &&
+                   domains.includes(emailDomain.toLowerCase());
+        } catch (e) { authed = false; }
+      }
+      if (!authed) return res.status(401).json({ ok: false, error: 'unauthorized' });
 
       const { subs, mode } = await listSubs();
       if (body.dryRun) return res.status(200).json({ ok: true, dryRun: true, total: subs.length, mode });

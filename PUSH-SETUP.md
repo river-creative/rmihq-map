@@ -31,10 +31,34 @@ machine (untracked). Two steps:
 Then redeploy (`git commit --allow-empty -m redeploy && git push`) so the
 functions pick up the env.
 
+## Google sign-in for /admin.html (one-time)
+
+The composer is gated behind Google sign-in, restricted to allowed domains
+(default `revival.com`; override with a `PUSH_ALLOWED_DOMAINS` env var,
+comma-separated). Setup:
+
+1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+   (signed in with the RMI Google Workspace admin account), create a project
+   if needed, then **Create Credentials -> OAuth client ID -> Web application**.
+   - If prompted to configure the consent screen first: choose **Internal**
+     (Workspace) so only org accounts can ever sign in.
+   - **Authorized JavaScript origins**: `https://map.fire.revival.com` and
+     `https://fire-conf-map-git-pwa-river-creative.vercel.app`
+   - No redirect URIs needed.
+2. Copy the **Client ID** (`...apps.googleusercontent.com`) and:
+   - paste it into `admin.html` (`GOOGLE_CLIENT_ID` constant), and
+   - add it as a Vercel env var: `vercel env add GOOGLE_CLIENT_ID production --value="<id>" --yes --scope river-creative` (repeat for `preview`).
+3. Redeploy.
+
+The static `PUSH_ADMIN_KEY` still works for programmatic sends (curl/scripts);
+the Google path is for humans on /admin.html. The server verifies tokens
+against Google's tokeninfo endpoint: audience must match `GOOGLE_CLIENT_ID`,
+email must be verified and on an allowed domain.
+
 ## Sending an alert
 
-Open **`/admin.html`** on the deployed site, paste the admin key (from
-`.push-keys.local.json` → `admin`), write a title + message, and:
+Open **`/admin.html`** on the deployed site, sign in with an allowed Google
+account, write a title + message, and:
 
 - **Dry run** — shows how many devices are subscribed (no send)
 - **Send to everyone** — broadcasts immediately (no undo)

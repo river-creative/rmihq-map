@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>FIRE CONF · Send Alert</title>
 <link rel="icon" type="image/png" href="/favicon.png">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
   :root{ --bg:#141415; --card:#1f1f22; --card2:#2a2a2f; --mut:#9a9aa2; --dim:#77777e; --lt:#cfcfd4; --org:#ff5c1f; }
   *{box-sizing:border-box;}
@@ -26,58 +27,94 @@
     font-size:12px;color:var(--mut);white-space:pre-wrap;display:none;line-height:1.6;}
   .warn{font-size:11.5px;color:var(--dim);margin-top:26px;line-height:1.55;}
   .ok{color:#5ecb8e;} .bad{color:#ff6b6b;}
+  #gate{background:var(--card);border-radius:16px;padding:22px 18px;text-align:center;margin-top:8px;}
+  #gate p{font-size:13px;color:var(--mut);line-height:1.55;margin:0 0 16px;}
+  #gsi{display:flex;justify-content:center;}
+  #who{display:none;font-size:12px;color:var(--mut);margin-bottom:4px;}
+  #composer{display:none;}
 </style>
 </head>
 <body>
   <h1><img src="/apple-touch-icon.png" alt="" style="width:22px;height:22px;">Send Event Alert</h1>
   <div class="sub">FIRE CONFERENCE 2026 · PUSH BROADCAST</div>
 
-  <label for="key">Admin key</label>
-  <input id="key" type="password" placeholder="paste the admin key" autocomplete="off">
-
-  <label for="title">Title</label>
-  <input id="title" maxlength="120" placeholder="Schedule update">
-
-  <label for="body">Message</label>
-  <textarea id="body" maxlength="400" placeholder="Tonight&#8217;s evening session now starts at 7:30 PM — doors 6:30."></textarea>
-
-  <label for="url">Link (opens when tapped — optional)</label>
-  <input id="url" placeholder="/schedule" value="/">
-
-  <div class="row">
-    <button id="dry">Dry run (count devices)</button>
-    <button id="send">Send to everyone</button>
+  <div id="gate">
+    <p>Restricted to Revival Ministries staff.<br>Sign in with your <b style="color:#fff;">@revival.com</b> Google account.</p>
+    <div id="gsi"></div>
+    <p id="gateErr" class="bad" style="display:none;margin-top:14px;"></p>
   </div>
 
-  <div id="out"></div>
+  <div id="composer">
+    <div id="who"></div>
 
-  <p class="warn">⚠️ “Send to everyone” pushes immediately to every subscribed device — there is no undo.
-  Use “Dry run” to check how many devices are subscribed. Keep this page’s URL and the admin key private.</p>
+    <label for="title">Title</label>
+    <input id="title" maxlength="120" placeholder="Schedule update">
+
+    <label for="body">Message</label>
+    <textarea id="body" maxlength="400" placeholder="Tonight&#8217;s evening session now starts at 7:30 PM — doors 6:30."></textarea>
+
+    <label for="url">Link (opens when tapped — optional)</label>
+    <input id="url" placeholder="/schedule" value="/">
+
+    <div class="row">
+      <button id="dry">Dry run (count devices)</button>
+      <button id="send">Send to everyone</button>
+    </div>
+
+    <div id="out"></div>
+
+    <p class="warn">⚠️ “Send to everyone” pushes immediately to every subscribed device — there is no undo.
+    Use “Dry run” to check how many devices are subscribed. Sessions expire after about an hour — just sign in again.</p>
+  </div>
 
 <script>
-  var keyEl=document.getElementById('key'), out=document.getElementById('out');
-  keyEl.value=localStorage.getItem('fc_admin_key')||'';
-  keyEl.addEventListener('change',function(){ localStorage.setItem('fc_admin_key',keyEl.value.trim()); });
+  /* Set after creating the OAuth client in Google Cloud Console (Web application,
+     authorized JS origins: https://map.fire.revival.com + the preview URL). */
+  var GOOGLE_CLIENT_ID='PASTE_GOOGLE_CLIENT_ID';
+
+  var idToken=null, out=document.getElementById('out');
+
+  function onCred(resp){
+    idToken=resp.credential;
+    try{
+      var claims=JSON.parse(atob(idToken.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+      document.getElementById('who').textContent='Signed in as '+claims.email;
+      document.getElementById('who').style.display='block';
+    }catch(e){}
+    document.getElementById('gate').style.display='none';
+    document.getElementById('composer').style.display='block';
+  }
+
+  window.onload=function(){
+    if(GOOGLE_CLIENT_ID.indexOf('PASTE')===0){
+      document.getElementById('gateErr').textContent='OAuth client not configured yet — see PUSH-SETUP.md.';
+      document.getElementById('gateErr').style.display='block';
+      return;
+    }
+    google.accounts.id.initialize({ client_id:GOOGLE_CLIENT_ID, callback:onCred });
+    google.accounts.id.renderButton(document.getElementById('gsi'), { theme:'filled_black', size:'large', text:'signin_with' });
+  };
 
   function post(dryRun){
-    var payload={ action:'send', key:keyEl.value.trim(), dryRun:!!dryRun,
+    var payload={ action:'send', idToken:idToken, dryRun:!!dryRun,
       title:document.getElementById('title').value.trim(),
       body:document.getElementById('body').value.trim(),
       url:document.getElementById('url').value.trim()||'/' };
-    if(!payload.key){ show('Enter the admin key first.', false); return; }
+    if(!idToken){ show('Sign in first.', false); return; }
     if(!dryRun && (!payload.title||!payload.body)){ show('Title and message are required.', false); return; }
     if(!dryRun && !confirm('Send this alert to ALL subscribed devices now?')) return;
     show((dryRun?'Counting…':'Sending…'), true);
     fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {status:r.status, j:j}; }); })
       .then(function(res){
+        if(res.status===401){ return show('Session expired or account not allowed — sign in again with an @revival.com account.', false); }
         if(!res.j.ok) return show('Error ('+res.status+'): '+(res.j.error||'unknown'), false);
         if(res.j.dryRun) return show('✓ '+res.j.total+' device(s) subscribed  ·  storage: '+res.j.mode, true);
-        show('✓ Sent: '+res.j.sent+'  ·  Failed: '+res.j.failed+'  ·  Pruned dead: '+res.j.pruned+'  ·  Total: '+res.j.total+'  ·  storage: '+res.j.mode, true);
+        show('✓ Sent: '+res.j.sent+'  ·  Failed: '+res.j.failed+'  ·  Pruned dead: '+res.j.pruned+'  ·  Total: '+res.j.total, true);
       })
       .catch(function(e){ show('Network error: '+e, false); });
   }
-  function show(msg, good){ out.style.display='block'; out.textContent=msg; out.className=good?'ok':'bad'; out.id='out'; }
+  function show(msg, good){ out.style.display='block'; out.textContent=msg; out.className=good?'ok':'bad'; }
   document.getElementById('dry').addEventListener('click',function(){ post(true); });
   document.getElementById('send').addEventListener('click',function(){ post(false); });
 </script>
