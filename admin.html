@@ -147,6 +147,7 @@
     sendGroup=b.getAttribute('data-g');
     var bs=this.querySelectorAll('button');
     for(var i=0;i<bs.length;i++) bs[i].className=bs[i]===b?'on':'';
+    document.getElementById('send').textContent=sendGroup==='all'?'Send to everyone':'Send to '+GROUP_LABEL[sendGroup]+' only';
   });
 
   function post(dryRun){
