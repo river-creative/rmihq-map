@@ -276,9 +276,6 @@
   .shScroll::before{content:"";float:left;width:0;height:calc(100% + 1px);}
   .shScroll{touch-action:pan-y;overscroll-behavior-y:contain;} /* keep the elastic bounce inside the scroller */
   html,body{overscroll-behavior:none;} /* never chain overscroll to the document (drags fixed nav in standalone) */
-  @media (display-mode: standalone){
-    body{position:fixed;inset:0;width:100%;} /* installed app: hard-pin the document so the tab bar cannot budge */
-  }
   .shWk,.shChips,.shCovers,#shMapChips{touch-action:pan-x;}
   #shellBar{touch-action:manipulation;}
   .shHead{display:flex;align-items:center;justify-content:space-between;gap:10px;box-sizing:border-box;
