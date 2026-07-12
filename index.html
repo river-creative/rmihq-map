@@ -2057,7 +2057,7 @@
       { name:'Campmeeting', sub:'Adults · Sanctuary', color:ORG, border:'rgba(255,92,31,0.55)', filter:'Campmeeting', src:CDN+'6a231802bdae079a49553422_Family%20Fire%20Conference%20Graphic-Final.jpg' },
       { name:'Youth Week', sub:'Ages 13–19 · Pavilion', color:BLU, border:'rgba(63,141,255,0.5)', filter:'Youth Week', src:CDN+'6a2317cad695b35b55d2cfdf_1920%20x%201080%20(web).jpg' },
       { name:'Kids Week', sub:'Ages 6–12 · Kids Tent', color:GRN, border:'rgba(47,181,107,0.5)', filter:'Kids', src:CDN+'6a2317bf2fd10c275d86c010_awaken-kids-fire-week-2026-landscape.jpg' },
-      { name:'Kids Week · Bears', sub:'Ages 3–5 · Kids Tent', color:GRN, border:'rgba(47,181,107,0.5)', filter:'Kids', src:CDN+'6a231796a448e4ecfc937a00_river-bears-v2.jpg' }
+      { name:'River Bears', sub:'Ages 3–5 · Studio B', color:GRN, border:'rgba(47,181,107,0.5)', filter:'Kids', src:CDN+'6a231796a448e4ecfc937a00_river-bears-v2.jpg' }
     ];
     var CHIPS=[
       { label:'All', value:'All', dot:'#141415' },
@@ -2077,16 +2077,17 @@
         evts:['Campmeeting'],groups:[sun?'church':'camp'],evtLabel:sun?'The River at Tampa Bay Church':null,color:ORG,route:'main',approxEnd:true});
       if(wk){
         s.push({t:'9:30 AM',m:570,end:780,title:'Morning Session',venue:'River Pavilion · until ~ 1:00 PM',evts:['Youth Week'],groups:['youth'],color:BLU,route:'youth',approxEnd:true});
-        s.push({t:'9:30 AM',m:570,end:780,title:'Morning Session',venue:'Kids Tent · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:'kids',approxEnd:true});
+        s.push({t:'9:30 AM',m:570,end:780,title:'Morning Session',venue:'Kids Tent · ages 6–12',evts:['Kids'],groups:['k612'],color:GRN,route:'kids',approxEnd:true});
+        s.push({t:'9:30 AM',m:570,end:780,title:'Morning Session',venue:'Studio B · ages 3–5',evts:['Kids'],groups:['k35'],color:GRN,route:'bears',approxEnd:true});
       }
       if(day===13){
         s.push({t:'4:00 PM',m:960,end:1020,title:'Registration — Groups',venue:'Opening Night · Youth & Kids check-in',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
         s.push({t:'5:00 PM',m:1020,end:1140,title:'Registration — General',venue:'Opening Night · Youth & Kids check-in',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
       }
       if(day===14) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Wear clothes to get wet & dirty — bring a towel',evts:['Youth Week'],groups:['youth'],color:BLU,route:null});
-      if(day===15) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Kids Tent · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
+      if(day===15) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Kids Tent & Studio B · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
       if(day===16) s.push({t:'2:00 PM',m:840,end:960,title:'Field Day — Crucible Obstacle Course',venue:'Wear clothes to get wet & dirty — towel recommended',evts:['Youth Week'],groups:['youth'],color:BLU,route:null});
-      if(day===17) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Kids Tent · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
+      if(day===17) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Kids Tent & Studio B · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
       if(day>=13&&day<=17) s.push({t:'5:00 PM',m:1020,end:1140,title:'Preservice Activities',venue:'River Pavilion & Kids Tent',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
       s.push({t:'7:00 PM',m:1140,end:1320,title:'Evening Session',venue:'Main Sanctuary · doors 6:00 PM',evts:['Campmeeting'],groups:['camp'],color:ORG,route:'main',approxEnd:true});
       if(day>=13&&day<=17){
@@ -2174,7 +2175,7 @@
         var group=liveSet.filter(function(s){ return s.t===live.t && s.title===live.title; });
         var evtSet=[]; group.forEach(function(s){ s.evts.forEach(function(e){ if(evtSet.indexOf(e)<0) evtSet.push(e); }); });
         var title = group.length>1 && /Session$/.test(live.title) ? live.title+'s' : live.title;
-        var line = group.length>=3 ? 'All three venues · '+live.t
+        var line = group.length>=3 ? 'All venues · '+live.t
           : group.length===2 ? evtSet.join(' & ').replace(/ Week/g,'')+' · '+live.t
           : esc(live.venue)+' · '+live.t;
         var route = group.length>1 ? '' : (live.route||null);
@@ -2214,7 +2215,7 @@
         else { seen[k]={ t:s.t, title:s.title, evtLabel:s.evtLabel, count:1, evtSet:s.evts.slice() }; merged.push(seen[k]); }
       });
       merged.slice(0,3).forEach(function(s){
-        var evtLabel = s.count>=3 ? 'All three venues'
+        var evtLabel = s.count>=3 ? 'All venues'
           : (s.evtLabel || (s.evtSet.length>1 ? s.evtSet.join(' & ').replace(' Week','') : s.evtSet[0]));
         var title = s.count>1 && /Session$/.test(s.title) ? s.title+'s' : s.title;
         var row=document.createElement('div'); row.className='shRow'; row.style.cursor='pointer';
@@ -2313,7 +2314,7 @@
       kids:  { title:'Kids Tent', tag:'KIDS 6–12', tagFg:'#5ecb8e', tagBg:'rgba(47,181,107,0.14)',
                desc:'Kids Fire Week · morning & evening sessions', route:'kids' },
       bears: { title:'River Bears', tag:'KIDS 3–5', tagFg:'#5ecb8e', tagBg:'rgba(47,181,107,0.14)',
-               desc:'Ages 3–5 · mornings 9:30 AM – 1:00 PM', route:'bears' }
+               desc:'Studio B · ages 3–5 · mornings 9:30 AM – 1:00 PM', route:'bears' }
     };
     var MCHIPS=[
       { label:'All', key:null },
