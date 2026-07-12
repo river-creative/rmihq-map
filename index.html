@@ -395,16 +395,30 @@
   #shellMenu.open{visibility:visible;transform:translateY(0);border-radius:0;
     transition:transform .48s cubic-bezier(0.32,0.72,0,1), border-radius .48s ease, visibility 0s 0s;}
   @media (prefers-reduced-motion:reduce){ #shellMenu{transition:none;} }
-  #shMenuClose,#shFaqClose{width:40px;height:40px;border-radius:50%;background:var(--sh-card);border:0;cursor:pointer;
+  #shMenuClose,#shFaqClose,#shAlertsClose{width:40px;height:40px;border-radius:50%;background:var(--sh-card);border:0;cursor:pointer;
     display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--sh-lt);}
-  #shMenuClose:hover,#shFaqClose:hover{background:var(--sh-card2);}
-  /* ---- FAQs: same iOS sheet pattern, layers above the menu ---- */
-  #shellFaq{display:flex;z-index:77;visibility:hidden;transform:translateY(103%);
+  #shMenuClose:hover,#shFaqClose:hover,#shAlertsClose:hover{background:var(--sh-card2);}
+  /* ---- FAQs + Alerts: same iOS sheet pattern, layers above the menu ---- */
+  #shellFaq,#shellAlerts{display:flex;z-index:77;visibility:hidden;transform:translateY(103%);
     border-radius:24px 24px 0 0;overflow:hidden;box-shadow:0 -18px 60px rgba(0,0,0,0.55);
     transition:transform .48s cubic-bezier(0.32,0.72,0,1), border-radius .48s ease, visibility 0s .48s;}
-  #shellFaq.open{visibility:visible;transform:translateY(0);border-radius:0;
+  #shellFaq.open,#shellAlerts.open{visibility:visible;transform:translateY(0);border-radius:0;
     transition:transform .48s cubic-bezier(0.32,0.72,0,1), border-radius .48s ease, visibility 0s 0s;}
-  @media (prefers-reduced-motion:reduce){ #shellFaq{transition:none;} }
+  @media (prefers-reduced-motion:reduce){ #shellFaq,#shellAlerts{transition:none;} }
+  /* alert toggle rows */
+  .alRow{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--sh-card);
+    border-radius:16px;padding:15px 16px;margin-bottom:8px;border:0;width:100%;font-family:inherit;
+    color:#fff;text-align:left;cursor:pointer;}
+  .alRow .lbl{font-weight:700;font-size:15.5px;display:block;}
+  .alRow .sub{display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;}
+  .alSwitch{position:relative;width:48px;height:29px;border-radius:15px;background:var(--sh-card2);flex:0 0 auto;transition:background .2s;}
+  .alSwitch::after{content:'';position:absolute;top:2.5px;left:2.5px;width:24px;height:24px;border-radius:50%;
+    background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,0.4);}
+  .alRow.on .alSwitch{background:var(--sh-org);}
+  .alRow.on .alSwitch::after{transform:translateX(19px);}
+  #alYouth.on .alSwitch{background:var(--sh-blu);}
+  #alKids.on .alSwitch{background:var(--sh-grn);}
+  .alRow.dis{opacity:.4;pointer-events:none;}
   .faqItem{background:var(--sh-card);border-radius:16px;margin-bottom:8px;overflow:hidden;}
   .faqQ{width:100%;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
     font-weight:700;font-size:14.5px;color:#fff;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left;}
@@ -661,7 +675,7 @@
   <div id="shellMenu" class="shellScreen">
     <div style="position:absolute;top:0;left:0;right:0;height:220px;background:radial-gradient(120% 100% at 50% 0%, rgba(255,92,31,0.16) 0%, rgba(20,20,21,0) 70%);pointer-events:none;"></div>
     <div class="shHead" style="position:relative;">
-      <span class="shTitle" id="shMenuTitle">Menu</span>
+      <span class="shTitle">Menu</span>
       <button id="shMenuClose" aria-label="Close menu">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
       </button>
@@ -670,10 +684,6 @@
       <div style="display:flex;flex-direction:column;gap:8px;">
         <button class="shMenuRow" id="shMenuInstall" style="display:none;"><span>Get the App</span><span style="color:var(--sh-mut);font-size:14px;">&darr;</span></button>
         <button class="shMenuRow" id="shMenuAlerts"><span>Event Alerts<span id="shAlertsState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Checking&hellip;</span></span><svg id="shAlertsBell" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sh-mut);flex:0 0 auto;"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
-        <div id="shTopics" style="display:none;flex-direction:column;gap:8px;">
-          <button class="shMenuRow" id="shTopicYouth" style="margin-left:18px;"><span>Youth Week Alerts<span id="shTopicYouthState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Off</span></span><span id="shTopicYouthDot" style="width:10px;height:10px;border-radius:50%;background:var(--sh-mut);opacity:.35;flex:0 0 auto;"></span></button>
-          <button class="shMenuRow" id="shTopicKids" style="margin-left:18px;"><span>Kids Week Alerts<span id="shTopicKidsState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Off</span></span><span id="shTopicKidsDot" style="width:10px;height:10px;border-radius:50%;background:var(--sh-mut);opacity:.35;flex:0 0 auto;"></span></button>
-        </div>
         <a class="shMenuRow" href="https://revival.com" target="_blank" rel="noopener"><span>Revival.com</span><span style="color:var(--sh-mut);font-size:14px;">&nearr;</span></a>
         <button class="shMenuRow" id="shMenuFaq"><span>FAQs</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
         <button class="shMenuRow" id="shMenuVendors"><span>Vendors</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
@@ -730,6 +740,23 @@
         <button id="shAskGo">Enable Alerts</button>
         <button id="shAskLater">Not now</button>
       </div>
+    </div>
+  </div>
+
+  <div id="shellAlerts" class="shellScreen">
+    <div class="shHead" style="position:relative;">
+      <span class="shTitle">Event Alerts</span>
+      <button id="shAlertsClose" aria-label="Close alerts">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
+      </button>
+    </div>
+    <div class="shScroll" style="padding-top:14px;">
+      <button class="alRow" id="alMaster"><span><span class="lbl">Event Alerts</span><span class="sub" id="alMasterSub">Off</span></span><span class="alSwitch"></span></button>
+      <div style="font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:1.6px;color:var(--sh-mut);margin:20px 2px 10px;">MORE ALERT TYPES</div>
+      <button class="alRow" id="alYouth"><span><span class="lbl">Youth Week Alerts</span><span class="sub">Youth sessions &amp; news</span></span><span class="alSwitch"></span></button>
+      <button class="alRow" id="alKids"><span><span class="lbl">Kids Week Alerts</span><span class="sub">Kids sessions &amp; news</span></span><span class="alSwitch"></span></button>
+      <button class="alRow" id="alAdmin"><span><span class="lbl">Admin Alerts</span><span class="sub">Event team updates</span></span><span class="alSwitch"></span></button>
+      <p style="font-size:11.5px;color:var(--sh-dim);line-height:1.55;margin:16px 2px 0;">Everyone with Event Alerts on receives general updates — schedule changes, app updates, and event news. The extra types add alerts for those tracks on top.</p>
     </div>
   </div>
 
@@ -2535,12 +2562,12 @@
     function setAlertsState(txt,on){ var s=el('shAlertsState'); if(!s) return; s.textContent=txt;
       var bell=el('shAlertsBell'); if(bell) bell.style.color=on?'var(--sh-org)':'var(--sh-mut)'; }
     function refreshAlertsRow(){
-      if(!pushSupported()){ setAlertsState(isIOS()&&!isStandalone()?'Add to Home Screen to enable':'Not supported on this browser'); showTopics(false); return; }
-      if(Notification.permission==='denied'){ setAlertsState('Blocked — allow in Settings'); showTopics(false); return; }
-      if(!swReg){ setAlertsState('Loading…'); showTopics(false); return; }
+      if(!pushSupported()){ setAlertsState(isIOS()&&!isStandalone()?'Add to Home Screen to enable':'Not supported on this browser'); refreshAlertsSheet(false,false); return; }
+      if(Notification.permission==='denied'){ setAlertsState('Blocked — allow in Settings'); refreshAlertsSheet(false,false); return; }
+      if(!swReg){ setAlertsState('Loading…'); refreshAlertsSheet(false,false); return; }
       swReg.pushManager.getSubscription().then(function(sub){
         setAlertsState(sub?'On — updates & event news enabled':'Off — tap to enable', !!sub);
-        showTopics(!!sub);
+        refreshAlertsSheet(!!sub,true);
       });
     }
 
@@ -2553,7 +2580,7 @@
       localStorage.setItem('fc_groups', JSON.stringify(gs));
       trackEvent((on?'group_on_':'group_off_')+g);
       syncGroups();
-      refreshTopicRows();
+      refreshAlertsRow();
     }
     function syncGroups(){
       /* re-save the existing subscription with the current group tags */
@@ -2564,17 +2591,22 @@
           body:JSON.stringify({action:'subscribe',subscription:sub,groups:getGroups()})}).catch(function(){});
       });
     }
-    function showTopics(on){ var t=el('shTopics'); if(t) t.style.display=on?'flex':'none'; if(on) refreshTopicRows(); }
-    function refreshTopicRows(){
-      [['youth','shTopicYouthState','shTopicYouthDot','var(--sh-blu)'],
-       ['kids','shTopicKidsState','shTopicKidsDot','var(--sh-grn)']].forEach(function(p){
-        var st=el(p[1]), dot=el(p[2]); if(!st||!dot) return;
-        var on=hasGroup(p[0]);
-        st.textContent=on?'On':'Off';
-        dot.style.background=on?p[3]:'var(--sh-mut)';
-        dot.style.opacity=on?'1':'.35';
+    function refreshAlertsSheet(subOn, usable){
+      var m=el('alMaster'); if(!m) return;
+      m.classList.toggle('on', subOn);
+      m.classList.toggle('dis', !usable);
+      el('alMasterSub').textContent = usable
+        ? (subOn ? 'On — general event updates' : 'Off — schedule changes & event news')
+        : el('shAlertsState').textContent;
+      [['alYouth','youth'],['alKids','kids'],['alAdmin','admin']].forEach(function(p){
+        var r=el(p[0]); if(!r) return;
+        r.classList.toggle('on', subOn && hasGroup(p[1]));
+        r.classList.toggle('dis', !subOn);
       });
     }
+    var alertsOpen=false;
+    function openAlerts(){ alertsOpen=true; refreshAlertsRow(); el('shellAlerts').classList.add('open'); track('/alerts'); }
+    function closeAlerts(){ alertsOpen=false; el('shellAlerts').classList.remove('open'); }
     function toggleAlerts(){
       if(!pushSupported()){
         if(isIOS()&&!isStandalone()) alert('To get event alerts:\n\n1. Tap the Share button\n2. Tap "Add to Home Screen"\n3. Open FIRE CONF from your home screen\n4. Turn on Event Alerts in the Menu');
@@ -2707,6 +2739,7 @@
     function showTab(name){
       if(menuOpen) closeMenu(true);
       if(faqOpen) closeFaq();
+      if(alertsOpen) closeAlerts();
       tab=name;
       Object.keys(SCREENS).forEach(function(k){ el(SCREENS[k]).classList.toggle('on', k===name); });
       document.body.classList.toggle('shellMap', name==='map');
@@ -2821,37 +2854,13 @@
     el('shFullSched').addEventListener('click', function(){ showTab('schedule'); });
     el('shMenuVendors').addEventListener('click', function(){ showTab('vendors'); });
     el('shMenuFaq').addEventListener('click', function(){ openFaq(); });
-    el('shMenuAlerts').addEventListener('click', function(){ toggleAlerts(); });
+    el('shMenuAlerts').addEventListener('click', function(){ openAlerts(); });
     el('shAskGo').addEventListener('click', function(){ closeAsk(); toggleAlerts(); });
-    el('shTopicYouth').addEventListener('click', function(){ setGroup('youth', !hasGroup('youth')); });
-    el('shTopicKids').addEventListener('click', function(){ setGroup('kids', !hasGroup('kids')); });
-
-    /* hidden team-alerts unlock: 7 quick taps on the Menu title, then the team code */
-    var admTaps=0, admTimer=null;
-    el('shMenuTitle').addEventListener('click', function(){
-      admTaps++;
-      clearTimeout(admTimer); admTimer=setTimeout(function(){ admTaps=0; }, 2500);
-      if(admTaps<7) return;
-      admTaps=0;
-      if(hasGroup('admin')){
-        if(confirm('Team alerts are ON for this device. Turn them off?')) setGroup('admin', false);
-        return;
-      }
-      var code=prompt('Team code:');
-      if(code===null) return;
-      if(String(code).trim().toLowerCase()==='fireteam26'){
-        setGroup('admin', true);
-        if(swReg){
-          swReg.pushManager.getSubscription().then(function(sub){
-            alert(sub?'Team alerts enabled for this device.':'Team alerts saved — now turn on Event Alerts above to receive them.');
-          });
-        } else {
-          alert('Team alerts saved — now turn on Event Alerts above to receive them.');
-        }
-      } else {
-        alert('Incorrect code.');
-      }
-    });
+    el('shAlertsClose').addEventListener('click', function(){ closeAlerts(); });
+    el('alMaster').addEventListener('click', function(){ toggleAlerts(); });
+    el('alYouth').addEventListener('click', function(){ setGroup('youth', !hasGroup('youth')); });
+    el('alKids').addEventListener('click', function(){ setGroup('kids', !hasGroup('kids')); });
+    el('alAdmin').addEventListener('click', function(){ setGroup('admin', !hasGroup('admin')); });
     el('shAskLater').addEventListener('click', function(){ closeAsk(); trackEvent('alerts_prompt_dismissed'); });
     el('shAskBg').addEventListener('click', function(){ closeAsk(); });
     el('shInstLater').addEventListener('click', function(){ closeInstall(); trackEvent('install_prompt_dismissed'); });
