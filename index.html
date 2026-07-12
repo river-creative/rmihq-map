@@ -396,19 +396,39 @@
   .faqA{max-height:0;overflow:hidden;padding:0 16px;color:var(--sh-mut);font-size:13.5px;line-height:1.6;
     transition:max-height .32s ease, padding .32s ease;}
   .faqItem.open .faqA{max-height:500px;padding:0 16px 14px;}
-  /* ---- Get-the-app install prompt (bottom card sheet) ---- */
-  #shellInstall{position:fixed;inset:0;z-index:79;visibility:hidden;font-family:'Archivo',sans-serif;}
-  #shellInstall.open{visibility:visible;}
-  #shellInstall .instBg{position:absolute;inset:0;background:rgba(0,0,0,0.55);opacity:0;transition:opacity .3s ease;}
-  #shellInstall.open .instBg{opacity:1;}
-  #shellInstall .instCard{position:absolute;left:12px;right:12px;bottom:calc(var(--sh-barH) + var(--sh-safe) + 10px);
-    background:#1a1a1d;border-radius:24px;padding:20px 18px 16px;box-shadow:0 -16px 44px rgba(0,0,0,0.5);color:#fff;
-    transform:translateY(130%);transition:transform .48s cubic-bezier(0.32,0.72,0,1);}
-  #shellInstall.open .instCard{transform:none;}
-  @media (prefers-reduced-motion:reduce){ #shellInstall .instCard,#shellInstall .instBg{transition:none;} }
-  .instStep{display:flex;align-items:center;gap:11px;padding:9px 0;font-size:13.5px;color:var(--sh-lt);}
-  .instStep .n{width:22px;height:22px;border-radius:50%;background:var(--sh-card2);color:#fff;font-size:11.5px;font-weight:700;
+  /* ---- Get-the-app install coach mark (design 4a "Spotlight sheet") ---- */
+  @keyframes fcFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fcSheetUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fcNudge { from { transform: translate(0, 0); } to { transform: translate(6px, 9px); } }
+  #shellInstall{position:fixed;inset:0;z-index:85;display:none;font-family:'Archivo',sans-serif;}
+  #shellInstall.open{display:block;}
+  #shellInstall .instBg{position:absolute;inset:0;background:rgba(5,5,8,0.66);}
+  #shellInstall.open .instBg{animation:fcFadeIn 0.5s ease both;}
+  #shellInstall .instCard{position:fixed;left:12px;right:12px;bottom:calc(120px + var(--sh-safe));
+    background:#1f1f22;border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:18px;
+    box-shadow:0 24px 70px rgba(0,0,0,0.6);color:#fff;}
+  #shellInstall.open .instCard{animation:fcSheetUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.12s both;}
+  #shellInstall.closing .instCard,#shellInstall.closing .instBg{transition:opacity .25s ease;opacity:0;animation:none;}
+  .fcSteps{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+  .fcStep{display:flex;align-items:center;gap:11px;background:#26262b;border-radius:14px;padding:11px 13px;
+    font-size:13.5px;color:var(--sh-lt);}
+  .fcStep .n{width:22px;height:22px;border-radius:50%;background:#2f2f35;color:#fff;font-size:11.5px;font-weight:700;
     display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .fcStep .t{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap;}
+  .fcChip{width:30px;height:20px;border-radius:6px;background:#3a3b41;display:inline-flex;align-items:center;
+    justify-content:center;gap:3px;flex:0 0 auto;}
+  .fcChip i{width:3.5px;height:3.5px;border-radius:50%;background:#e8e9ee;}
+  #shInstLater{width:100%;height:44px;border-radius:14px;background:none;border:1.5px solid #34343a;
+    color:var(--sh-lt);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}
+  #shInstGo{width:100%;height:44px;border-radius:14px;border:0;font-size:14px;font-weight:700;font-family:inherit;
+    background:var(--sh-org);color:#fff;cursor:pointer;display:none;}
+  #shInstArrow{position:fixed;right:54px;bottom:calc(24px + var(--sh-safe));display:none;pointer-events:none;}
+  #shellInstall.open #shInstArrow.on{display:block;animation:fcFadeIn 0.4s ease 0.55s both;}
+  #shInstArrow .nudge{animation:fcNudge 0.9s ease-in-out 0.95s infinite alternate;}
+  @media (prefers-reduced-motion:reduce){
+    #shInstArrow .nudge{animation:none;}
+    #shellInstall.open .instBg,#shellInstall.open .instCard,#shellInstall.open #shInstArrow.on{animation-duration:0.01s;animation-delay:0s;}
+  }
   /* ---- Pavilion Lobby modal restyled to the 3a shell ---- */
   #pavModal{background:var(--sh-bg);z-index:78;} /* above shell screens (70) and menu sheet (76), below tab bar (80) */
   #pavModal .schedBg{display:none;}
@@ -641,19 +661,26 @@
   <div id="shellInstall" aria-hidden="true">
     <div class="instBg" id="shInstBg"></div>
     <div class="instCard">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <img src="apple-touch-icon.png" alt="" style="width:34px;height:34px;">
-        <div style="flex:1;">
-          <div style="font-weight:800;font-size:17px;">Get the FIRE CONF app</div>
-          <div style="font-size:12px;color:var(--sh-mut);margin-top:1px;">Faster access &middot; event alerts &middot; works offline</div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="icon-192.png" alt="" style="width:46px;height:46px;border-radius:12px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:800;font-size:17px;color:#fff;">Get The FIRE CONF. Web App</div>
+          <div style="font-size:12px;color:var(--sh-mut);margin-top:2px;">Faster Access &bull; Event Alerts &bull; Offline Mode</div>
         </div>
       </div>
-      <div id="shInstBody" style="margin-top:10px;"></div>
-      <div style="display:flex;gap:9px;margin-top:12px;">
-        <button id="shInstLater" class="shSheetBtn" style="background:none;border:1.5px solid #34343a;color:var(--sh-lt);font-weight:600;flex:0 0 34%;">Not now</button>
-        <button id="shInstGo" class="shSheetBtn shBtnOrg" style="border:0;font-weight:700;display:none;">Add to Home Screen</button>
+      <div id="shInstBody"></div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+        <button id="shInstGo">Add to Home Screen</button>
+        <button id="shInstLater">Not now</button>
       </div>
     </div>
+    <div id="shInstArrow"><div class="nudge">
+      <svg width="46" height="86" viewBox="0 0 46 86" fill="none">
+        <path d="M10 6 Q 12 46 34 72" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/>
+        <path d="M34 72 L19 68" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/>
+        <path d="M34 72 L31 56" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div></div>
   </div>
 
   <div id="shellFaq" class="shellScreen">
@@ -2475,26 +2502,38 @@
     function installEligible(){
       return !isStandalone() && localStorage.getItem('fc_installed')!=='1';
     }
+    function isIOSChrome(){ return /CriOS/.test(navigator.userAgent); }
+    function isIOSAltBrowser(){ return isIOS() && /CriOS|FxiOS|EdgiOS/.test(navigator.userAgent); }
     function renderInstallBody(){
-      var b=el('shInstBody'), go=el('shInstGo');
-      if(deferredInstall){ /* Android/Chrome: real install button */
-        b.innerHTML='<div style="font-size:13px;color:var(--sh-mut);line-height:1.5;">One tap and the FIRE CONF app is on your home screen.</div>';
+      var b=el('shInstBody'), go=el('shInstGo'), arrow=el('shInstArrow');
+      arrow.classList.remove('on');
+      var chip='<span class="fcChip"><i></i><i></i><i></i></span>';
+      if(deferredInstall){ /* Android/desktop Chrome: real one-tap install button */
+        b.innerHTML='<div style="font-size:13px;color:var(--sh-mut);line-height:1.5;margin-top:10px;">One tap and the FIRE CONF app is on your home screen.</div>';
         go.style.display='block';
         return;
       }
-      if(isIOS()){ /* iOS: instructional steps (Apple allows no install button) */
-        b.innerHTML=
-          '<div class="instStep"><span class="n">1</span><span>Tap the <b>Share</b> button&nbsp;'+
-          '<svg width="14" height="17" viewBox="0 0 24 30" fill="none" stroke="#4da3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;"><path d="M12 19V3M6.5 8.5L12 3l5.5 5.5"/><path d="M5 13v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V13"/></svg>'+
-          '&nbsp;below</span></div>'+
-          '<div class="instStep"><span class="n">2</span><span>Scroll down &amp; tap <b>Add to Home Screen</b></span></div>'+
-          '<div class="instStep"><span class="n">3</span><span>Open <b>FIRE CONF</b> from your home screen</span></div>';
-        go.style.display='none';
+      go.style.display='none';
+      if(isIOSAltBrowser()){ /* iOS Chrome & other bottom-right-menu browsers: coach mark (4a) */
+        b.innerHTML='<div class="fcSteps">'+
+          '<div class="fcStep"><span class="n">1</span><span class="t">Tap the '+chip+' menu at the <b style="color:#fff;font-weight:700;">bottom right</b></span></div>'+
+          '<div class="fcStep"><span class="n">2</span><span class="t">Choose <b style="color:#fff;font-weight:700;">Add to Home Screen</b> <span style="color:var(--sh-dim);">(or &ldquo;Install app&rdquo;)</span></span></div>'+
+          '</div>';
+        if(window.innerWidth<520) arrow.classList.add('on');
         return;
       }
-      /* other browsers: generic menu instructions */
-      b.innerHTML='<div style="font-size:13px;color:var(--sh-mut);line-height:1.55;">Open your browser menu and choose <b style="color:#fff;">Add to Home Screen</b> (or &ldquo;Install app&rdquo;).</div>';
-      go.style.display='none';
+      if(isIOS()){ /* iOS Safari: share-sheet steps */
+        b.innerHTML='<div class="fcSteps">'+
+          '<div class="fcStep"><span class="n">1</span><span class="t">Tap the <b style="color:#fff;font-weight:700;">Share</b> button '+
+          '<svg width="14" height="17" viewBox="0 0 24 30" fill="none" stroke="#4da3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V3M6.5 8.5L12 3l5.5 5.5"/><path d="M5 13v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V13"/></svg>'+
+          ' below</span></div>'+
+          '<div class="fcStep"><span class="n">2</span><span class="t">Scroll down &amp; tap <b style="color:#fff;font-weight:700;">Add to Home Screen</b></span></div>'+
+          '<div class="fcStep"><span class="n">3</span><span class="t">Open <b style="color:#fff;font-weight:700;">FIRE CONF</b> from your home screen</span></div>'+
+          '</div>';
+        return;
+      }
+      /* desktop / top-right-menu browsers: text-only fallback (no arrow) */
+      b.innerHTML='<div style="font-size:13px;color:var(--sh-mut);line-height:1.55;margin-top:10px;">Open your browser menu and choose <b style="color:#fff;">Add to Home Screen</b> (or &ldquo;Install app&rdquo;).</div>';
     }
     function openInstall(){
       if(!installEligible()) return;
@@ -2502,7 +2541,12 @@
       el('shellInstall').classList.add('open');
       trackEvent('install_prompt_shown',{platform: deferredInstall?'android':'ios_or_other'});
     }
-    function closeInstall(){ el('shellInstall').classList.remove('open'); }
+    function closeInstall(){
+      var s=el('shellInstall');
+      if(!s.classList.contains('open')) return;
+      s.classList.add('closing');
+      setTimeout(function(){ s.classList.remove('open'); s.classList.remove('closing'); }, 260);
+    }
     var autoPrompted=false;
     function maybeAutoPrompt(){
       if(autoPrompted || !installEligible() || localStorage.getItem('fc_install_seen')==='1') return;
