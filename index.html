@@ -276,6 +276,13 @@
   .shScroll::before{content:"";float:left;width:0;height:calc(100% + 1px);}
   .shScroll{touch-action:pan-y;overscroll-behavior-y:contain;} /* keep the elastic bounce inside the scroller */
   html,body{overscroll-behavior:none;} /* never chain overscroll to the document (drags fixed nav in standalone) */
+  /* pull-to-refresh (installed app only — iOS standalone has no native gesture) */
+  #shPtr{position:fixed;top:calc(max(10px,env(safe-area-inset-top,10px)));left:50%;margin-left:-19px;z-index:92;
+    width:38px;height:38px;border-radius:50%;background:#1f1f22;border:1px solid rgba(255,255,255,0.09);
+    box-shadow:0 8px 24px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;
+    transform:translateY(-70px);opacity:0;pointer-events:none;}
+  #shPtr svg{width:17px;height:17px;transition:transform .15s ease;}
+  #shPtr.spin svg{animation:spin 0.8s linear infinite;}
   .shWk,.shChips,.shCovers,#shMapChips{touch-action:pan-x;}
   #shellBar{touch-action:manipulation;}
   .shHead{display:flex;align-items:center;justify-content:space-between;gap:10px;box-sizing:border-box;
@@ -745,6 +752,8 @@
   </div>
   <div id="shMapChips"></div>
   <div id="shMapSheet"></div>
+
+  <div id="shPtr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#ff5c1f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.8-6.3"/><path d="M3.5 4.5v4h4"/></svg></div>
 
   <nav id="shellBar" aria-label="App navigation">
     <button class="shTab" data-tab="today" aria-label="Today">
@@ -2613,6 +2622,40 @@
       autoPrompted=true;
       setTimeout(function(){ localStorage.setItem('fc_install_seen','1'); openInstall(); }, 1400);
     }
+
+    /* ---- pull-to-refresh: installed app only ---- */
+    (function(){
+      if(!(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches) && navigator.standalone!==true) return;
+      var ptr=el('shPtr'), startY=0, pulling=false, dist=0, THRESH=78;
+      function setPtr(d){
+        var t=Math.min(d,110);
+        ptr.style.opacity=Math.min(1, t/45);
+        ptr.style.transform='translateY('+(-70+t)+'px)';
+        ptr.querySelector('svg').style.transform='rotate('+(t*2.4)+'deg)';
+      }
+      function resetPtr(){ ptr.style.transition='transform .25s ease, opacity .25s ease'; ptr.style.transform='translateY(-70px)'; ptr.style.opacity='0';
+        setTimeout(function(){ ptr.style.transition=''; ptr.classList.remove('spin'); },260); }
+      document.addEventListener('touchstart', function(e){
+        var sc=e.target.closest('.shScroll');
+        pulling=false; dist=0;
+        if(!sc || sc.scrollTop>1) return;
+        if(document.body.classList.contains('shellMap')) return;
+        startY=e.touches[0].clientY; pulling=true;
+      }, {passive:true});
+      document.addEventListener('touchmove', function(e){
+        if(!pulling) return;
+        var dy=e.touches[0].clientY-startY;
+        if(dy<=0){ dist=0; setPtr(0); return; }
+        dist=dy*0.5; setPtr(dist);
+      }, {passive:true});
+      document.addEventListener('touchend', function(){
+        if(!pulling) return;
+        pulling=false;
+        if(dist>THRESH){ ptr.classList.add('spin'); trackEvent('pull_refresh'); setTimeout(function(){ location.reload(); }, 250); }
+        else resetPtr();
+        dist=0;
+      });
+    })();
 
     /* ---- analytics: virtual page views + key events ---- */
     function track(path,title){ if(window.gtag) gtag('event','page_view',{ page_path:path, page_title:title||('FIRE CONF · '+path.replace('/','')) }); }
