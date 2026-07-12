@@ -282,7 +282,8 @@
   .shChip.on{background:#fff;color:#141415;}
   .shDot{width:7px;height:7px;border-radius:50%;flex:0 0 auto;}
   /* covers carousel */
-  .shCovers{display:flex;gap:9px;overflow-x:auto;margin:0 -20px;padding:0 20px;scrollbar-width:none;}
+  .shCovers{display:flex;gap:9px;overflow-x:auto;margin:0 -20px;padding:0 20px;scrollbar-width:none;scroll-snap-type:x mandatory;scroll-padding-left:20px;-webkit-overflow-scrolling:touch;}
+  .shCover{scroll-snap-align:start;}
   .shCovers::-webkit-scrollbar{display:none;}
   .shCover{flex:0 0 auto;width:148px;cursor:pointer;background:none;border:0;padding:0;text-align:left;font-family:inherit;}
   .shCoverImg{width:148px;height:111px;border-radius:14px;overflow:hidden;border:1.5px solid transparent;background:#26262b;}
@@ -539,7 +540,7 @@
   <!-- ============ FIRE CONF app shell (concept 3a) ============ -->
   <div id="shellToday" class="shellScreen">
     <div class="shHead">
-      <span class="shBrand">FIRE CONF</span>
+      <span style="display:flex;align-items:center;gap:8px;"><img src="apple-touch-icon.png" alt="" style="width:20px;height:20px;display:block;"><span class="shBrand">FIRE CONF.</span></span>
       <span class="shMono" id="shDayCount" style="font-size:10.5px;"></span>
     </div>
     <div class="shWk" id="shWkToday"></div>
@@ -1611,12 +1612,12 @@
   function pick(cx,cy){ var pn=Date.now(); if(pn-lastPickT<500 && Math.abs(cx-lastPickX)<24 && Math.abs(cy-lastPickY)<24) return; lastPickT=pn; lastPickX=cx; lastPickY=cy;   // touch fires pointerup + touchend for one tap; ignore the duplicate so the route doesn't toggle on then off
     ndc(cx,cy); ray.setFromCamera(mouse,camera); var hit=ray.intersectObjects(buildings,false);
     var id=hit.length?hit[0].object.userData.id:null;
-    if(id==='studiob'){ selectNone(); setRoute('bears'); shellVenue('bears'); return; }     // Studio B -> show the River Bears route
-    if(id==='kidstent'){ selectNone(); setRoute('kids'); shellVenue('kids'); return; }      // Kids Week tent -> show the Kids route
+    if(id==='studiob'){ selectNone(); if(!shellVenue('bears')) setRoute('bears'); return; }     // Studio B -> show the River Bears route
+    if(id==='kidstent'){ selectNone(); if(!shellVenue('kids')) setRoute('kids'); return; }      // Kids Week tent -> show the Kids route
     if(id==='foodtrucks'){ selectNone(); if(window.__shellVendors){ window.__shellVendors(); } else { openVendorModal(); } return; }  // Food trucks -> Vendors
-    if(id==='youthhit'){ selectNone(); setRoute('youth'); shellVenue('youth'); return; }    // Youth Week text -> show the 13-19 route
+    if(id==='youthhit'){ selectNone(); if(!shellVenue('youth')) setRoute('youth'); return; }    // Youth Week text -> show the 13-19 route
     if(id==='lobbyhit'){ selectNone(); openPavModal(); return; }       // Pavilion Lobby text -> booth-layout pop-up
-    if(id==='auditorium'){ selectNone(); setRoute('main'); shellVenue('main'); return; }   // Main Sanctuary -> show the Main Auditorium route
+    if(id==='auditorium'){ selectNone(); if(!shellVenue('main')) setRoute('main'); return; }   // Main Sanctuary -> show the Main Auditorium route
     if(id) select(id); else selectNone(); }
   function select(id){ selectedId=id; renderCard(id); refreshHi(); markActive(id);
     if(revertTimer) clearTimeout(revertTimer);
@@ -2020,7 +2021,7 @@
   pollStatuses(); if(STATUS_URL) setInterval(pollStatuses, STATUS_POLL_MS);
 
   /* ===================== app shell bridge ===================== */
-  function shellVenue(k){ if(window.__shellVenue) window.__shellVenue(k); }
+  function shellVenue(k){ if(window.__shellVenue){ window.__shellVenue(k); return true; } return false; }
   window.MapAPI = { setRoute:setRoute, setNight:setNight, selectNone:selectNone, VENDORS:VENDORS, openPavModal:openPavModal };
 })();
 </script>
@@ -2321,7 +2322,8 @@
       { label:'Kids (6–12)', key:'kids', dot:GRN },
       { label:'Kids (3–5)', key:'bears', dot:GRN }
     ];
-    var mapSel=null;
+    var mapSel=null, lastRoute=null;
+    function clearRoute(){ if(lastRoute && window.MapAPI){ window.MapAPI.setRoute(lastRoute); } lastRoute=null; }
     function renderMapChips(){
       var c=el('shMapChips'); c.innerHTML='';
       MCHIPS.forEach(function(ch){
@@ -2329,8 +2331,8 @@
         b.className='shMChip'+((ch.key===mapSel||(ch.key===null&&mapSel===null))?' on':'');
         b.innerHTML=(ch.dot?'<span class="shDot" style="background:'+ch.dot+';"></span>':'')+esc(ch.label);
         b.addEventListener('click', function(){
-          if(ch.key===null || ch.key===mapSel){ hideSheet(); if(window.MapAPI) window.MapAPI.selectNone(); if(ch.key===null) return; }
-          else { openSheet(ch.key); if(window.MapAPI) window.MapAPI.setRoute(VENUES[ch.key].route, true); }
+          if(ch.key===null || ch.key===mapSel){ hideSheet(); clearRoute(); if(window.MapAPI) window.MapAPI.selectNone(); }
+          else { clearRoute(); openSheet(ch.key); }
         });
         c.appendChild(b);
       });
@@ -2348,7 +2350,10 @@
         (v.booth?'<button class="shSheetBtn" id="shBooth" style="background:none;border:1.5px solid #34343a;color:var(--sh-lt);font-weight:600;">Booth layout</button>':'')+
         '</div>';
       s.classList.add('open');
-      el('shWalk').addEventListener('click', function(){ if(window.MapAPI) window.MapAPI.setRoute(v.route, true); });
+      el('shWalk').addEventListener('click', function(){
+        if(window.MapAPI) window.MapAPI.setRoute(v.route, true);
+        lastRoute=v.route; hideSheet();
+      });
       var bl=document.getElementById('shBooth');
       if(bl) bl.addEventListener('click', function(){ if(window.MapAPI&&window.MapAPI.openPavModal) window.MapAPI.openPavModal(); });
       var h=s.querySelector('.shSheetHandle');
@@ -2357,7 +2362,7 @@
     }
     function hideSheet(){ mapSel=null; el('shMapSheet').classList.remove('open'); renderMapChips(); }
     /* building taps on the 3D map open the matching venue sheet */
-    window.__shellVenue=function(key){ if(VENUES[key]) openSheet(key); };
+    window.__shellVenue=function(key){ if(VENUES[key]){ clearRoute(); openSheet(key); } };
     window.__shellVendors=function(){ showTab('vendors'); };
 
     /* ---- tabs ---- */
@@ -2383,8 +2388,8 @@
     function closeMenu(silent){ menuOpen=false; el('shellMenu').classList.remove('open'); if(!silent) setBarActive(tab); }
     function goMapRoute(route){
       showTab('map');
-      if(window.MapAPI && route){ window.MapAPI.setRoute(route, true);
-        var k; for(k in VENUES){ if(VENUES[k].route===route){ openSheet(k); break; } } }
+      hideSheet();
+      if(window.MapAPI && route){ window.MapAPI.setRoute(route, true); lastRoute=route; }
     }
     function renderAll(){
       if(tab==='today'){ renderTodayHead();
