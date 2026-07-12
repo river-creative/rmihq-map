@@ -276,11 +276,6 @@
   .shScroll::before{content:"";float:left;width:0;height:calc(100% + 1px);}
   .shScroll{touch-action:pan-y;overscroll-behavior-y:contain;} /* keep the elastic bounce inside the scroller */
   html,body{overscroll-behavior:none;} /* never chain overscroll to the document (drags fixed nav in standalone) */
-  /* installed app: the home-indicator inset already provides clearance — tuck the bar like a native tab bar */
-  @media (display-mode: standalone){
-    #shellBar{padding-bottom:max(6px, calc(var(--sh-safe) - 14px));}
-    :root{--sh-barH:50px;}
-  }
   /* pull-to-refresh (installed app only — iOS standalone has no native gesture) */
   #shPtr{position:fixed;top:calc(max(10px,env(safe-area-inset-top,10px)));left:50%;margin-left:-19px;z-index:92;
     width:38px;height:38px;border-radius:50%;background:#1f1f22;border:1px solid rgba(255,255,255,0.09);
@@ -347,6 +342,14 @@
   .shPinDrop{width:20px;height:20px;background:#fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;}
   .shPinDot{width:7px;height:7px;border-radius:50%;background:var(--sh-org);}
   .shTabMap .lbl{color:var(--sh-dim);} .shTabMap.on .lbl{color:var(--sh-org);font-weight:800;}
+  /* installed app: the home-indicator inset already provides clearance — tuck the bar like a native
+     tab bar. MUST stay AFTER the base #shellBar rule: its padding shorthand would override this
+     longhand in the cascade (same specificity, later source order) — that bug pushed the map venue
+     sheet behind an oversized bar in standalone. */
+  @media (display-mode: standalone){
+    #shellBar{padding-bottom:max(6px, calc(var(--sh-safe) - 14px));}
+    :root{--sh-barH:50px;}
+  }
   /* hamburger */
   .shBurger{display:flex;flex-direction:column;gap:4px;}
   .shBurger i{width:22px;height:3.5px;background:currentColor;border-radius:2px;}
