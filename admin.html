@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>FIRE CONF · Send Alert</title>
+<title>FIRE CONF.</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
@@ -35,16 +35,16 @@
 </style>
 </head>
 <body>
-  <h1><img src="/apple-touch-icon.png" alt="" style="width:22px;height:22px;">Send Event Alert</h1>
-  <div class="sub">FIRE CONFERENCE 2026 · PUSH BROADCAST</div>
-
-  <div id="gate">
-    <p>Restricted to Revival Ministries staff.<br>Sign in with your <b style="color:#fff;">@revival.com</b> Google account.</p>
+  <div id="gate" style="margin-top:26vh;background:none;">
+    <img src="/apple-touch-icon.png" alt="" style="width:64px;height:64px;display:block;margin:0 auto 14px;">
+    <div style="font-weight:800;font-size:19px;letter-spacing:3px;color:var(--org);text-align:center;margin-bottom:26px;">FIRE CONF.</div>
     <div id="gsi"></div>
-    <p id="gateErr" class="bad" style="display:none;margin-top:14px;"></p>
+    <p id="gateErr" class="bad" style="display:none;margin-top:14px;text-align:center;"></p>
   </div>
 
   <div id="composer">
+    <h1><img src="/apple-touch-icon.png" alt="" style="width:22px;height:22px;">Send Event Alert</h1>
+    <div class="sub">FIRE CONFERENCE 2026 · PUSH BROADCAST</div>
     <div id="who"></div>
 
     <label for="title">Title</label>
@@ -87,7 +87,7 @@
 
   window.onload=function(){
     if(GOOGLE_CLIENT_ID.indexOf('PASTE')===0){
-      document.getElementById('gateErr').textContent='OAuth client not configured yet — see PUSH-SETUP.md.';
+      document.getElementById('gateErr').textContent='Unavailable.';
       document.getElementById('gateErr').style.display='block';
       return;
     }
@@ -107,7 +107,7 @@
     fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {status:r.status, j:j}; }); })
       .then(function(res){
-        if(res.status===401){ return show('Session expired or account not allowed — sign in again with an @revival.com account.', false); }
+        if(res.status===401){ return show('Not authorized.', false); }
         if(!res.j.ok) return show('Error ('+res.status+'): '+(res.j.error||'unknown'), false);
         if(res.j.dryRun) return show('✓ '+res.j.total+' device(s) subscribed  ·  storage: '+res.j.mode, true);
         show('✓ Sent: '+res.j.sent+'  ·  Failed: '+res.j.failed+'  ·  Pruned dead: '+res.j.pruned+'  ·  Total: '+res.j.total, true);

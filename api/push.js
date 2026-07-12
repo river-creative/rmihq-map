@@ -40,11 +40,15 @@ module.exports = async (req, res) => {
       if (!authed && body.idToken) {
         try {
           const info = await (await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(body.idToken))).json();
-          const domains = (process.env.PUSH_ALLOWED_DOMAINS || 'revival.com').split(',').map(s => s.trim().toLowerCase());
-          const emailDomain = String(info.email || '').split('@')[1] || '';
-          authed = info.aud === process.env.GOOGLE_CLIENT_ID &&
-                   info.email_verified === 'true' &&
-                   domains.includes(emailDomain.toLowerCase());
+          const email = String(info.email || '').toLowerCase();
+          const okToken = info.aud === process.env.GOOGLE_CLIENT_ID && info.email_verified === 'true';
+          const allowEmails = (process.env.PUSH_ALLOWED_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+          if (allowEmails.length) {
+            authed = okToken && allowEmails.includes(email);   // strict allowlist when configured
+          } else {
+            const domains = (process.env.PUSH_ALLOWED_DOMAINS || 'revival.com').split(',').map(s => s.trim().toLowerCase());
+            authed = okToken && domains.includes(email.split('@')[1] || '');
+          }
         } catch (e) { authed = false; }
       }
       if (!authed) return res.status(401).json({ ok: false, error: 'unauthorized' });
