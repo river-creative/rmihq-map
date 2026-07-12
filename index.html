@@ -683,7 +683,7 @@
     <div class="shScroll" style="padding-top:18px;position:relative;">
       <div style="display:flex;flex-direction:column;gap:8px;">
         <button class="shMenuRow" id="shMenuInstall" style="display:none;"><span>Get the App</span><span style="color:var(--sh-mut);font-size:14px;">&darr;</span></button>
-        <button class="shMenuRow" id="shMenuAlerts"><span>Event Alerts<span id="shAlertsState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Checking&hellip;</span></span><svg id="shAlertsBell" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sh-mut);flex:0 0 auto;"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+        <button class="shMenuRow" id="shMenuAlerts"><span>Notifications<span id="shAlertsState" style="display:block;font-weight:500;font-size:11.5px;color:var(--sh-mut);margin-top:2px;">Checking&hellip;</span></span><svg id="shAlertsBell" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sh-mut);flex:0 0 auto;"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
         <a class="shMenuRow" href="https://revival.com" target="_blank" rel="noopener"><span>Revival.com</span><span style="color:var(--sh-mut);font-size:14px;">&nearr;</span></a>
         <button class="shMenuRow" id="shMenuFaq"><span>FAQs</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
         <button class="shMenuRow" id="shMenuVendors"><span>Vendors</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
@@ -713,7 +713,7 @@
         <img src="icon-192.png" alt="" style="width:46px;height:46px;border-radius:12px;">
         <div style="flex:1;min-width:0;">
           <div style="font-weight:800;font-size:17px;color:#fff;">Get The FIRE CONF. Web App</div>
-          <div style="font-size:12px;color:var(--sh-mut);margin-top:2px;">Faster Access &bull; Event Alerts &bull; Offline Mode</div>
+          <div style="font-size:12px;color:var(--sh-mut);margin-top:2px;">Faster Access &bull; Notifications &bull; Offline Mode</div>
         </div>
       </div>
       <div id="shInstBody"></div>
@@ -731,7 +731,7 @@
       <div style="display:flex;align-items:center;gap:12px;">
         <span class="shAskBell"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff5c1f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:800;font-size:17px;color:#fff;">Turn On Event Alerts</div>
+          <div style="font-weight:800;font-size:17px;color:#fff;">Turn On Notifications</div>
           <div style="font-size:12px;color:var(--sh-mut);margin-top:2px;">App Updates &bull; Schedule Changes &bull; Event News</div>
         </div>
       </div>
@@ -745,18 +745,18 @@
 
   <div id="shellAlerts" class="shellScreen">
     <div class="shHead" style="position:relative;">
-      <span class="shTitle">Event Alerts</span>
-      <button id="shAlertsClose" aria-label="Close alerts">
+      <span class="shTitle">Notifications</span>
+      <button id="shAlertsClose" aria-label="Close notifications">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
       </button>
     </div>
     <div class="shScroll" style="padding-top:14px;">
-      <button class="alRow" id="alMaster"><span><span class="lbl">Event Alerts</span><span class="sub" id="alMasterSub">Off</span></span><span class="alSwitch"></span></button>
-      <div style="font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:1.6px;color:var(--sh-mut);margin:20px 2px 10px;">MORE ALERT TYPES</div>
+      <button class="alRow" id="alMaster"><span><span class="lbl">Notifications</span><span class="sub" id="alMasterSub">Off</span></span><span class="alSwitch"></span></button>
+      <div style="font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:1.6px;color:var(--sh-mut);margin:20px 2px 10px;">MORE NOTIFICATION TYPES</div>
       <button class="alRow" id="alYouth"><span><span class="lbl">Youth Week Alerts</span><span class="sub">Youth sessions &amp; news</span></span><span class="alSwitch"></span></button>
       <button class="alRow" id="alKids"><span><span class="lbl">Kids Week Alerts</span><span class="sub">Kids sessions &amp; news</span></span><span class="alSwitch"></span></button>
       <button class="alRow" id="alAdmin"><span><span class="lbl">Admin Alerts</span><span class="sub">Event team updates</span></span><span class="alSwitch"></span></button>
-      <p style="font-size:11.5px;color:var(--sh-dim);line-height:1.55;margin:16px 2px 0;">Everyone with Event Alerts on receives general updates — schedule changes, app updates, and event news. The extra types add alerts for those tracks on top.</p>
+      <p style="font-size:11.5px;color:var(--sh-dim);line-height:1.55;margin:16px 2px 0;">Everyone with Notifications on receives general updates — schedule changes, app updates, and event news. The extra types add alerts for those tracks on top.</p>
     </div>
   </div>
 
@@ -2610,7 +2610,7 @@
     function closeAlerts(){ alertsOpen=false; el('shellAlerts').classList.remove('open'); }
     function toggleAlerts(){
       if(!pushSupported()){
-        if(isIOS()&&!isStandalone()) alert('To get event alerts:\n\n1. Tap the Share button\n2. Tap "Add to Home Screen"\n3. Open FIRE CONF from your home screen\n4. Turn on Event Alerts in the Menu');
+        if(isIOS()&&!isStandalone()) alert('To get notifications:\n\n1. Tap the Share button\n2. Tap "Add to Home Screen"\n3. Open FIRE CONF from your home screen\n4. Turn on Notifications in the Menu');
         return;
       }
       if(!swReg) return;
