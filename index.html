@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <script>
   /* On Safari, shrink the UI overlays to 75% — the canvas stays full-size so it fills the screen. */
   (function(){ var ua=navigator.userAgent||'';
@@ -249,7 +249,7 @@
     --sh-bg:#141415; --sh-card:#1f1f22; --sh-card2:#2a2a2f; --sh-bar:#101011;
     --sh-mut:#9a9aa2; --sh-dim:#77777e; --sh-lt:#cfcfd4;
     --sh-org:#ff5c1f; --sh-blu:#3f8dff; --sh-grn:#2fb56b;
-    --sh-barH:75px; --sh-safe:env(safe-area-inset-bottom,0px);
+    --sh-barH:86px; --sh-safe:env(safe-area-inset-bottom,0px);
   }
   .shellScreen{position:fixed;inset:0;z-index:70;display:none;flex-direction:column;background:var(--sh-bg);color:#fff;
     font-family:'Archivo',sans-serif;padding-bottom:calc(var(--sh-barH) + var(--sh-safe));}
@@ -306,7 +306,7 @@
     white-space:nowrap;background:none;cursor:pointer;font-family:inherit;flex:0 0 auto;}
   /* tab bar */
   #shellBar{position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--sh-bar);border-top:1px solid rgba(255,255,255,0.06);
-    display:flex;align-items:flex-end;padding:11px 6px calc(10px + var(--sh-safe));font-family:'Archivo',sans-serif;}
+    display:flex;align-items:flex-end;padding:11px 6px calc(22px + var(--sh-safe));font-family:'Archivo',sans-serif;}
   .shTab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:40px;color:var(--sh-dim);
     background:none;border:0;cursor:pointer;font-family:inherit;padding:0;}
   .shTab .lbl{font-size:10px;font-weight:600;}
