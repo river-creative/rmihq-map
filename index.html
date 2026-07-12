@@ -1538,11 +1538,11 @@
   /* ===================== controlled overhead camera ===================== */
   function fitRadius(){ var aspect=window.innerWidth/window.innerHeight, t=Math.tan((45*Math.PI/180)/2);
     var needZ=90/t, needX=64/(t*aspect); return Math.max(needZ,needX)*1.05 + 8; }
-  var DEF={ target:new THREE.Vector3(-26,2,-14), radius:fitRadius()*0.92, theta:-Math.PI/6, phi:1.12 };   // opening/pan view: furthest-west angle, zoomed in slightly
+  var DEF={ target:new THREE.Vector3(-26,2,-14), radius:fitRadius()*1.0, theta:-Math.PI/6, phi:1.12 };   // opening/pan view: furthest-west angle, zoomed in slightly
   var target=DEF.target.clone();
   var sph={ radius:DEF.radius, theta:DEF.theta, phi:DEF.phi };
   // limits: turn 30° left/right, tilt from near-overhead down to a low oblique angle
-  var THETA_MIN=-Math.PI/6, THETA_MAX=Math.PI/6, PHI_MIN=0.05, PHI_MAX=1.15, R_MIN=80, R_MAX=360;   // raised so the map can zoom out further than the overhead view
+  var THETA_MIN=-Math.PI/6, THETA_MAX=Math.PI/6, PHI_MIN=0.05, PHI_MAX=1.15, R_MIN=80, R_MAX=400;   // raised so the map can zoom out further than the overhead view
   var autoSway=true, swayT=0, swayAfterFly=false;
 
   function clampTheta(v){ return Math.max(THETA_MIN, Math.min(THETA_MAX, v)); }
@@ -1560,7 +1560,7 @@
   function resetIdle(){ if(idleTimer) clearTimeout(idleTimer); idleTimer=setTimeout(goPanning, 180000); }
   function goPanning(){
     selectNone();                                                                // keep any active arrow visible
-    var Rdef=fitRadius()*0.92; DEF.radius=Rdef;
+    var Rdef=fitRadius()*1.0; DEF.radius=Rdef;
     flyTo(DEF.target.clone(), Rdef, -Math.PI/6, 1.12, 1.0); swayAfterFly=true;     // opening/panning view from the far west + gentle spin
   }
   ['pointerdown','wheel','touchstart','keydown'].forEach(function(ev){ document.addEventListener(ev, resetIdle, {passive:true, capture:true}); });
