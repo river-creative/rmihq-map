@@ -3,7 +3,7 @@
   "private": true,
   "description": "Fire Conference 2026 event app — static shell + push notification API",
   "dependencies": {
-    "@vercel/blob": "^1.1.1",
+    "@vercel/blob": "^2.6.1",
     "web-push": "^3.6.7"
   }
 }
