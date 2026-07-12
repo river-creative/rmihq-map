@@ -278,8 +278,8 @@
   html,body{overscroll-behavior:none;} /* never chain overscroll to the document (drags fixed nav in standalone) */
   /* installed app: the home-indicator inset already provides clearance — tuck the bar like a native tab bar */
   @media (display-mode: standalone){
-    #shellBar{padding-bottom:calc(6px + var(--sh-safe));}
-    :root{--sh-barH:70px;}
+    #shellBar{padding-bottom:max(6px, calc(var(--sh-safe) - 4px));}
+    :root{--sh-barH:60px;}
   }
   /* pull-to-refresh (installed app only — iOS standalone has no native gesture) */
   #shPtr{position:fixed;top:calc(max(10px,env(safe-area-inset-top,10px)));left:50%;margin-left:-19px;z-index:92;
