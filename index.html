@@ -439,18 +439,11 @@
     color:var(--sh-lt);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;}
   #shInstGo{width:100%;height:44px;border-radius:14px;border:0;font-size:14px;font-weight:700;font-family:inherit;
     background:var(--sh-org);color:#fff;cursor:pointer;display:none;}
-  @keyframes fcPulse { 0% { box-shadow: 0 0 0 0 rgba(255,92,31,0.55); } 70% { box-shadow: 0 0 0 14px rgba(255,92,31,0); } 100% { box-shadow: 0 0 0 14px rgba(255,92,31,0); } }
-  @keyframes fcNudgeDown { from { transform: translate(0,0); } to { transform: translate(0,9px); } }
   #shInstArrow{position:fixed;display:none;pointer-events:none;}
   #shellInstall.open #shInstArrow.on{display:block;animation:fcFadeIn 0.4s ease 0.55s both;}
   #shInstArrow .nudge{animation:fcNudge 0.9s ease-in-out 0.95s infinite alternate;}
-  #shInstTarget{position:fixed;display:none;width:48px;height:48px;border-radius:50%;background:#3a3b41;
-    border:2px solid #ff5c1f;align-items:center;justify-content:center;pointer-events:none;gap:4px;}
-  #shellInstall.open #shInstTarget.on{display:flex;animation:fcPulse 1.8s ease-out 0.95s infinite, fcFadeIn 0.4s ease 0.55s both;}
-  #shInstTarget i{width:4.5px;height:4.5px;border-radius:50%;background:#e8e9ee;}
-  /* coach target: the ... menu, bottom right on iOS Safari and Chrome alike */
-  #shellInstall.vRight #shInstArrow{right:74px;bottom:calc(70px + var(--sh-safe));}
-  #shellInstall.vRight #shInstTarget{right:30px;bottom:calc(12px + var(--sh-safe));}
+  /* arrow aims past the page edge at the browser's real ... menu, bottom right */
+  #shellInstall.vRight #shInstArrow{right:40px;bottom:calc(4px + var(--sh-safe));}
   @media (prefers-reduced-motion:reduce){
     #shInstArrow .nudge{animation:none;}
     #shellInstall.open #shInstTarget.on{animation:fcFadeIn 0.01s both;}
@@ -717,7 +710,6 @@
       </div>
     </div>
     <div id="shInstArrow"><div class="nudge" id="shInstArrowSvg"></div></div>
-    <div id="shInstTarget"></div>
   </div>
 
   <div id="shellAsk" aria-hidden="true">
@@ -2580,12 +2572,12 @@
     }
     var ARROW_CURVE='<svg width="46" height="86" viewBox="0 0 46 86" fill="none"><path d="M10 6 Q 12 46 34 72" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/><path d="M34 72 L19 68" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/><path d="M34 72 L31 56" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/></svg>';
     function setCoach(on){
-      var s=el('shellInstall'), arrow=el('shInstArrow'), target=el('shInstTarget');
+      var s=el('shellInstall'), arrow=el('shInstArrow');
       s.classList.remove('vRight');
-      arrow.classList.remove('on'); target.classList.remove('on');
+      arrow.classList.remove('on');
       if(!on || window.innerWidth>=520) return;
-      s.classList.add('vRight'); el('shInstArrowSvg').innerHTML=ARROW_CURVE; target.innerHTML='<i></i><i></i><i></i>';
-      arrow.classList.add('on'); target.classList.add('on');
+      s.classList.add('vRight'); el('shInstArrowSvg').innerHTML=ARROW_CURVE;
+      arrow.classList.add('on');
     }
     function renderInstallBody(){
       var b=el('shInstBody'), go=el('shInstGo');
