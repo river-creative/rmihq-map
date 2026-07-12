@@ -276,6 +276,11 @@
   .shScroll::before{content:"";float:left;width:0;height:calc(100% + 1px);}
   .shScroll{touch-action:pan-y;overscroll-behavior-y:contain;} /* keep the elastic bounce inside the scroller */
   html,body{overscroll-behavior:none;} /* never chain overscroll to the document (drags fixed nav in standalone) */
+  /* installed app: the home-indicator inset already provides clearance — tuck the bar like a native tab bar */
+  @media (display-mode: standalone){
+    #shellBar{padding-bottom:calc(6px + var(--sh-safe));}
+    :root{--sh-barH:70px;}
+  }
   /* pull-to-refresh (installed app only — iOS standalone has no native gesture) */
   #shPtr{position:fixed;top:calc(max(10px,env(safe-area-inset-top,10px)));left:50%;margin-left:-19px;z-index:92;
     width:38px;height:38px;border-radius:50%;background:#1f1f22;border:1px solid rgba(255,255,255,0.09);
