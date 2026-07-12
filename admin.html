@@ -109,6 +109,7 @@
 
   function denyAccess(){
     idToken=null;
+    try{ sessionStorage.removeItem('fcAdminTok'); }catch(e){}
     document.body.innerHTML='<div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;'+
       'background:var(--bg);font-family:ui-monospace,monospace;font-size:18px;font-weight:700;letter-spacing:4px;color:#ff6b6b;">NO ACCESS</div>';
   }
@@ -129,25 +130,46 @@
       .catch(function(){});
   }
 
+  // Verify a token against the server-side allowlist (a dryRun send doubles as the check).
+  function verifyToken(tok){
+    return fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({action:'send',idToken:tok,dryRun:true})})
+      .then(function(r){ return r.json().then(function(j){ return {allowed:r.status===200&&j.ok, j:j}; }); });
+  }
+
+  function tokClaims(tok){
+    try{ return JSON.parse(atob(tok.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))); }catch(e){ return null; }
+  }
+  function tokFresh(tok){
+    var c=tokClaims(tok);
+    return !!(c && c.exp && c.exp*1000 > Date.now()+60000);
+  }
+
+  function enterComposer(j){
+    setCounts(j.counts);
+    var claims=tokClaims(idToken);
+    if(claims && claims.email){
+      document.getElementById('who').textContent='Signed in as '+claims.email;
+      document.getElementById('who').style.display='block';
+    }
+    document.getElementById('gate').style.display='none';
+    document.getElementById('composer').style.display='block';
+  }
+
   function onCred(resp){
     idToken=resp.credential;
-    // Verify against the server-side allowlist before revealing anything.
-    fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
-        body:JSON.stringify({action:'send',idToken:idToken,dryRun:true})})
-      .then(function(r){ return r.json().then(function(j){ return {allowed:r.status===200&&j.ok, j:j}; }); })
-      .then(function(res){
-        var allowed=res.allowed;
-        if(!allowed) return denyAccess();
-        setCounts(res.j.counts);
-        try{
-          var claims=JSON.parse(atob(idToken.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-          document.getElementById('who').textContent='Signed in as '+claims.email;
-          document.getElementById('who').style.display='block';
-        }catch(e){}
-        document.getElementById('gate').style.display='none';
-        document.getElementById('composer').style.display='block';
-      })
+    // survive page refreshes for the token's lifetime; remember this browser for silent re-sign-in
+    try{ sessionStorage.setItem('fcAdminTok', idToken); localStorage.setItem('fcAdminKnown','1'); }catch(e){}
+    verifyToken(idToken)
+      .then(function(res){ if(!res.allowed) return denyAccess(); enterComposer(res.j); })
       .catch(denyAccess);
+  }
+
+  function initGsi(autoPrompt){
+    google.accounts.id.initialize({ client_id:GOOGLE_CLIENT_ID, callback:onCred, auto_select:true, itp_support:true });
+    google.accounts.id.renderButton(document.getElementById('gsi'), { theme:'filled_black', size:'large', text:'signin_with' });
+    // returning admin with an expired/absent token: let One Tap re-sign silently
+    if(autoPrompt) google.accounts.id.prompt();
   }
 
   window.onload=function(){
@@ -156,8 +178,21 @@
       document.getElementById('gateErr').style.display='block';
       return;
     }
-    google.accounts.id.initialize({ client_id:GOOGLE_CLIENT_ID, callback:onCred });
-    google.accounts.id.renderButton(document.getElementById('gsi'), { theme:'filled_black', size:'large', text:'signin_with' });
+    var saved=null, known=false;
+    try{ saved=sessionStorage.getItem('fcAdminTok'); known=localStorage.getItem('fcAdminKnown')==='1'; }catch(e){}
+    if(saved && tokFresh(saved)){
+      idToken=saved;
+      verifyToken(saved).then(function(res){
+        if(res.allowed) return enterComposer(res.j);
+        // stale/rejected stored token: back to the gate, not NO ACCESS — let One Tap retry
+        idToken=null;
+        try{ sessionStorage.removeItem('fcAdminTok'); }catch(e){}
+        initGsi(known);
+      }).catch(function(){ idToken=null; initGsi(known); });
+    } else {
+      try{ sessionStorage.removeItem('fcAdminTok'); }catch(e){}
+      initGsi(known);
+    }
   };
 
   var sendGroup='all';
