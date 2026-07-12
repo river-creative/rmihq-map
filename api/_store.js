@@ -124,15 +124,25 @@ async function listLog() {
   return { entries: [...memLog].reverse(), mode: 'memory' };
 }
 
+// Config is written as immutable versioned blobs (push-config/v-<ts>.json) because
+// overwriting a fixed path leaves reads stale for up to ~60s (origin propagation).
+// New blobs list and fetch instantly. Older versions are pruned on each write.
+const CFG_VER_PREFIX = 'push-config/v-';
+
 async function getConfig() {
   if (hasBlob()) {
-    const { head } = require('@vercel/blob');
+    const { list } = require('@vercel/blob');
     try {
-      // head() gives fresh per-call metadata; bust() skips the CDN cache of overwrites
-      const item = await head(CFG_PATH);
-      const config = await fetchBlobJson(item);
-      if (config) return { config, mode: 'blob' };
-    } catch (e) { /* not found yet, or transient — fall through to defaults */ }
+      const page = await list({ prefix: 'push-config/', limit: 1000 });
+      const vers = page.blobs.filter((b) => b.pathname.indexOf(CFG_VER_PREFIX) === 0);
+      const pick = vers.length
+        ? vers.reduce((a, b) => (a.pathname > b.pathname ? a : b))
+        : page.blobs.find((b) => b.pathname === CFG_PATH); // legacy overwrite-style blob
+      if (pick) {
+        const config = await fetchBlobJson(pick);
+        if (config) return { config, mode: 'blob' };
+      }
+    } catch (e) { /* fall through to defaults */ }
     return { config: {}, mode: 'blob' };
   }
   return { config: memCfg, mode: 'memory' };
@@ -141,8 +151,15 @@ async function getConfig() {
 async function setConfig(patch) {
   const next = Object.assign({}, (await getConfig()).config, patch);
   if (hasBlob()) {
-    const { put } = require('@vercel/blob');
-    await put(CFG_PATH, JSON.stringify(next), FRESH_PUT_OPTS);
+    const { put, list, del } = require('@vercel/blob');
+    const pathname = CFG_VER_PREFIX + String(Date.now()).padStart(14, '0') + '.json';
+    await put(pathname, JSON.stringify(next), FRESH_PUT_OPTS);
+    // best-effort prune of older versions (and the legacy config.json)
+    try {
+      const page = await list({ prefix: 'push-config/', limit: 1000 });
+      const stale = page.blobs.map((b) => b.pathname).filter((p) => p !== pathname);
+      if (stale.length) await del(stale);
+    } catch (e) { /* pruning is optional */ }
     return { config: next, mode: 'blob' };
   }
   Object.assign(memCfg, patch);
