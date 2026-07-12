@@ -4,7 +4,7 @@
 //   POST { action:"send", key|idToken, title, body, url?, dryRun? } -> broadcast (PUSH_ADMIN_KEY / allowlist gated)
 //   POST { action:"history", key|idToken }                  -> log of sent broadcasts (same gate)
 const webpush = require('web-push');
-const { saveSub, removeSub, listSubs, pruneSub, logSend, listLog } = require('./_store');
+const { saveSub, removeSub, listSubs, pruneSub, logSend, listLog, getConfig, setConfig } = require('./_store');
 
 // Everyone is implicitly in "all"; these are the opt-in extras a device may carry.
 const VALID_GROUPS = ['youth', 'kids', 'admin'];
@@ -117,6 +117,22 @@ module.exports = async (req, res) => {
       if (!authed) return res.status(401).json({ ok: false, error: 'unauthorized' });
       const { entries, mode } = await listLog();
       return res.status(200).json({ ok: true, entries, mode });
+    }
+
+    if (body.action === 'config') {
+      // public read: the app uses this to decide which opt-in toggles to show
+      const { config, mode } = await getConfig();
+      return res.status(200).json({ ok: true, config, mode });
+    }
+
+    if (body.action === 'setConfig') {
+      const { authed } = await authSender(body);
+      if (!authed) return res.status(401).json({ ok: false, error: 'unauthorized' });
+      const patch = {};
+      if (typeof (body.config || {}).adminToggle === 'boolean') patch.adminToggle = body.config.adminToggle;
+      if (!Object.keys(patch).length) return res.status(400).json({ ok: false, error: 'no valid config keys' });
+      const { config, mode } = await setConfig(patch);
+      return res.status(200).json({ ok: true, config, mode });
     }
 
     return res.status(400).json({ ok: false, error: 'unknown action' });

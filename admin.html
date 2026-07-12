@@ -89,6 +89,16 @@
 
     <p class="warn">⚠️ “Send to everyone” pushes immediately to every subscribed device — there is no undo.
     Use “Dry run” to check how many devices are subscribed. Sessions expire after about an hour — just sign in again.</p>
+
+    <div style="margin-top:26px;border-top:1px solid #26262b;padding-top:16px;">
+      <label>App settings</label>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1.5px solid #34343a;border-radius:14px;padding:13px 14px;">
+        <span style="font-size:13.5px;font-weight:700;">Admin Alerts toggle
+          <span id="cfgAdmSub" style="display:block;font-size:11px;font-weight:500;color:var(--mut);margin-top:2px;">Loading…</span>
+        </span>
+        <button id="cfgAdmBtn" class="ghost" disabled>…</button>
+      </div>
+    </div>
   </div>
 
   <div id="history">
@@ -145,8 +155,46 @@
     return !!(c && c.exp && c.exp*1000 > Date.now()+60000);
   }
 
+  /* ---- app settings: show/hide the public Admin Alerts toggle ---- */
+  var appCfg=null;
+  function renderCfg(){
+    var b=document.getElementById('cfgAdmBtn'), s=document.getElementById('cfgAdmSub');
+    if(!appCfg){ b.disabled=true; b.textContent='…'; s.textContent='Loading…'; return; }
+    var on=appCfg.adminToggle!==false;
+    b.disabled=false;
+    b.textContent=on?'Visible':'Hidden';
+    b.style.color=on?'#5ecb8e':'#ff6b6b';
+    b.style.borderColor=on?'#2c5c42':'#5c2c2c';
+    s.textContent=on
+      ?'Shown to everyone in the app under Notifications'
+      :'Hidden in the app — existing Team devices keep their alerts';
+  }
+  function loadCfg(){
+    fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({action:'config'})})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(j.ok){ appCfg=j.config||{}; renderCfg(); } })
+      .catch(function(){});
+  }
+  document.getElementById('cfgAdmBtn').addEventListener('click',function(){
+    if(!appCfg||!idToken) return;
+    var next=!(appCfg.adminToggle!==false);
+    var b=this; b.disabled=true;
+    fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({action:'setConfig',idToken:idToken,config:{adminToggle:next}})})
+      .then(function(r){ return r.json().then(function(j){ return {status:r.status,j:j}; }); })
+      .then(function(res){
+        if(res.status===401){ show('Not authorized — session may have expired. Reload and sign in again.', false); renderCfg(); return; }
+        if(!res.j.ok){ show('Error: '+(res.j.error||'unknown'), false); renderCfg(); return; }
+        appCfg=res.j.config||{}; renderCfg();
+        show('✓ Admin Alerts toggle is now '+((appCfg.adminToggle!==false)?'VISIBLE':'HIDDEN')+' in the app.', true);
+      })
+      .catch(function(e){ show('Network error: '+e, false); renderCfg(); });
+  });
+
   function enterComposer(j){
     setCounts(j.counts);
+    loadCfg();
     var claims=tokClaims(idToken);
     if(claims && claims.email){
       document.getElementById('who').textContent='Signed in as '+claims.email;

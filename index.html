@@ -2606,7 +2606,22 @@
       });
     }
     var alertsOpen=false;
-    function openAlerts(){ alertsOpen=true; refreshAlertsRow(); el('shellAlerts').classList.add('open'); track('/alerts'); }
+    function applyAlertsCfg(cfg){
+      var row=el('alAdmin'); if(!row) return;
+      /* hidden only for devices that haven't already opted in — existing members keep the switch */
+      var visible = !(cfg && cfg.adminToggle===false) || hasGroup('admin');
+      row.style.display = visible ? '' : 'none';
+    }
+    function openAlerts(){
+      alertsOpen=true; refreshAlertsRow();
+      var cached=null; try{ cached=JSON.parse(localStorage.getItem('fc_cfg')||'null'); }catch(e){}
+      applyAlertsCfg(cached);
+      fetch('/api/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'config'})})
+        .then(function(r){ return r.json(); })
+        .then(function(j){ if(j&&j.ok){ try{ localStorage.setItem('fc_cfg', JSON.stringify(j.config||{})); }catch(e){} applyAlertsCfg(j.config||{}); } })
+        .catch(function(){});
+      el('shellAlerts').classList.add('open'); track('/alerts');
+    }
     function closeAlerts(){ alertsOpen=false; el('shellAlerts').classList.remove('open'); }
     function toggleAlerts(){
       if(!pushSupported()){

@@ -7,8 +7,10 @@ const PREFIX = 'push-subs/';
 const LOG_PREFIX = 'push-log/';
 const hasBlob = () => !!process.env.BLOB_READ_WRITE_TOKEN;
 
+const CFG_PATH = 'push-config/config.json';
 const mem = (globalThis.__pushSubs = globalThis.__pushSubs || new Map());
 const memLog = (globalThis.__pushLog = globalThis.__pushLog || []);
+const memCfg = (globalThis.__pushCfg = globalThis.__pushCfg || {});
 
 function idFor(endpoint) {
   return crypto.createHash('sha256').update(endpoint).digest('hex');
@@ -116,4 +118,37 @@ async function listLog() {
   return { entries: [...memLog].reverse(), mode: 'memory' };
 }
 
-module.exports = { saveSub, removeSub, listSubs, pruneSub, logSend, listLog };
+async function getConfig() {
+  if (hasBlob()) {
+    const { list } = require('@vercel/blob');
+    try {
+      const page = await list({ prefix: CFG_PATH, limit: 1 });
+      if (page.blobs.length) {
+        const res = await fetch(page.blobs[0].downloadUrl || page.blobs[0].url, {
+          headers: { authorization: 'Bearer ' + process.env.BLOB_READ_WRITE_TOKEN },
+        });
+        if (res.ok) return { config: await res.json(), mode: 'blob' };
+      }
+    } catch (e) { /* fall through to defaults */ }
+    return { config: {}, mode: 'blob' };
+  }
+  return { config: memCfg, mode: 'memory' };
+}
+
+async function setConfig(patch) {
+  const next = Object.assign({}, (await getConfig()).config, patch);
+  if (hasBlob()) {
+    const { put } = require('@vercel/blob');
+    await put(CFG_PATH, JSON.stringify(next), {
+      access: 'private',
+      addRandomSuffix: false,
+      contentType: 'application/json',
+      allowOverwrite: true,
+    });
+    return { config: next, mode: 'blob' };
+  }
+  Object.assign(memCfg, patch);
+  return { config: memCfg, mode: 'memory' };
+}
+
+module.exports = { saveSub, removeSub, listSubs, pruneSub, logSend, listLog, getConfig, setConfig };
