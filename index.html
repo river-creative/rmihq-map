@@ -12,6 +12,14 @@
 </script>
 <title>Fire Conference 2026 | Drs. Rodney & Adonica Howard-Browne | Tampa, FL</title>
 <meta name="apple-mobile-web-app-title" content="FIRE CONF">
+<!-- Google tag (gtag.js) — Fire Conference GA4 property -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QVBXMKZHM4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QVBXMKZHM4', { send_page_view: false }); /* tab views are tracked as virtual pages */
+</script>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2311,7 +2319,7 @@
       });
       c.innerHTML=html;
       var bb=document.getElementById('shBoothBtn');
-      if(bb) bb.addEventListener('click', function(){ if(window.MapAPI&&window.MapAPI.openPavModal) window.MapAPI.openPavModal(); });
+      if(bb) bb.addEventListener('click', function(){ if(window.MapAPI&&window.MapAPI.openPavModal){ window.MapAPI.openPavModal(); trackEvent('booth_layout'); } });
     }
 
     /* ---- Campus map screen (3a): chips + venue sheet ---- */
@@ -2363,6 +2371,7 @@
       el('shWalk').addEventListener('click', function(){
         if(window.MapAPI) window.MapAPI.setRoute(v.route, true);
         lastRoute=v.route; hideSheet();
+        trackEvent('walk_me_there',{venue:v.title});
       });
       var bl=document.getElementById('shBooth');
       if(bl) bl.addEventListener('click', function(){ if(window.MapAPI&&window.MapAPI.openPavModal) window.MapAPI.openPavModal(); });
@@ -2374,6 +2383,10 @@
     /* building taps on the 3D map open the matching venue sheet */
     window.__shellVenue=function(key){ if(VENUES[key]){ clearRoute(); openSheet(key); } };
     window.__shellVendors=function(){ showTab('vendors'); };
+
+    /* ---- analytics: virtual page views + key events ---- */
+    function track(path,title){ if(window.gtag) gtag('event','page_view',{ page_path:path, page_title:title||('FIRE CONF · '+path.replace('/','')) }); }
+    function trackEvent(name,params){ if(window.gtag) gtag('event',name,params||{}); }
 
     /* ---- tabs ---- */
     var SCREENS={ today:'shellToday', schedule:'shellSchedule', vendors:'shellVendors' };
@@ -2390,16 +2403,17 @@
       setBarActive(name);
       if(name!=='map'){ hideSheet(); if(window.MapAPI) window.MapAPI.selectNone && window.MapAPI.selectNone(); }
       else renderMapChips();
+      track('/'+name);
       renderAll();
     }
     /* ---- Menu sheet: slides up over the current page ---- */
     var menuOpen=false;
-    function openMenu(){ menuOpen=true; el('shellMenu').classList.add('open'); setBarActive('menu'); }
+    function openMenu(){ menuOpen=true; el('shellMenu').classList.add('open'); setBarActive('menu'); track('/menu'); }
     function closeMenu(silent){ menuOpen=false; el('shellMenu').classList.remove('open'); if(!silent) setBarActive(tab); }
     function goMapRoute(route){
       showTab('map');
       hideSheet();
-      if(window.MapAPI && route){ window.MapAPI.setRoute(route, true); lastRoute=route; }
+      if(window.MapAPI && route){ window.MapAPI.setRoute(route, true); lastRoute=route; trackEvent('show_on_map',{route:route}); }
     }
     function renderAll(){
       if(tab==='today'){ renderTodayHead();
@@ -2482,7 +2496,7 @@
         });
       });
     }
-    function openFaq(){ faqOpen=true; if(!el('shFaqChips').childNodes.length){ renderFaqChips(); renderFaqs(); } el('shellFaq').classList.add('open'); }
+    function openFaq(){ faqOpen=true; if(!el('shFaqChips').childNodes.length){ renderFaqChips(); renderFaqs(); } el('shellFaq').classList.add('open'); track('/faqs'); }
     function closeFaq(){ faqOpen=false; el('shellFaq').classList.remove('open'); }
 
     /* ---- wire up ---- */
