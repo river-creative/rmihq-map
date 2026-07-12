@@ -338,15 +338,15 @@
   .shSoc .hdl{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;flex:1;}
   .shSocLbl{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:1.8px;margin:12px 0 2px;}
   /* map-mode: lift existing UI above the tab bar */
-  body.shellMap #compass{bottom:calc(var(--sh-barH) + var(--sh-safe) + 34px);}
+  body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;}
   body.shellMap #hint{bottom:calc(22px + var(--sh-barH) + var(--sh-safe));}
   #schedBtn{display:none;} /* replaced by the Schedule tab */
   @media (max-width:520px){
-    body.shellMap #compass{bottom:calc(var(--sh-barH) + var(--sh-safe) + 34px);}
+    body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;}
   }
   /* ---- 3a Campus map screen ---- */
   body.shellMap #infoWrap{display:none;}                                /* legacy card replaced by chips + venue sheet */
-  body.shellMap #tools{top:auto;bottom:calc(var(--sh-barH) + var(--sh-safe) + 34px);}
+  body.shellMap #tools{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);}
   body.shellMap #tools .btn{padding:11px;border-radius:13px;}
   body.shellMap #tools .btn svg{width:17px;height:17px;}
   body.shellMap #nightBtn.on{background:#3a3a40;color:#fff;border-color:transparent;}
@@ -1844,7 +1844,7 @@
     var on=(force!==undefined)?force:!tgt.visible;
     Object.keys(ROUTES).forEach(function(k){ ROUTES[k].visible=(k===key&&on); });
     DIRMENU.forEach(function(d){ if(d.row) d.row.classList.toggle('on', d.route.visible); });
-    if(on) flyTo(new THREE.Vector3(-20,0,-8), 252, 0, 0.03, 1.0);
+    if(on) flyTo(new THREE.Vector3(-20,0,-8), Math.max(252, fitRadius()*1.05), 0, 0.03, 1.0);   // fit the whole property (fixed 252 clipped phones)
   }
   DIRMENU.forEach(function(m){
     var row=document.createElement('button'); row.className='frow drow'; m.row=row;
