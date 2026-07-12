@@ -342,22 +342,23 @@
   .shSoc .hdl{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;flex:1;}
   .shSocLbl{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:1.8px;margin:12px 0 2px;}
   /* map-mode: lift existing UI above the tab bar */
-  body.shellMap #compass{bottom:calc(var(--sh-barH) + var(--sh-safe) + 34px);}
+  body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;zoom:1;}
   body.shellMap #hint{bottom:calc(22px + var(--sh-barH) + var(--sh-safe));}
   #schedBtn{display:none;} /* replaced by the Schedule tab */
   @media (max-width:520px){
-    body.shellMap #compass{bottom:calc(var(--sh-barH) + var(--sh-safe) + 34px);}
+    body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;zoom:1;}
   }
   /* ---- 3a Campus map screen ---- */
   body.shellMap #infoWrap{display:none;}                                /* legacy card replaced by chips + venue sheet */
-  body.shellMap #tools{top:auto;bottom:calc(var(--sh-barH) + var(--sh-safe) + 34px);}
+  body.shellMap #tools{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);zoom:1;} /* defeat legacy Safari .sz 0.75 zoom that shifted these into the chips */
   body.shellMap #tools .btn{padding:11px;border-radius:13px;}
   body.shellMap #tools .btn svg{width:17px;height:17px;}
   body.shellMap #nightBtn.on{background:#3a3a40;color:#fff;border-color:transparent;}
   #shMapTop,#shMapHead,#shMapChips,#shMapSheet{display:none;}
   body.shellMap #shMapTop{display:block;position:fixed;top:0;left:0;right:0;height:170px;z-index:8;pointer-events:none;
     background:linear-gradient(180deg, rgba(20,20,21,0.88) 0%, rgba(20,20,21,0.45) 55%, rgba(20,20,21,0) 100%);}
-  body.shellMap #shMapHead{display:flex;position:fixed;top:max(18px,env(safe-area-inset-top,18px));left:20px;right:20px;z-index:11;
+  body.shellMap #shMapHead{display:flex;position:fixed;top:max(18px,env(safe-area-inset-top,18px));left:0;right:0;z-index:11;
+    height:30px;box-sizing:border-box;padding:0 20px;gap:10px;
     align-items:center;justify-content:space-between;font-family:'Archivo',sans-serif;pointer-events:none;}
   body.shellMap #shMapChips{display:flex;position:fixed;top:calc(max(18px,env(safe-area-inset-top,18px)) + 42px);left:0;right:0;z-index:11;
     gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 20px;font-family:'Archivo',sans-serif;}
@@ -637,7 +638,7 @@
   <!-- 3a Campus map overlays (visible only in map mode) -->
   <div id="shMapTop"></div>
   <div id="shMapHead">
-    <span style="font-weight:800;font-size:19px;color:#fff;white-space:nowrap;">Campus map</span>
+    <span class="shTitle" style="white-space:nowrap;">Campus map</span>
     <span class="shMono" style="font-size:10.5px;white-space:nowrap;">THE RIVER &middot; TAMPA</span>
   </div>
   <div id="shMapChips"></div>
@@ -1849,7 +1850,7 @@
     var on=(force!==undefined)?force:!tgt.visible;
     Object.keys(ROUTES).forEach(function(k){ ROUTES[k].visible=(k===key&&on); });
     DIRMENU.forEach(function(d){ if(d.row) d.row.classList.toggle('on', d.route.visible); });
-    if(on) flyTo(new THREE.Vector3(-20,0,-8), 252, 0, 0.03, 1.0);
+    if(on) flyTo(new THREE.Vector3(-20,0,-8), Math.max(252, fitRadius()*1.05), 0, 0.03, 1.0);   // fit the whole property (fixed 252 clipped phones)
   }
   DIRMENU.forEach(function(m){
     var row=document.createElement('button'); row.className='frow drow'; m.row=row;
@@ -2071,7 +2072,7 @@
       { name:'Campmeeting', sub:'Adults · Sanctuary', color:ORG, border:'rgba(255,92,31,0.55)', filter:'Campmeeting', src:CDN+'6a231802bdae079a49553422_Family%20Fire%20Conference%20Graphic-Final.jpg' },
       { name:'Youth Week', sub:'Ages 13–19 · Pavilion', color:BLU, border:'rgba(63,141,255,0.5)', filter:'Youth Week', src:CDN+'6a2317cad695b35b55d2cfdf_1920%20x%201080%20(web).jpg' },
       { name:'Kids Week', sub:'Ages 6–12 · Kids Tent', color:GRN, border:'rgba(47,181,107,0.5)', filter:'Kids', src:CDN+'6a2317bf2fd10c275d86c010_awaken-kids-fire-week-2026-landscape.jpg' },
-      { name:'River Bears', sub:'Ages 3–5 · Studio B', color:GRN, border:'rgba(47,181,107,0.5)', filter:'Kids', src:CDN+'6a231796a448e4ecfc937a00_river-bears-v2.jpg' }
+      { name:'Kids Week (River Bears)', sub:'Ages 3–5 · Studio B', color:GRN, border:'rgba(47,181,107,0.5)', filter:'Kids', src:CDN+'6a231796a448e4ecfc937a00_river-bears-v2.jpg' }
     ];
     var CHIPS=[
       { label:'All', value:'All', dot:'#141415' },
