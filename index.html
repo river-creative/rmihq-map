@@ -431,13 +431,9 @@
     border:2px solid #ff5c1f;align-items:center;justify-content:center;pointer-events:none;gap:4px;}
   #shellInstall.open #shInstTarget.on{display:flex;animation:fcPulse 1.8s ease-out 0.95s infinite, fcFadeIn 0.4s ease 0.55s both;}
   #shInstTarget i{width:4.5px;height:4.5px;border-radius:50%;background:#e8e9ee;}
-  /* variant: menu at bottom right (iOS Chrome-class) */
+  /* coach target: the ... menu, bottom right on iOS Safari and Chrome alike */
   #shellInstall.vRight #shInstArrow{right:54px;bottom:calc(70px + var(--sh-safe));}
   #shellInstall.vRight #shInstTarget{right:30px;bottom:calc(12px + var(--sh-safe));}
-  /* variant: share button at bottom center (iOS Safari) */
-  #shellInstall.vCenter #shInstArrow{left:50%;margin-left:-18px;bottom:calc(70px + var(--sh-safe));}
-  #shellInstall.vCenter #shInstArrow .nudge{animation-name:fcNudgeDown;}
-  #shellInstall.vCenter #shInstTarget{left:50%;margin-left:-24px;bottom:calc(12px + var(--sh-safe));}
   @media (prefers-reduced-motion:reduce){
     #shInstArrow .nudge{animation:none;}
     #shellInstall.open #shInstTarget.on{animation:fcFadeIn 0.01s both;}
@@ -2511,18 +2507,13 @@
     function installEligible(){
       return !isStandalone() && localStorage.getItem('fc_installed')!=='1';
     }
-    function isIOSChrome(){ return /CriOS/.test(navigator.userAgent); }
-    function isIOSAltBrowser(){ return isIOS() && /CriOS|FxiOS|EdgiOS/.test(navigator.userAgent); }
     var ARROW_CURVE='<svg width="46" height="86" viewBox="0 0 46 86" fill="none"><path d="M10 6 Q 12 46 34 72" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/><path d="M34 72 L19 68" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/><path d="M34 72 L31 56" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/></svg>';
-    var ARROW_DOWN='<svg width="46" height="86" viewBox="0 0 46 86" fill="none"><path d="M23 6 Q 20 42 23 72" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/><path d="M23 72 L13 61" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/><path d="M23 72 L33 61" stroke="#ff5c1f" stroke-width="4" stroke-linecap="round"/></svg>';
-    var SHARE_GLYPH='<svg width="20" height="24" viewBox="0 0 24 30" fill="none" stroke="#4da3ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V3M6.5 8.5L12 3l5.5 5.5"/><path d="M5 13v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V13"/></svg>';
-    function setCoach(variant){ /* variant: 'right' | 'center' | null */
+    function setCoach(on){
       var s=el('shellInstall'), arrow=el('shInstArrow'), target=el('shInstTarget');
-      s.classList.remove('vRight'); s.classList.remove('vCenter');
+      s.classList.remove('vRight');
       arrow.classList.remove('on'); target.classList.remove('on');
-      if(!variant || window.innerWidth>=520) return;
-      if(variant==='right'){ s.classList.add('vRight'); el('shInstArrowSvg').innerHTML=ARROW_CURVE; target.innerHTML='<i></i><i></i><i></i>'; }
-      else { s.classList.add('vCenter'); el('shInstArrowSvg').innerHTML=ARROW_DOWN; target.innerHTML=SHARE_GLYPH; }
+      if(!on || window.innerWidth>=520) return;
+      s.classList.add('vRight'); el('shInstArrowSvg').innerHTML=ARROW_CURVE; target.innerHTML='<i></i><i></i><i></i>';
       arrow.classList.add('on'); target.classList.add('on');
     }
     function renderInstallBody(){
@@ -2535,23 +2526,13 @@
         return;
       }
       go.style.display='none';
-      if(isIOSAltBrowser()){ /* iOS Chrome & other bottom-right-menu browsers: coach mark (4a) */
+      if(isIOS()){ /* iOS — Safari and Chrome share the same bottom-right ... menu: coach mark (4a) */
         b.innerHTML='<div class="fcSteps">'+
           '<div class="fcStep"><span class="n">1</span><span class="t">Tap the '+chip+' menu at the <b style="color:#fff;font-weight:700;">bottom right</b></span></div>'+
           '<div class="fcStep"><span class="n">2</span><span class="t">Choose <b style="color:#fff;font-weight:700;">Add to Home Screen</b> <span style="color:var(--sh-dim);">(or &ldquo;Install app&rdquo;)</span></span></div>'+
-          '</div>';
-        setCoach('right');
-        return;
-      }
-      if(isIOS()){ /* iOS Safari: share-sheet steps */
-        b.innerHTML='<div class="fcSteps">'+
-          '<div class="fcStep"><span class="n">1</span><span class="t">Tap the <b style="color:#fff;font-weight:700;">Share</b> button '+
-          '<svg width="14" height="17" viewBox="0 0 24 30" fill="none" stroke="#4da3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V3M6.5 8.5L12 3l5.5 5.5"/><path d="M5 13v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V13"/></svg>'+
-          ' below</span></div>'+
-          '<div class="fcStep"><span class="n">2</span><span class="t">Scroll down &amp; tap <b style="color:#fff;font-weight:700;">Add to Home Screen</b></span></div>'+
           '<div class="fcStep"><span class="n">3</span><span class="t">Open <b style="color:#fff;font-weight:700;">FIRE CONF</b> from your home screen</span></div>'+
           '</div>';
-        setCoach('center');
+        setCoach(true);
         return;
       }
       /* desktop / top-right-menu browsers: text-only fallback (no arrow) */
