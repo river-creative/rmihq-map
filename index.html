@@ -338,15 +338,15 @@
   .shSoc .hdl{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;flex:1;}
   .shSocLbl{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:1.8px;margin:12px 0 2px;}
   /* map-mode: lift existing UI above the tab bar */
-  body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;}
+  body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;zoom:1;}
   body.shellMap #hint{bottom:calc(22px + var(--sh-barH) + var(--sh-safe));}
   #schedBtn{display:none;} /* replaced by the Schedule tab */
   @media (max-width:520px){
-    body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;}
+    body.shellMap #compass{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);bottom:auto;zoom:1;}
   }
   /* ---- 3a Campus map screen ---- */
   body.shellMap #infoWrap{display:none;}                                /* legacy card replaced by chips + venue sheet */
-  body.shellMap #tools{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);}
+  body.shellMap #tools{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);zoom:1;} /* defeat legacy Safari .sz 0.75 zoom that shifted these into the chips */
   body.shellMap #tools .btn{padding:11px;border-radius:13px;}
   body.shellMap #tools .btn svg{width:17px;height:17px;}
   body.shellMap #nightBtn.on{background:#3a3a40;color:#fff;border-color:transparent;}
