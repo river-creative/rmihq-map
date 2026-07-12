@@ -242,6 +242,150 @@
     #infoWrap.dopen #ddrawer{transform:translateY(0);}
   }
 </style>
+<style id="shellStyles">
+  /* ============ FIRE CONF app shell (concept 3a) ============ */
+  :root{
+    --sh-bg:#141415; --sh-card:#1f1f22; --sh-card2:#2a2a2f; --sh-bar:#101011;
+    --sh-mut:#9a9aa2; --sh-dim:#77777e; --sh-lt:#cfcfd4;
+    --sh-org:#ff5c1f; --sh-blu:#3f8dff; --sh-grn:#2fb56b;
+    --sh-barH:75px; --sh-safe:env(safe-area-inset-bottom,0px);
+  }
+  .shellScreen{position:fixed;inset:0;z-index:70;display:none;flex-direction:column;background:var(--sh-bg);color:#fff;
+    font-family:'Archivo',sans-serif;padding-bottom:calc(var(--sh-barH) + var(--sh-safe));}
+  .shellScreen.on{display:flex;}
+  .shScroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 26px;scrollbar-width:none;}
+  .shScroll::-webkit-scrollbar{display:none;}
+  .shHead{display:flex;align-items:center;justify-content:space-between;gap:10px;box-sizing:border-box;
+    height:calc(max(18px,env(safe-area-inset-top,18px)) + 30px);
+    padding:max(18px,env(safe-area-inset-top,18px)) 20px 0;}
+  .shBrand{font-weight:800;font-size:16px;letter-spacing:2.5px;color:var(--sh-org);}
+  .shTitle{font-weight:800;font-size:24px;color:#fff;}
+  .shMono{font-family:'IBM Plex Mono',monospace;letter-spacing:1.6px;color:var(--sh-mut);}
+  /* week strip */
+  .shWk{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:14px 20px 0;}
+  .shWk::-webkit-scrollbar{display:none;}
+  .shDay{min-width:42px;height:54px;border-radius:21px;background:var(--sh-card);display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:3px;color:#8a8a90;flex:0 0 auto;cursor:pointer;border:0;font-family:inherit;padding:0 4px;}
+  .shDay .dw{font-size:9.5px;font-weight:600;} .shDay .dn{font-size:14px;font-weight:700;}
+  .shDay.on{background:var(--sh-org);color:#fff;box-shadow:0 8px 22px rgba(255,92,31,.35);}
+  .shDay.on .dw{font-weight:700;} .shDay.on .dn{font-weight:800;}
+  /* chips */
+  .shChips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:12px 20px 2px;}
+  .shChips::-webkit-scrollbar{display:none;}
+  .shChip{height:36px;padding:0 14px;border-radius:18px;background:var(--sh-card);color:var(--sh-lt);font-size:12px;font-weight:700;
+    display:flex;align-items:center;gap:6px;white-space:nowrap;cursor:pointer;border:0;font-family:inherit;flex:0 0 auto;}
+  .shChip.on{background:#fff;color:#141415;}
+  .shDot{width:7px;height:7px;border-radius:50%;flex:0 0 auto;}
+  /* covers carousel */
+  .shCovers{display:flex;gap:9px;overflow-x:auto;margin:0 -20px;padding:0 20px;scrollbar-width:none;}
+  .shCovers::-webkit-scrollbar{display:none;}
+  .shCover{flex:0 0 auto;width:148px;cursor:pointer;background:none;border:0;padding:0;text-align:left;font-family:inherit;}
+  .shCoverImg{width:148px;height:111px;border-radius:14px;overflow:hidden;border:1.5px solid transparent;background:#26262b;}
+  .shCoverImg img{width:100%;height:100%;object-fit:cover;display:block;}
+  .shCoverName{display:flex;align-items:center;gap:5px;margin-top:6px;font-weight:700;font-size:11px;color:#fff;white-space:nowrap;}
+  .shCoverSub{font-size:10px;color:var(--sh-mut);margin-top:1px;white-space:nowrap;}
+  /* cards & rows */
+  .shCard{background:var(--sh-card);border-radius:20px;padding:15px 16px;}
+  .shRow{background:var(--sh-card);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+  .shRowArr{width:32px;height:32px;border-radius:50%;background:var(--sh-card2);color:var(--sh-lt);display:flex;align-items:center;
+    justify-content:center;font-size:14px;flex:0 0 auto;}
+  .shBtnOrg{display:inline-flex;align-items:center;justify-content:center;background:var(--sh-org);color:#fff;font-size:12.5px;font-weight:700;
+    border-radius:20px;padding:11px 16px;white-space:nowrap;border:0;cursor:pointer;font-family:inherit;}
+  .shSess{display:flex;gap:11px;align-items:center;padding:12.5px 2px;border-bottom:1px solid rgba(255,255,255,0.07);}
+  .shSess .tm{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--sh-mut);flex:0 0 58px;}
+  .shNowTag{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#ff8a52;background:rgba(255,92,31,0.14);
+    border-radius:8px;padding:3px 6px;flex:0 0 auto;}
+  .shMapBtn{font-size:11px;font-weight:700;color:var(--sh-lt);border:1.5px solid #34343a;border-radius:14px;padding:6px 11px;
+    white-space:nowrap;background:none;cursor:pointer;font-family:inherit;flex:0 0 auto;}
+  /* tab bar */
+  #shellBar{position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--sh-bar);border-top:1px solid rgba(255,255,255,0.06);
+    display:flex;align-items:flex-end;padding:11px 6px calc(10px + var(--sh-safe));font-family:'Archivo',sans-serif;}
+  .shTab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:40px;color:var(--sh-dim);
+    background:none;border:0;cursor:pointer;font-family:inherit;padding:0;}
+  .shTab .lbl{font-size:10px;font-weight:600;}
+  .shTab.on{color:var(--sh-org);} .shTab.on .lbl{font-weight:700;}
+  .shTab.shTabMap{position:relative;}
+  .shPin{width:56px;height:56px;border-radius:50%;background:var(--sh-org);position:absolute;bottom:24px;left:50%;margin-left:-28px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px rgba(255,92,31,.45),0 0 0 6px var(--sh-bar);}
+  .shTabMap.on .shPin{box-shadow:0 0 0 3px rgba(255,92,31,.35),0 10px 28px rgba(255,92,31,.55),0 0 0 6px var(--sh-bar);}
+  .shPinDrop{width:20px;height:20px;background:#fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;}
+  .shPinDot{width:7px;height:7px;border-radius:50%;background:var(--sh-org);}
+  .shTabMap .lbl{color:var(--sh-dim);} .shTabMap.on .lbl{color:var(--sh-org);font-weight:800;}
+  /* hamburger */
+  .shBurger{display:flex;flex-direction:column;gap:3px;}
+  .shBurger i{width:15px;height:2.5px;background:currentColor;border-radius:2px;}
+  /* menu screen bits */
+  .shMenuRow{background:var(--sh-card);border-radius:16px;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;
+    color:#fff;text-decoration:none;font-weight:700;font-size:15.5px;cursor:pointer;border:0;width:100%;font-family:inherit;text-align:left;}
+  .shMenuRow:hover{color:#fff;text-decoration:none;}
+  .shSoc{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:inherit;text-decoration:none;}
+  .shSoc:last-child{border-bottom:0;}
+  .shSoc .hdl{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;flex:1;}
+  .shSocLbl{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:1.8px;margin:12px 0 2px;}
+  /* map-mode: lift existing UI above the tab bar */
+  body.shellMap #compass{bottom:calc(20px + var(--sh-barH) + var(--sh-safe));}
+  body.shellMap #hint{bottom:calc(22px + var(--sh-barH) + var(--sh-safe));}
+  #schedBtn{display:none;} /* replaced by the Schedule tab */
+  @media (max-width:520px){
+    body.shellMap #compass{bottom:calc(12px + var(--sh-barH) + var(--sh-safe));}
+  }
+  /* ---- 3a Campus map screen ---- */
+  body.shellMap #infoWrap{display:none;}                                /* legacy card replaced by chips + venue sheet */
+  body.shellMap #tools{top:calc(max(18px,env(safe-area-inset-top,18px)) + 100px);}
+  #shMapTop,#shMapHead,#shMapChips,#shMapSheet{display:none;}
+  body.shellMap #shMapTop{display:block;position:fixed;top:0;left:0;right:0;height:170px;z-index:8;pointer-events:none;
+    background:linear-gradient(180deg, rgba(20,20,21,0.88) 0%, rgba(20,20,21,0.45) 55%, rgba(20,20,21,0) 100%);}
+  body.shellMap #shMapHead{display:flex;position:fixed;top:max(18px,env(safe-area-inset-top,18px));left:20px;right:20px;z-index:11;
+    align-items:center;justify-content:space-between;font-family:'Archivo',sans-serif;pointer-events:none;}
+  body.shellMap #shMapChips{display:flex;position:fixed;top:calc(max(18px,env(safe-area-inset-top,18px)) + 42px);left:0;right:0;z-index:11;
+    gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 20px;font-family:'Archivo',sans-serif;}
+  #shMapChips::-webkit-scrollbar{display:none;}
+  .shMChip{height:38px;padding:0 14px;border-radius:19px;background:rgba(31,31,34,0.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    color:var(--sh-lt);font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px;white-space:nowrap;cursor:pointer;border:0;font-family:inherit;flex:0 0 auto;}
+  .shMChip.on{background:#fff;color:#141415;font-weight:700;}
+  body.shellMap #shMapSheet.open{display:block;position:fixed;left:12px;right:12px;bottom:calc(var(--sh-barH) + var(--sh-safe) + 10px);z-index:12;
+    background:#1a1a1d;border-radius:24px;padding:10px 18px 16px;box-shadow:0 -16px 44px rgba(0,0,0,0.5);font-family:'Archivo',sans-serif;color:#fff;}
+  .shSheetHandle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,0.16);margin:0 auto 12px;}
+  .shSheetTag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.4px;border-radius:11px;padding:5px 10px;white-space:nowrap;}
+  .shSheetBtn{flex:1;text-align:center;font-size:13.5px;border-radius:22px;padding:13px 0;white-space:nowrap;cursor:pointer;font-family:inherit;}
+  /* ---- Menu: iOS-style sheet over the current page ---- */
+  #shellMenu{display:flex;z-index:76;visibility:hidden;transform:translateY(103%);
+    border-radius:24px 24px 0 0;overflow:hidden;box-shadow:0 -18px 60px rgba(0,0,0,0.55);
+    transition:transform .48s cubic-bezier(0.32,0.72,0,1), border-radius .48s ease, visibility 0s .48s;}
+  #shellMenu.open{visibility:visible;transform:translateY(0);border-radius:0;
+    transition:transform .48s cubic-bezier(0.32,0.72,0,1), border-radius .48s ease, visibility 0s 0s;}
+  @media (prefers-reduced-motion:reduce){ #shellMenu{transition:none;} }
+  #shMenuClose,#shFaqClose{width:40px;height:40px;border-radius:50%;background:var(--sh-card);border:0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--sh-lt);}
+  #shMenuClose:hover,#shFaqClose:hover{background:var(--sh-card2);}
+  /* ---- FAQs: same iOS sheet pattern, layers above the menu ---- */
+  #shellFaq{display:flex;z-index:77;visibility:hidden;transform:translateY(103%);
+    border-radius:24px 24px 0 0;overflow:hidden;box-shadow:0 -18px 60px rgba(0,0,0,0.55);
+    transition:transform .48s cubic-bezier(0.32,0.72,0,1), border-radius .48s ease, visibility 0s .48s;}
+  #shellFaq.open{visibility:visible;transform:translateY(0);border-radius:0;
+    transition:transform .48s cubic-bezier(0.32,0.72,0,1), border-radius .48s ease, visibility 0s 0s;}
+  @media (prefers-reduced-motion:reduce){ #shellFaq{transition:none;} }
+  .faqItem{background:var(--sh-card);border-radius:16px;margin-bottom:8px;overflow:hidden;}
+  .faqQ{width:100%;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    font-weight:700;font-size:14.5px;color:#fff;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left;}
+  .faqQ .chev{flex:0 0 auto;color:var(--sh-dim);transition:transform .3s ease;}
+  .faqItem.open .faqQ .chev{transform:rotate(180deg);}
+  .faqA{max-height:0;overflow:hidden;padding:0 16px;color:var(--sh-mut);font-size:13.5px;line-height:1.6;
+    transition:max-height .32s ease, padding .32s ease;}
+  .faqItem.open .faqA{max-height:500px;padding:0 16px 14px;}
+  /* ---- Pavilion Lobby modal restyled to the 3a shell ---- */
+  #pavModal{background:var(--sh-bg);z-index:78;} /* above shell screens (70) and menu sheet (76), below tab bar (80) */
+  #pavModal .schedBg{display:none;}
+  #pavModal .schedSheet{max-width:560px;padding:0 20px calc(var(--sh-barH) + var(--sh-safe) + 26px);}
+  #pavModal .schedHead{text-align:left;padding:max(18px,env(safe-area-inset-top,18px)) 56px 12px 0;}
+  #pavModal .schedTitle{font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;line-height:1.15;text-shadow:none;}
+  #pavModal .schedRule{display:none;}
+  #pavModal .pavSub{color:var(--sh-mut);font-size:10.5px;letter-spacing:1.6px;margin:7px 0 0;}
+  #pavModal .schedClose{top:max(14px,env(safe-area-inset-top,14px));right:16px;width:40px;height:40px;border:0;
+    background:var(--sh-card);color:var(--sh-lt);font-size:22px;backdrop-filter:none;}
+  #pavModal .schedClose:hover{background:var(--sh-card2);border:0;}
+  #pavModal .pavFrame{border:0;border-radius:20px;background:var(--sh-card);box-shadow:none;margin:0 0 16px;}
+</style>
 </head>
 <body>
 <div id="app">
@@ -384,6 +528,121 @@
       <div class="schedBody" id="vendorBody"></div>
     </div>
   </div>
+  <!-- ============ FIRE CONF app shell (concept 3a) ============ -->
+  <div id="shellToday" class="shellScreen">
+    <div class="shHead">
+      <span class="shBrand">FIRE CONF</span>
+      <span class="shMono" id="shDayCount" style="font-size:10.5px;"></span>
+    </div>
+    <div class="shWk" id="shWkToday"></div>
+    <div class="shScroll" style="padding-top:14px;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:0 2px 8px;">
+        <span class="shMono" style="font-size:10px;letter-spacing:1.8px;">THREE EVENTS &middot; ONE CAMPUS</span>
+        <span style="font-size:10px;color:var(--sh-dim);">tap to filter &middot; swipe</span>
+      </div>
+      <div class="shCovers" id="shCovers"></div>
+      <div id="shNowWrap"></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:16px 2px 8px;">
+        <span style="font-weight:700;font-size:15px;">Up next</span>
+        <button id="shFullSched" style="background:none;border:0;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;color:var(--sh-org);padding:0;">Full schedule</button>
+      </div>
+      <div id="shUpNext" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <div id="shellSchedule" class="shellScreen">
+    <div class="shHead">
+      <span class="shTitle">Schedule</span>
+      <span class="shMono" style="font-size:10.5px;">JUL 12 &ndash; 19</span>
+    </div>
+    <div class="shWk" id="shWkSched"></div>
+    <div class="shChips" id="shChips"></div>
+    <div class="shScroll" style="padding-top:10px;" id="shSessions"></div>
+  </div>
+
+  <div id="shellVendors" class="shellScreen">
+    <div class="shHead">
+      <span class="shTitle">Vendors</span>
+      <span class="shMono" style="font-size:10.5px;">PAVILION &amp; FOOD TRUCKS</span>
+    </div>
+    <div class="shScroll" style="padding-top:14px;" id="shVendors"></div>
+  </div>
+
+  <div id="shellMenu" class="shellScreen">
+    <div style="position:absolute;top:0;left:0;right:0;height:220px;background:radial-gradient(120% 100% at 50% 0%, rgba(255,92,31,0.16) 0%, rgba(20,20,21,0) 70%);pointer-events:none;"></div>
+    <div class="shHead" style="position:relative;">
+      <span class="shTitle">Menu</span>
+      <button id="shMenuClose" aria-label="Close menu">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
+      </button>
+    </div>
+    <div class="shScroll" style="padding-top:18px;position:relative;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a class="shMenuRow" href="https://revival.com" target="_blank" rel="noopener"><span>Revival.com</span><span style="color:var(--sh-mut);font-size:14px;">&nearr;</span></a>
+        <button class="shMenuRow" id="shMenuFaq"><span>FAQs</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
+        <button class="shMenuRow" id="shMenuVendors"><span>Vendors</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>
+      </div>
+      <div style="background:var(--sh-card);border-radius:16px;padding:15px 16px 6px;margin-top:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,0.07);">
+          <span style="font-weight:700;font-size:15.5px;">Social</span>
+        </div>
+        <div class="shSocLbl" style="color:var(--sh-mut);">REVIVAL MINISTRIES</div>
+        <a class="shSoc" href="https://www.facebook.com/rodneyadonicahowardbrowne" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;color:var(--sh-lt);" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><path d="M15.6 8.1h-1.5c-.6 0-1 .5-1 1.1v1.5h2.4l-.4 2.4h-2v5.4h-2.5v-5.4H8.8v-2.4h1.8V9.1c0-1.9 1.2-3.2 3.1-3.2h1.9z" fill="currentColor" stroke="none"/></svg><span class="hdl" style="font-size:12px;line-height:1.45;">Rodney &amp; Adonica Howard-Browne Facebook Page</span><span style="color:var(--sh-dim);font-size:12px;">&nearr;</span></a>
+        <a class="shSoc" href="https://instagram.com/rhowardbrowne" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;color:var(--sh-lt);" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none"/></svg><span class="hdl">@rhowardbrowne</span><span style="color:var(--sh-dim);font-size:12px;">&nearr;</span></a>
+        <a class="shSoc" href="https://instagram.com/rmi.hq" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;color:var(--sh-lt);" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none"/></svg><span class="hdl">@rmi.hq</span><span style="color:var(--sh-dim);font-size:12px;">&nearr;</span></a>
+        <div class="shSocLbl" style="color:#ff8a52;">FIRE CONFERENCE</div>
+        <a class="shSoc" href="https://instagram.com/fireconf.rmi" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;color:var(--sh-org);" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none"/></svg><span class="hdl">@fireconf.rmi</span><span style="color:var(--sh-dim);font-size:12px;">&nearr;</span></a>
+        <div class="shSocLbl" style="color:#6fa8ff;">YOUTH WEEK</div>
+        <a class="shSoc" href="https://instagram.com/fireconf.yth" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;color:var(--sh-blu);" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none"/></svg><span class="hdl">@fireconf.yth</span><span style="color:var(--sh-dim);font-size:12px;">&nearr;</span></a>
+        <div class="shSocLbl" style="color:#5ecb8e;">KIDS WEEK</div>
+        <a class="shSoc" href="https://instagram.com/fireconf.kids" target="_blank" rel="noopener" style="padding-bottom:13px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;color:var(--sh-grn);" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none"/></svg><span class="hdl">@fireconf.kids</span><span style="color:var(--sh-dim);font-size:12px;">&nearr;</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div id="shellFaq" class="shellScreen">
+    <div class="shHead" style="position:relative;">
+      <span class="shTitle">FAQs</span>
+      <button id="shFaqClose" aria-label="Close FAQs">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
+      </button>
+    </div>
+    <div class="shChips" id="shFaqChips"></div>
+    <div class="shScroll" style="padding-top:12px;" id="shFaqList"></div>
+  </div>
+
+  <!-- 3a Campus map overlays (visible only in map mode) -->
+  <div id="shMapTop"></div>
+  <div id="shMapHead">
+    <span style="font-weight:800;font-size:19px;color:#fff;white-space:nowrap;">Campus map</span>
+    <span class="shMono" style="font-size:10.5px;white-space:nowrap;">THE RIVER &middot; TAMPA</span>
+  </div>
+  <div id="shMapChips"></div>
+  <div id="shMapSheet"></div>
+
+  <nav id="shellBar" aria-label="App navigation">
+    <button class="shTab" data-tab="today" aria-label="Today">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m8,12h-2c-1.103,0-2,.897-2,2v2c0,1.103.897,2,2,2h2c1.103,0,2-.897,2-2v-2c0-1.103-.897-2-2-2Zm-2,4v-2h2v2s-2,0-2,0ZM19,2h-1v-1c0-.552-.447-1-1-1s-1,.448-1,1v1h-8v-1c0-.552-.447-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5Zm-14,2h14c1.654,0,3,1.346,3,3v1H2v-1c0-1.654,1.346-3,3-3Zm14,18H5c-1.654,0-3-1.346-3-3v-9h20v9c0,1.654-1.346,3-3,3Z"/></svg>
+      <span class="lbl">Today</span>
+    </button>
+    <button class="shTab" data-tab="schedule" aria-label="Schedule">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12,24C5.383,24,0,18.617,0,12S5.383,0,12,0s12,5.383,12,12-5.383,12-12,12Zm0-22C6.486,2,2,6.486,2,12s4.486,10,10,10,10-4.486,10-10S17.514,2,12,2Zm5,10c0-.553-.447-1-1-1h-3V6c0-.553-.448-1-1-1s-1,.447-1,1v6c0,.553,.448,1,1,1h4c.553,0,1-.447,1-1Z"/></svg>
+      <span class="lbl">Schedule</span>
+    </button>
+    <button class="shTab shTabMap" data-tab="map" aria-label="Map">
+      <span class="shPin"><span class="shPinDrop"><span class="shPinDot"></span></span></span>
+      <span class="lbl">Map</span>
+    </button>
+    <button class="shTab" data-tab="vendors" aria-label="Vendors">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19,12H16.386l.54-4.331A3.017,3.017,0,0,0,14,4.017H11.631c.109-.771.043-2.007,1.134-2.012H16a1,1,0,1,0,0-2H12.765A3,3,0,0,0,9.79,2.633L9.617,4.017H3A3.021,3.021,0,0,0,.059,7.572L1.572,19.63a5.005,5.005,0,0,0,4.959,4.376L19,23.994a5,5,0,0,0,5-5V17A5,5,0,0,0,19,12Zm3,5H10a3,3,0,0,1,3-3h6A3,3,0,0,1,22,17ZM14,6.016a1.011,1.011,0,0,1,.96,1.311L14.873,8h-3.74l.248-1.986ZM2.224,6.39A1,1,0,0,1,3,6.016H9.367L9.118,8H2.124l-.1-.77A.993.993,0,0,1,2.224,6.39ZM3.556,19.382,2.376,10H14.623l-.251,2H13a5,5,0,0,0-5,5c-.042,1.634-.1,3.74,1.036,5.01H6.531A3,3,0,0,1,3.556,19.382ZM19,22H13a3,3,0,0,1-3-3h3.7c.387.186,2.875,2.111,3.3,2,.416.118,2.93-1.823,3.3-2H22A3,3,0,0,1,19,22Z"/></svg>
+      <span class="lbl">Vendors</span>
+    </button>
+    <button class="shTab" data-tab="menu" aria-label="Menu">
+      <span class="shBurger"><i></i><i></i><i></i></span>
+      <span class="lbl">Menu</span>
+    </button>
+  </nav>
+
   <div id="loader"><div class="ring"></div>BUILDING SITE</div>
 </div>
 
@@ -1344,12 +1603,12 @@
   function pick(cx,cy){ var pn=Date.now(); if(pn-lastPickT<500 && Math.abs(cx-lastPickX)<24 && Math.abs(cy-lastPickY)<24) return; lastPickT=pn; lastPickX=cx; lastPickY=cy;   // touch fires pointerup + touchend for one tap; ignore the duplicate so the route doesn't toggle on then off
     ndc(cx,cy); ray.setFromCamera(mouse,camera); var hit=ray.intersectObjects(buildings,false);
     var id=hit.length?hit[0].object.userData.id:null;
-    if(id==='studiob'){ selectNone(); setRoute('bears'); return; }     // Studio B -> show the River Bears route
-    if(id==='kidstent'){ selectNone(); setRoute('kids'); return; }     // Kids Week tent -> show the Kids route
-    if(id==='foodtrucks'){ selectNone(); openVendorModal(); return; }  // Food trucks -> Food & Vendors pop-up
-    if(id==='youthhit'){ selectNone(); setRoute('youth'); return; }    // Youth Week text -> show the 13-19 route
+    if(id==='studiob'){ selectNone(); setRoute('bears'); shellVenue('bears'); return; }     // Studio B -> show the River Bears route
+    if(id==='kidstent'){ selectNone(); setRoute('kids'); shellVenue('kids'); return; }      // Kids Week tent -> show the Kids route
+    if(id==='foodtrucks'){ selectNone(); if(window.__shellVendors){ window.__shellVendors(); } else { openVendorModal(); } return; }  // Food trucks -> Vendors
+    if(id==='youthhit'){ selectNone(); setRoute('youth'); shellVenue('youth'); return; }    // Youth Week text -> show the 13-19 route
     if(id==='lobbyhit'){ selectNone(); openPavModal(); return; }       // Pavilion Lobby text -> booth-layout pop-up
-    if(id==='auditorium'){ selectNone(); setRoute('main'); return; }   // Main Sanctuary -> show the Main Auditorium route
+    if(id==='auditorium'){ selectNone(); setRoute('main'); shellVenue('main'); return; }   // Main Sanctuary -> show the Main Auditorium route
     if(id) select(id); else selectNone(); }
   function select(id){ selectedId=id; renderCard(id); refreshHi(); markActive(id);
     if(revertTimer) clearTimeout(revertTimer);
@@ -1751,12 +2010,16 @@
 
   /* live status polling (no-op until STATUS_URL is set) */
   pollStatuses(); if(STATUS_URL) setInterval(pollStatuses, STATUS_POLL_MS);
+
+  /* ===================== app shell bridge ===================== */
+  function shellVenue(k){ if(window.__shellVenue) window.__shellVenue(k); }
+  window.MapAPI = { setRoute:setRoute, setNight:setNight, selectNone:selectNone, VENDORS:VENDORS, openPavModal:openPavModal };
 })();
 </script>
   <script>
   /* ===== Pavilion Lobby booth-layout embed ===== */
   (function(){
-    var PAV_LAYOUT_HTML = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Pavilion Booth Layout</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap\" rel=\"stylesheet\">\n<style>\n  :root{\n    --turf-a:#4c8a44;\n    --turf-b:#56964d;\n    --ink:#1f2a30;\n    --sub:#5b6a70;\n    --booth:#ffffff;\n    --booth-edge:#dfe6e4;\n    --gold:#e1a82c;\n    --kings:#2f83c5;\n    --book:#f6694b;\n    --eden:#7cb342;\n    --paper:#eef1ee;\n  }\n  *{box-sizing:border-box}\n  html,body{margin:0;padding:0}\n  body{\n    background:var(--paper);\n    color:var(--ink);\n    font-family:'Inter',system-ui,sans-serif;\n    padding:24px 16px 40px;\n    display:flex;flex-direction:column;align-items:center;\n  }\n  .wrap{width:100%;max-width:1200px}\n  header{margin:0 4px 10px}\n  h1{\n    font-family:'Barlow Condensed',sans-serif;\n    font-weight:700;letter-spacing:.02em;text-transform:uppercase;\n    font-size:clamp(24px,4.5vw,36px);margin:0;line-height:1;\n  }\n  svg{display:block;width:100%;height:auto}\n  .booth-g{cursor:default;transition:transform .18s ease,filter .18s ease;transform-box:fill-box;transform-origin:center}\n  .booth-g:hover{transform:translateY(-6px) scale(1.03);filter:drop-shadow(0 12px 16px rgba(0,0,0,.35))}\n  @media (prefers-reduced-motion:reduce){.booth-g{transition:none}}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n  <header><h1>Pavilion Lobby Layout</h1></header>\n\n  <svg id=\"map\" viewBox=\"0 0 1440 1200\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Top-view map of pavilion booths on astro turf\">\n    <defs>\n      <filter id=\"soft\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">\n        <feDropShadow dx=\"0\" dy=\"3\" stdDeviation=\"4\" flood-color=\"#0a1410\" flood-opacity=\"0.28\"/>\n      </filter>\n      <filter id=\"turfshadow\" x=\"-8%\" y=\"-8%\" width=\"116%\" height=\"116%\">\n        <feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"16\" flood-color=\"#1d3a1a\" flood-opacity=\"0.30\"/>\n      </filter>\n      <clipPath id=\"pavClip\"><rect x=\"36\" y=\"36\" width=\"1368\" height=\"1128\" rx=\"26\"/></clipPath>\n    </defs>\n\n    <rect x=\"36\" y=\"36\" width=\"1368\" height=\"1128\" rx=\"26\" fill=\"var(--turf-a)\" filter=\"url(#turfshadow)\"/>\n\n    <g clip-path=\"url(#pavClip)\">\n      <g id=\"stripes\"></g>\n      <g id=\"turftex\"></g>\n    </g>\n\n    <g id=\"features\"></g>\n    <g id=\"booths\"></g>\n\n    <g>\n      <image href=\"data:image/png;base64,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\" x=\"650\" y=\"1026\" width=\"139\" height=\"98\"/>\n    </g>\n  </svg>\n</div>\n\n<script>\n(function(){\n  const NS=\"http://www.w3.org/2000/svg\";\n  const el=(t,a={})=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);return n;};\n\n  function fitFont(lines, availW, availH, absMax, k){\n    k=k||0.47; const lh=1.10;\n    let fw=Infinity;\n    lines.forEach(ln=>{ const eff=Math.max(1, ln.length); fw=Math.min(fw, availW/(eff*k)); });\n    const fh=availH/(lines.length*lh);\n    return Math.max(9, Math.min(fw, fh, absMax));\n  }\n  function drawLines(g, lines, cx, cy, fs, fill){\n    const lineH=fs+2;\n    const startY=cy-((lines.length-1)*lineH)/2;\n    lines.forEach((ln,i)=>{\n      const t=el('text',{x:cx,y:startY+i*lineH,'text-anchor':'middle','dominant-baseline':'middle',\n        'font-family':'Barlow Condensed, sans-serif','font-size':fs,'font-weight':700,'letter-spacing':'0',fill});\n      t.textContent=ln.toUpperCase(); g.appendChild(t);\n    });\n  }\n\n  // Astro turf\n  const stripes=document.getElementById('stripes');\n  const bandW=68;\n  for(let x=36,i=0;x<1404;x+=bandW,i++){\n    stripes.appendChild(el('rect',{x,y:36,width:bandW,height:1128,fill:i%2?'var(--turf-b)':'var(--turf-a)'}));\n  }\n  const tex=document.getElementById('turftex');\n  for(let y=48;y<1164;y+=12){\n    tex.appendChild(el('line',{x1:36,y1:y,x2:1404,y2:y,stroke:'#ffffff','stroke-opacity':0.05,'stroke-width':2}));\n  }\n\n  // Fixed features\n  const features=document.getElementById('features');\n  function featureBox(x,y,w,h,lines,opts={}){\n    const g=el('g',{class:'booth-g',filter:'url(#soft)'});\n    g.appendChild(el('rect',{x,y,width:w,height:h,rx:opts.rx||13,fill:opts.fill||'#2c3a3f'}));\n    const fs=fitFont(lines, w-10, h-12, opts.max||42);\n    drawLines(g, lines, x+w/2, y+h/2, fs, opts.ink||'#eef3f2');\n    features.appendChild(g);\n  }\n\n  (function(){\n    const cx=157, cy=148, r=84, lines=['Operation','Eden','Market'];\n    const g=el('g',{class:'booth-g',filter:'url(#soft)'});\n    g.appendChild(el('circle',{cx,cy,r,fill:'var(--eden)'}));\n    const fs=fitFont(lines, 2*r*0.74, 2*r*0.82, 40);\n    drawLines(g, lines, cx, cy, fs, '#ffffff');\n    features.appendChild(g);\n  })();\n\n  featureBox(69,267,165,345,['Studio B','Experience'],{fill:'var(--gold)',ink:'#ffffff'});\n  featureBox(1224,430,165,210,['Kings Arms','Coffee'],{fill:'var(--kings)',ink:'#ffffff'});\n  featureBox(1224,670,165,264,['RMI','Bookstore'],{fill:'var(--book)',ink:'#ffffff'});\n\n  // Booths\n  const S=121;\n  const booths=[\n    {name:['River Manor','Farms'],x:267,y:58},\n    {name:['Perfumes'],sub:['Desert Oasis /','House of Wash'],x:401,y:58},\n    {name:['River','University'],x:535,y:58},\n    {name:['Great','Awakening'],x:670,y:58},\n    {name:['Testimonies'],x:804,y:58},\n    {name:['Crucible','Signup'],x:938,y:58},\n    {name:['Car','Giveaway'],x:1072,y:58},\n    {name:['A Land','of','Delight'],x:97,y:642,w:121,h:219},\n    {name:['Lost &','Found'],x:97,y:886},\n    {name:['JHB','Designs'],x:938,y:267,w:121,h:219}\n  ];\n\n  const bg=document.getElementById('booths');\n  booths.forEach(b=>{\n    const w=b.w||S, h=b.h||S, cx=b.x+w/2;\n    const g=el('g',{class:'booth-g',filter:'url(#soft)'});\n    g.appendChild(el('rect',{x:b.x,y:b.y,width:w,height:h,rx:12,fill:'var(--booth)',stroke:'var(--booth-edge)','stroke-width':1.6}));\n\n    if(b.sub){\n      const tFs=fitFont(b.name, w-8, (h-10)*0.5, 30);\n      const sFs=fitFont(b.sub, w-10, (h-10)*0.4, 13, 0.55);\n      const tLineH=tFs+2, sLineH=sFs+2, gap=7;\n      const blockH=b.name.length*tLineH + gap + b.sub.length*sLineH;\n      const topY=b.y+h/2-blockH/2;\n      b.name.forEach((ln,i)=>{\n        const t=el('text',{x:cx,y:topY+tLineH*(i+0.5),'text-anchor':'middle','dominant-baseline':'middle',\n          'font-family':'Barlow Condensed, sans-serif','font-size':tFs,'font-weight':700,'letter-spacing':'0',fill:'var(--ink)'});\n        t.textContent=ln.toUpperCase(); g.appendChild(t);\n      });\n      const subTop=topY + b.name.length*tLineH + gap;\n      b.sub.forEach((ln,i)=>{\n        const t=el('text',{x:cx,y:subTop+sLineH*(i+0.5),'text-anchor':'middle','dominant-baseline':'middle',\n          'font-family':'Inter, system-ui, sans-serif','font-size':sFs,'font-weight':500,'letter-spacing':'0.01em',fill:'var(--sub)'});\n        t.textContent=ln; g.appendChild(t);\n      });\n    } else {\n      const fs=fitFont(b.name, w-8, h-8, 32);\n      drawLines(g, b.name, cx, b.y+h/2, fs, 'var(--ink)');\n    }\n    bg.appendChild(g);\n  });\n})();\n<\/script>\n</body>\n</html>\n";
+    var PAV_LAYOUT_HTML = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Pavilion Booth Layout</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap\" rel=\"stylesheet\">\n<style>\n  :root{\n    --turf-a:#4c8a44;\n    --turf-b:#56964d;\n    --ink:#1f2a30;\n    --sub:#5b6a70;\n    --booth:#ffffff;\n    --booth-edge:#dfe6e4;\n    --gold:#e1a82c;\n    --kings:#2f83c5;\n    --book:#f6694b;\n    --eden:#7cb342;\n    --paper:#1f1f22;\n  }\n  *{box-sizing:border-box}\n  html,body{margin:0;padding:0}\n  body{\n    background:var(--paper);\n    color:var(--ink);\n    font-family:'Inter',system-ui,sans-serif;\n    padding:14px 12px 18px;\n    display:flex;flex-direction:column;align-items:center;\n  }\n  .wrap{width:100%;max-width:1200px}\n  header{margin:0 4px 10px}\n  h1{\n    font-family:'Barlow Condensed',sans-serif;\n    font-weight:700;letter-spacing:.02em;text-transform:uppercase;\n    font-size:clamp(24px,4.5vw,36px);margin:0;line-height:1;\n  }\n  svg{display:block;width:100%;height:auto}\n  .booth-g{cursor:default;transition:transform .18s ease,filter .18s ease;transform-box:fill-box;transform-origin:center}\n  .booth-g:hover{transform:translateY(-6px) scale(1.03);filter:drop-shadow(0 12px 16px rgba(0,0,0,.35))}\n  @media (prefers-reduced-motion:reduce){.booth-g{transition:none}}\n  #vp{position:relative;overflow:hidden;border-radius:26px;touch-action:none;cursor:grab}\n  #vp.drag{cursor:grabbing}\n  #map{transform-origin:0 0;will-change:transform}\n  #zoomCtls{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:9px;z-index:5}\n  .zbtn{width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);box-shadow:0 5px 16px rgba(0,0,0,.28);color:#1f2a30;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}\n  .zbtn:active{transform:scale(.93)}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n<div id=\"vp\">\n<div id=\"zoomCtls\">\n<button class=\"zbtn\" id=\"zIn\" aria-label=\"Zoom in\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg></button>\n<button class=\"zbtn\" id=\"zOut\" aria-label=\"Zoom out\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\"><path d=\"M5 12h14\"/></svg></button>\n<button class=\"zbtn\" id=\"zReset\" aria-label=\"Reset view\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3.5 12a8.5 8.5 0 1 0 2.8-6.3\"/><path d=\"M3.5 4.5v4h4\"/></svg></button>\n</div>\n    <svg id=\"map\" viewBox=\"0 0 1440 1200\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Top-view map of pavilion booths on astro turf\">\n    <defs>\n      <filter id=\"soft\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">\n        <feDropShadow dx=\"0\" dy=\"3\" stdDeviation=\"4\" flood-color=\"#0a1410\" flood-opacity=\"0.28\"/>\n      </filter>\n      <filter id=\"turfshadow\" x=\"-8%\" y=\"-8%\" width=\"116%\" height=\"116%\">\n        <feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"16\" flood-color=\"#1d3a1a\" flood-opacity=\"0.30\"/>\n      </filter>\n      <clipPath id=\"pavClip\"><rect x=\"36\" y=\"36\" width=\"1368\" height=\"1128\" rx=\"26\"/></clipPath>\n    </defs>\n\n    <rect x=\"36\" y=\"36\" width=\"1368\" height=\"1128\" rx=\"26\" fill=\"var(--turf-a)\" filter=\"url(#turfshadow)\"/>\n\n    <g clip-path=\"url(#pavClip)\">\n      <g id=\"stripes\"></g>\n      <g id=\"turftex\"></g>\n    </g>\n\n    <g id=\"features\"></g>\n    <g id=\"booths\"></g>\n\n    <g>\n      <image href=\"data:image/png;base64,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\" x=\"650\" y=\"1026\" width=\"139\" height=\"98\"/>\n    </g>\n  </svg>\n</div>\n</div>\n\n<script>\n(function(){\n  const NS=\"http://www.w3.org/2000/svg\";\n  const el=(t,a={})=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);return n;};\n\n  function fitFont(lines, availW, availH, absMax, k){\n    k=k||0.47; const lh=1.10;\n    let fw=Infinity;\n    lines.forEach(ln=>{ const eff=Math.max(1, ln.length); fw=Math.min(fw, availW/(eff*k)); });\n    const fh=availH/(lines.length*lh);\n    return Math.max(9, Math.min(fw, fh, absMax));\n  }\n  function drawLines(g, lines, cx, cy, fs, fill){\n    const lineH=fs+2;\n    const startY=cy-((lines.length-1)*lineH)/2;\n    lines.forEach((ln,i)=>{\n      const t=el('text',{x:cx,y:startY+i*lineH,'text-anchor':'middle','dominant-baseline':'middle',\n        'font-family':'Barlow Condensed, sans-serif','font-size':fs,'font-weight':700,'letter-spacing':'0',fill});\n      t.textContent=ln.toUpperCase(); g.appendChild(t);\n    });\n  }\n\n  // Astro turf\n  const stripes=document.getElementById('stripes');\n  const bandW=68;\n  for(let x=36,i=0;x<1404;x+=bandW,i++){\n    stripes.appendChild(el('rect',{x,y:36,width:bandW,height:1128,fill:i%2?'var(--turf-b)':'var(--turf-a)'}));\n  }\n  const tex=document.getElementById('turftex');\n  for(let y=48;y<1164;y+=12){\n    tex.appendChild(el('line',{x1:36,y1:y,x2:1404,y2:y,stroke:'#ffffff','stroke-opacity':0.05,'stroke-width':2}));\n  }\n\n  // Fixed features\n  const features=document.getElementById('features');\n  function featureBox(x,y,w,h,lines,opts={}){\n    const g=el('g',{class:'booth-g',filter:'url(#soft)'});\n    g.appendChild(el('rect',{x,y,width:w,height:h,rx:opts.rx||13,fill:opts.fill||'#2c3a3f'}));\n    const fs=fitFont(lines, w-10, h-12, opts.max||42);\n    drawLines(g, lines, x+w/2, y+h/2, fs, opts.ink||'#eef3f2');\n    features.appendChild(g);\n  }\n\n  (function(){\n    const cx=157, cy=148, r=84, lines=['Operation','Eden','Market'];\n    const g=el('g',{class:'booth-g',filter:'url(#soft)'});\n    g.appendChild(el('circle',{cx,cy,r,fill:'var(--eden)'}));\n    const fs=fitFont(lines, 2*r*0.74, 2*r*0.82, 40);\n    drawLines(g, lines, cx, cy, fs, '#ffffff');\n    features.appendChild(g);\n  })();\n\n  featureBox(69,267,165,345,['Studio B','Experience'],{fill:'var(--gold)',ink:'#ffffff'});\n  featureBox(1224,430,165,210,['Kings Arms','Coffee'],{fill:'var(--kings)',ink:'#ffffff'});\n  featureBox(1224,670,165,264,['RMI','Bookstore'],{fill:'var(--book)',ink:'#ffffff'});\n\n  // Booths\n  const S=121;\n  const booths=[\n    {name:['River Manor','Farms'],x:267,y:58},\n    {name:['Perfumes'],sub:['Desert Oasis /','House of Wash'],x:401,y:58},\n    {name:['River','University'],x:535,y:58},\n    {name:['Great','Awakening'],x:670,y:58},\n    {name:['Testimonies'],x:804,y:58},\n    {name:['Crucible','Signup'],x:938,y:58},\n    {name:['Car','Giveaway'],x:1072,y:58},\n    {name:['A Land','of','Delight'],x:97,y:642,w:121,h:219},\n    {name:['Lost &','Found'],x:97,y:886},\n    {name:['JHB','Designs'],x:938,y:267,w:121,h:219}\n  ];\n\n  const bg=document.getElementById('booths');\n  booths.forEach(b=>{\n    const w=b.w||S, h=b.h||S, cx=b.x+w/2;\n    const g=el('g',{class:'booth-g',filter:'url(#soft)'});\n    g.appendChild(el('rect',{x:b.x,y:b.y,width:w,height:h,rx:12,fill:'var(--booth)',stroke:'var(--booth-edge)','stroke-width':1.6}));\n\n    if(b.sub){\n      const tFs=fitFont(b.name, w-8, (h-10)*0.5, 30);\n      const sFs=fitFont(b.sub, w-10, (h-10)*0.4, 13, 0.55);\n      const tLineH=tFs+2, sLineH=sFs+2, gap=7;\n      const blockH=b.name.length*tLineH + gap + b.sub.length*sLineH;\n      const topY=b.y+h/2-blockH/2;\n      b.name.forEach((ln,i)=>{\n        const t=el('text',{x:cx,y:topY+tLineH*(i+0.5),'text-anchor':'middle','dominant-baseline':'middle',\n          'font-family':'Barlow Condensed, sans-serif','font-size':tFs,'font-weight':700,'letter-spacing':'0',fill:'var(--ink)'});\n        t.textContent=ln.toUpperCase(); g.appendChild(t);\n      });\n      const subTop=topY + b.name.length*tLineH + gap;\n      b.sub.forEach((ln,i)=>{\n        const t=el('text',{x:cx,y:subTop+sLineH*(i+0.5),'text-anchor':'middle','dominant-baseline':'middle',\n          'font-family':'Inter, system-ui, sans-serif','font-size':sFs,'font-weight':500,'letter-spacing':'0.01em',fill:'var(--sub)'});\n        t.textContent=ln; g.appendChild(t);\n      });\n    } else {\n      const fs=fitFont(b.name, w-8, h-8, 32);\n      drawLines(g, b.name, cx, b.y+h/2, fs, 'var(--ink)');\n    }\n    bg.appendChild(g);\n  });\n\n  // ---- pan & zoom (wheel, drag, pinch, buttons) ----\n  const vp=document.getElementById('vp'), svgEl=document.getElementById('map');\n  let sc=1, tx=0, ty=0; const MINZ=1, MAXZ=4;\n  function clampApply(){ const r=vp.getBoundingClientRect();\n    tx=Math.min(0, Math.max(r.width - r.width*sc, tx));\n    ty=Math.min(0, Math.max(r.height - r.height*sc, ty));\n    svgEl.style.transform='translate('+tx+'px,'+ty+'px) scale('+sc+')'; }\n  function zoomAt(f, cx, cy){ const ns=Math.max(MINZ, Math.min(MAXZ, sc*f)); f=ns/sc; if(f===1) return;\n    tx=cx-(cx-tx)*f; ty=cy-(cy-ty)*f; sc=ns; clampApply(); }\n  vp.addEventListener('wheel', e=>{ e.preventDefault(); const r=vp.getBoundingClientRect();\n    zoomAt(e.deltaY<0?1.18:1/1.18, e.clientX-r.left, e.clientY-r.top); }, {passive:false});\n  const pts=new Map();\n  vp.addEventListener('pointerdown', e=>{ if(e.target.closest('#zoomCtls')) return;\n    vp.setPointerCapture(e.pointerId); pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(pts.size===1) vp.classList.add('drag'); });\n  vp.addEventListener('pointermove', e=>{ if(!pts.has(e.pointerId)) return;\n    const prev=pts.get(e.pointerId), cur={x:e.clientX,y:e.clientY};\n    if(pts.size===1){ tx+=cur.x-prev.x; ty+=cur.y-prev.y; clampApply(); }\n    else if(pts.size===2){ const ids=[...pts.keys()]; const other=pts.get(ids[0]===e.pointerId?ids[1]:ids[0]);\n      const d0=Math.hypot(prev.x-other.x, prev.y-other.y), d1=Math.hypot(cur.x-other.x, cur.y-other.y);\n      if(d0>0){ const r=vp.getBoundingClientRect(); zoomAt(d1/d0, (cur.x+other.x)/2-r.left, (cur.y+other.y)/2-r.top); } }\n    pts.set(e.pointerId, cur); });\n  ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>vp.addEventListener(ev, e=>{ pts.delete(e.pointerId); if(!pts.size) vp.classList.remove('drag'); }));\n  vp.addEventListener('dblclick', e=>{ const r=vp.getBoundingClientRect();\n    if(sc>1.05){ sc=1; tx=0; ty=0; clampApply(); } else { zoomAt(2, e.clientX-r.left, e.clientY-r.top); } });\n  const zCenter=f=>{ const r=vp.getBoundingClientRect(); zoomAt(f, r.width/2, r.height/2); };\n  document.getElementById('zIn').addEventListener('click', ()=>zCenter(1.45));\n  document.getElementById('zOut').addEventListener('click', ()=>zCenter(1/1.45));\n  document.getElementById('zReset').addEventListener('click', ()=>{ sc=1; tx=0; ty=0; clampApply(); });\n})();\n<\/script>\n</body>\n</html>\n";
     var f = document.getElementById("pavFrame");
     if(!f) return;
     function sizeFrame(){
@@ -1773,6 +2036,467 @@
       new MutationObserver(function(){ if(pm.classList.contains("open")){ sizeFrame(); setTimeout(sizeFrame,140); } })
         .observe(pm,{attributes:true,attributeFilter:["class"]});
     }
+  })();
+  </script>
+  <script id="shellScript">
+  /* ============ FIRE CONF app shell logic (concept 3a) ============ */
+  (function(){
+    "use strict";
+    var ORG='#ff5c1f', BLU='#3f8dff', GRN='#2fb56b', GRY='#9a9aa2';
+    var CDN='https://cdn.prod.website-files.com/66102a24e3a86fdffa3e295c/';
+    var COVERS=[
+      { name:'Campmeeting', sub:'Adults · Sanctuary', color:ORG, border:'rgba(255,92,31,0.55)', filter:'Campmeeting', src:CDN+'6a231802bdae079a49553422_Family%20Fire%20Conference%20Graphic-Final.jpg' },
+      { name:'Youth Week', sub:'Ages 13–19 · Pavilion', color:BLU, border:'rgba(63,141,255,0.5)', filter:'Youth Week', src:CDN+'6a2317cad695b35b55d2cfdf_1920%20x%201080%20(web).jpg' },
+      { name:'Kids Week', sub:'Ages 6–12 · Kids Tent', color:GRN, border:'rgba(47,181,107,0.5)', filter:'Kids', src:CDN+'6a2317bf2fd10c275d86c010_awaken-kids-fire-week-2026-landscape.jpg' },
+      { name:'Kids Week · Bears', sub:'Ages 3–5 · Kids Tent', color:GRN, border:'rgba(47,181,107,0.5)', filter:'Kids', src:CDN+'6a231796a448e4ecfc937a00_river-bears-v2.jpg' }
+    ];
+    var CHIPS=[
+      { label:'All', value:'All', dot:'#141415' },
+      { label:'Campmeeting', value:'Campmeeting', dot:ORG },
+      { label:'Youth Week', value:'Youth Week', dot:BLU },
+      { label:'Kids (3–12)', value:'Kids', dot:GRN }
+    ];
+    var EVT_Y=2026, EVT_M=6, EVT_D0=12, EVT_D1=19; // Jul 12–19, 2026
+    var WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    /* ---- official schedule generator (from the printed Fire schedule) ---- */
+    function sessionsFor(day){
+      var s=[];
+      var wk = day>=14 && day<=17;                       // Tue–Fri: youth & kids daily rhythm
+      var sun = day===12 || day===19;                    // Sundays: regular church service, not campmeeting
+      s.push({t:'9:30 AM',m:570,end:780,title:sun?'The Main Event':'Morning Session',venue:'Main Sanctuary · doors 8:30 AM',
+        evts:['Campmeeting'],groups:[sun?'church':'camp'],evtLabel:sun?'The River at Tampa Bay Church':null,color:ORG,route:'main',approxEnd:true});
+      if(wk){
+        s.push({t:'9:30 AM',m:570,end:780,title:'Morning Session',venue:'River Pavilion · until ~ 1:00 PM',evts:['Youth Week'],groups:['youth'],color:BLU,route:'youth',approxEnd:true});
+        s.push({t:'9:30 AM',m:570,end:780,title:'Morning Session',venue:'Kids Tent · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:'kids',approxEnd:true});
+      }
+      if(day===13){
+        s.push({t:'4:00 PM',m:960,end:1020,title:'Registration — Groups',venue:'Opening Night · Youth & Kids check-in',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
+        s.push({t:'5:00 PM',m:1020,end:1140,title:'Registration — General',venue:'Opening Night · Youth & Kids check-in',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
+      }
+      if(day===14) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Wear clothes to get wet & dirty — bring a towel',evts:['Youth Week'],groups:['youth'],color:BLU,route:null});
+      if(day===15) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Kids Tent · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
+      if(day===16) s.push({t:'2:00 PM',m:840,end:960,title:'Field Day — Crucible Obstacle Course',venue:'Wear clothes to get wet & dirty — towel recommended',evts:['Youth Week'],groups:['youth'],color:BLU,route:null});
+      if(day===17) s.push({t:'2:00 PM',m:840,end:960,title:'Water Day',venue:'Kids Tent · ages 3–5 & 6–12',evts:['Kids'],groups:['k612','k35'],color:GRN,route:null});
+      if(day>=13&&day<=17) s.push({t:'5:00 PM',m:1020,end:1140,title:'Preservice Activities',venue:'River Pavilion & Kids Tent',evts:['Youth Week','Kids'],groups:['youth','k612'],color:GRY,route:'youth'});
+      s.push({t:'7:00 PM',m:1140,end:1320,title:'Evening Session',venue:'Main Sanctuary · doors 6:00 PM',evts:['Campmeeting'],groups:['camp'],color:ORG,route:'main',approxEnd:true});
+      if(day>=13&&day<=17){
+        s.push({t:'7:00 PM',m:1140,end:1320,title:day===17?'Burn Your Junk Night & Water Baptism':'Evening Session',venue:'River Pavilion · until ~ 10:00 PM',evts:['Youth Week'],groups:['youth'],color:BLU,route:'youth',approxEnd:true});
+        s.push({t:'7:00 PM',m:1140,end:1320,title:day===17?'Evening Session & Water Baptism':'Evening Session',venue:'Kids Tent · ages 6–12 · doors 6:00',evts:['Kids'],groups:['k612'],color:GRN,route:'kids',approxEnd:true});
+      }
+      s.sort(function(a,b){ return a.m-b.m; });
+      return s;
+    }
+
+    /* ---- state ---- */
+    /* preview mode: ?day=14 (Jul 14) simulates that date; add &time=19:30 for a time of day.
+       Defaults to 10:00 AM so "Happening Now" is live. Remove the params to return to real time. */
+    var Q=new URLSearchParams(location.search);
+    var pvDay=parseInt(Q.get('day'),10);
+    var pvOn = pvDay>=EVT_D0 && pvDay<=EVT_D1;
+    var pvTime=(Q.get('time')||'10:00').split(':');
+    function now(){
+      if(pvOn) return new Date(EVT_Y,EVT_M,pvDay, +pvTime[0]||10, +pvTime[1]||0);
+      return new Date();
+    }
+    function isEventDay(dt){ return dt.getFullYear()===EVT_Y && dt.getMonth()===EVT_M && dt.getDate()>=EVT_D0 && dt.getDate()<=EVT_D1; }
+    var selDay = isEventDay(now()) ? now().getDate() : EVT_D0;
+    var filter = 'All';
+    var tab = 'today';
+
+    function esc(str){ var d=document.createElement('div'); d.textContent=str; return d.innerHTML; }
+    function el(id){ return document.getElementById(id); }
+    function minsNow(){ var n=now(); return n.getHours()*60+n.getMinutes(); }
+    function isToday(day){ var n=now(); return n.getFullYear()===EVT_Y && n.getMonth()===EVT_M && n.getDate()===day; }
+    function fmtTime(m){ var h=Math.floor(m/60), mm=m%60, ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+(mm<10?'0':'')+mm+' '+ap; }
+    function matches(sess){ return filter==='All' || sess.evts.indexOf(filter)>=0; }
+    /* the day the Today screen is locked to: the current date during the event,
+       the first day before it starts, the last day after it ends */
+    function todayDay(){ var n=now(); if(isEventDay(n)) return n.getDate(); return n<new Date(EVT_Y,EVT_M,EVT_D0) ? EVT_D0 : EVT_D1; }
+
+    /* ---- week strip ---- */
+    function buildWk(container, activeDay, onPick){
+      var c=el(container); c.innerHTML='';
+      for(var d=EVT_D0; d<=EVT_D1; d++){
+        var dt=new Date(EVT_Y,EVT_M,d);
+        var b=document.createElement('button');
+        b.className='shDay'+(d===activeDay?' on':'');
+        b.innerHTML='<span class="dw">'+WD[dt.getDay()]+'</span><span class="dn">'+d+'</span>';
+        (function(dd){ b.addEventListener('click', function(){ onPick(dd); }); })(d);
+        c.appendChild(b);
+      }
+    }
+
+    /* ---- Today screen ---- */
+    function renderTodayHead(){
+      var n=now(), label;
+      if(isEventDay(n)) label='DAY '+(n.getDate()-EVT_D0+1)+' OF 8';
+      else if(n<new Date(EVT_Y,EVT_M,EVT_D0)) label='JUL 12 – 19';
+      else label='SEE YOU NEXT YEAR';
+      el('shDayCount').textContent=label;
+    }
+    function renderCovers(){
+      var c=el('shCovers'); c.innerHTML='';
+      var list=COVERS.concat(COVERS); // loop illusion
+      list.forEach(function(cv){
+        var b=document.createElement('button'); b.className='shCover';
+        b.innerHTML='<div class="shCoverImg" style="border-color:'+cv.border+';"><img loading="lazy" alt="'+esc(cv.name)+'" src="'+cv.src+'"></div>'+
+          '<div class="shCoverName"><span class="shDot" style="background:'+cv.color+';"></span>'+esc(cv.name)+'</div>'+
+          '<div class="shCoverSub">'+esc(cv.sub)+'</div>';
+        b.addEventListener('click', function(){ filter=cv.filter; showTab('schedule'); });
+        c.appendChild(b);
+      });
+      c.addEventListener('scroll', function(){ var half=c.scrollWidth/2; if(c.scrollLeft>=half) c.scrollLeft-=half; });
+    }
+    function renderNow(){
+      var day=todayDay();
+      var w=el('shNowWrap'); var sess=sessionsFor(day); var m=minsNow();
+      var live=null, liveSet=[], next=null;
+      if(isToday(day)){
+        liveSet=sess.filter(function(s){ return m>=s.m && m<s.end; });
+        /* prefer the Campmeeting session as the primary card, else the first live one */
+        for(var i=0;i<liveSet.length;i++){ if(liveSet[i].evts.indexOf('Campmeeting')>=0){ live=liveSet[i]; break; } }
+        if(!live && liveSet.length) live=liveSet[0];
+        if(!live){ for(var k=0;k<sess.length;k++){ if(sess[k].m>m){ next=sess[k]; break; } } }
+      } else { next=sess[0]; }
+      var html='';
+      if(live){
+        /* merge simultaneous same-title live sessions into one card ("All three venues") */
+        var group=liveSet.filter(function(s){ return s.t===live.t && s.title===live.title; });
+        var evtSet=[]; group.forEach(function(s){ s.evts.forEach(function(e){ if(evtSet.indexOf(e)<0) evtSet.push(e); }); });
+        var title = group.length>1 && /Session$/.test(live.title) ? live.title+'s' : live.title;
+        var line = group.length>=3 ? 'All three venues · '+live.t
+          : group.length===2 ? evtSet.join(' & ').replace(/ Week/g,'')+' · '+live.t
+          : esc(live.venue)+' · '+live.t;
+        var route = group.length>1 ? '' : (live.route||null);
+        var pct=Math.round(100*(m-live.m)/(live.end-live.m));
+        html='<div style="display:flex;align-items:center;gap:8px;margin:16px 2px 8px;">'+
+          '<span style="width:8px;height:8px;border-radius:50%;background:'+live.color+';box-shadow:0 0 10px '+live.color+';"></span>'+
+          '<span class="shMono" style="font-size:10.5px;letter-spacing:1.8px;">HAPPENING NOW</span></div>'+
+          '<div class="shCard"><div style="font-weight:800;font-size:19px;">'+esc(title)+'</div>'+
+          '<div style="font-size:12.5px;color:var(--sh-mut);margin-top:2px;">'+line+'</div>'+
+          '<div style="display:flex;align-items:center;gap:10px;margin-top:12px;">'+
+          '<div style="flex:1;height:6px;border-radius:3px;background:#2c2c31;"><div style="width:'+pct+'%;height:6px;border-radius:3px;background:'+live.color+';"></div></div>'+
+          '<span class="shMono" style="font-size:10.5px;">ends '+(live.approxEnd?'~ ':'')+fmtTime(live.end)+'</span></div>'+
+          (route!==null?'<button class="shBtnOrg" data-route="'+route+'" style="margin-top:12px;">Show on map</button>':'')+'</div>';
+      } else if(next){
+        html='<div style="display:flex;align-items:center;gap:8px;margin:16px 2px 8px;">'+
+          '<span style="width:8px;height:8px;border-radius:50%;background:'+next.color+';"></span>'+
+          '<span class="shMono" style="font-size:10.5px;letter-spacing:1.8px;">'+(isToday(day)?'UP NEXT':WD[new Date(EVT_Y,EVT_M,day).getDay()].toUpperCase()+' JUL '+day)+'</span></div>'+
+          '<div class="shCard"><div style="font-weight:800;font-size:19px;">'+esc(next.title)+'</div>'+
+          '<div style="font-size:12.5px;color:var(--sh-mut);margin-top:2px;">'+esc(next.venue)+' · '+next.t+'</div>'+
+          (next.route?'<button class="shBtnOrg" data-route="'+next.route+'" style="margin-top:12px;">Show on map</button>':'')+'</div>';
+      }
+      w.innerHTML=html;
+      var btn=w.querySelector('[data-route]');
+      if(btn) btn.addEventListener('click', function(){ goMapRoute(btn.getAttribute('data-route')); });
+    }
+    function renderUpNext(){
+      var day=todayDay();
+      var c=el('shUpNext'); c.innerHTML='';
+      var sess=sessionsFor(day); var m=isToday(day)?minsNow():-1;
+      /* strictly future sessions only — never sessions that are already live */
+      var upcoming=sess.filter(function(s){ return s.m>m; });
+      /* merge simultaneous same-title sessions into one row ("All three venues") */
+      var merged=[], seen={};
+      upcoming.forEach(function(s){
+        var k=s.t+'|'+s.title;
+        if(seen[k]){ seen[k].count++; s.evts.forEach(function(e){ if(seen[k].evtSet.indexOf(e)<0) seen[k].evtSet.push(e); }); }
+        else { seen[k]={ t:s.t, title:s.title, evtLabel:s.evtLabel, count:1, evtSet:s.evts.slice() }; merged.push(seen[k]); }
+      });
+      merged.slice(0,3).forEach(function(s){
+        var evtLabel = s.count>=3 ? 'All three venues'
+          : (s.evtLabel || (s.evtSet.length>1 ? s.evtSet.join(' & ').replace(' Week','') : s.evtSet[0]));
+        var title = s.count>1 && /Session$/.test(s.title) ? s.title+'s' : s.title;
+        var row=document.createElement('div'); row.className='shRow'; row.style.cursor='pointer';
+        row.innerHTML='<span style="flex:1;min-width:0;"><span style="display:block;font-size:11px;color:var(--sh-mut);">'+s.t+' &middot; '+esc(evtLabel)+'</span>'+
+          '<span style="display:block;font-weight:700;font-size:14.5px;margin-top:2px;">'+esc(title)+'</span></span>'+
+          '<span class="shRowArr">&rarr;</span>';
+        row.addEventListener('click', function(){ selDay=day; showTab('schedule'); });
+        c.appendChild(row);
+      });
+      if(!merged.length){
+        var done=document.createElement('div');
+        done.style.cssText='font-size:13px;color:var(--sh-dim);padding:4px 2px 2px;';
+        done.textContent='No more sessions today.';
+        c.appendChild(done);
+      }
+    }
+
+    /* ---- Schedule screen ---- */
+    function renderChips(){
+      var c=el('shChips'); c.innerHTML='';
+      CHIPS.forEach(function(ch){
+        var b=document.createElement('button'); b.className='shChip'+(filter===ch.value?' on':'');
+        b.innerHTML='<span class="shDot" style="background:'+ch.dot+';"></span>'+esc(ch.label);
+        b.addEventListener('click', function(){ filter=ch.value; renderAll(); });
+        c.appendChild(b);
+      });
+    }
+    var SGROUPS=[
+      { key:'church', label:'THE RIVER AT TAMPA BAY CHURCH', color:'#ff8a52' },
+      { key:'camp', label:'CAMPMEETING', color:'#ff8a52' },
+      { key:'youth', label:'YOUTH', color:'#6fa8ff' },
+      { key:'k612', label:'KIDS (6–12)', color:'#5ecb8e' },
+      { key:'k35', label:'KIDS (3–5)', color:'#5ecb8e' }
+    ];
+    function renderSessions(){
+      var c=el('shSessions'); c.innerHTML='';
+      var m=minsNow();
+      var sess=sessionsFor(selDay).filter(matches);
+      SGROUPS.forEach(function(g, gi){
+        var rows=sess.filter(function(s){ return s.groups.indexOf(g.key)>=0; });
+        if(!rows.length) return;
+        var h=document.createElement('div');
+        h.className='shMono';
+        h.style.cssText='font-size:9.5px;letter-spacing:1.8px;color:'+g.color+';margin:'+(gi===0?'4px':'18px')+' 2px 2px;';
+        h.textContent=g.label;
+        c.appendChild(h);
+        rows.forEach(function(s){
+          var liveNow=isToday(selDay) && m>=s.m && m<s.end;
+          var row=document.createElement('div'); row.className='shSess';
+          row.innerHTML='<span class="shDot" style="width:8px;height:8px;background:'+s.color+';"></span>'+
+            '<span class="tm">'+s.t+'</span>'+(liveNow?'<span class="shNowTag">NOW</span>':'')+
+            '<span style="flex:1;min-width:0;"><span style="display:block;font-weight:700;font-size:14px;">'+esc(s.title)+'</span>'+
+            '<span style="display:block;font-size:11.5px;color:var(--sh-mut);margin-top:1px;">'+esc(s.venue)+'</span></span>'+
+            (s.route?'<button class="shMapBtn">Map</button>':'');
+          var mb=row.querySelector('.shMapBtn');
+          if(mb) mb.addEventListener('click', function(){ goMapRoute(s.route); });
+          c.appendChild(row);
+        });
+      });
+      /* children's-ministry note at the bottom of every day's list */
+      var note=document.createElement('div');
+      note.style.cssText='background:var(--sh-card);border-radius:16px;padding:13px 16px;margin:18px 0 6px;';
+      note.innerHTML='<div class="shMono" style="font-size:9.5px;letter-spacing:1.8px;color:#5ecb8e;margin-bottom:6px;">CHILDREN’S MINISTRY</div>'+
+        '<div style="font-size:13px;color:var(--sh-mut);line-height:1.55;">Children’s ministry will be available throughout the full conference for ages 1–12. Please note that outside of the official Kids Week programs, space is limited.</div>';
+      c.appendChild(note);
+    }
+
+    /* ---- Vendors screen ---- */
+    function renderVendors(){
+      var c=el('shVendors'); if(c.childNodes.length) return;
+      var data=(window.MapAPI&&window.MapAPI.VENDORS)||[];
+      var html='';
+      data.forEach(function(group){
+        var isPav=/pavilion/i.test(group.cat);
+        html+='<div class="shMono" style="font-size:10px;letter-spacing:1.8px;margin:6px 2px 8px;">'+esc(group.cat.toUpperCase())+'</div>'+
+          '<div style="background:var(--sh-card);border-radius:16px;padding:3px 16px;margin-bottom:'+(isPav?'8px':'14px')+';">';
+        group.items.forEach(function(v,i){
+          html+='<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:12px 0;'+(i<group.items.length-1?'border-bottom:1px solid rgba(255,255,255,0.06);':'')+'">'+
+            '<span style="font-weight:700;font-size:14.5px;">'+esc(v[0])+'</span>'+
+            '<span class="shMono" style="font-size:11px;color:var(--sh-mut);white-space:nowrap;">'+esc(v[1])+'</span></div>';
+        });
+        html+='</div>';
+        if(isPav) html+='<button id="shBoothBtn" class="shMenuRow" style="margin-bottom:14px;"><span>Pavilion booth layout</span><span style="color:var(--sh-mut);font-size:14px;">&rarr;</span></button>';
+      });
+      c.innerHTML=html;
+      var bb=document.getElementById('shBoothBtn');
+      if(bb) bb.addEventListener('click', function(){ if(window.MapAPI&&window.MapAPI.openPavModal) window.MapAPI.openPavModal(); });
+    }
+
+    /* ---- Campus map screen (3a): chips + venue sheet ---- */
+    var VENUES={
+      main:  { title:'Main Sanctuary', tag:'CAMPMEETING', tagFg:'#ff8a52', tagBg:'rgba(255,92,31,0.14)',
+               desc:'Morning & evening sessions · doors 8:30 AM & 6:00 PM', route:'main' },
+      youth: { title:'River Pavilion', tag:'YOUTH WEEK', tagFg:'#6fa8ff', tagBg:'rgba(63,141,255,0.14)',
+               desc:'Youth services · Vendor booths · Kings Arms Coffee', route:'youth' },
+      kids:  { title:'Kids Tent', tag:'KIDS 6–12', tagFg:'#5ecb8e', tagBg:'rgba(47,181,107,0.14)',
+               desc:'Kids Fire Week · morning & evening sessions', route:'kids' },
+      bears: { title:'River Bears', tag:'KIDS 3–5', tagFg:'#5ecb8e', tagBg:'rgba(47,181,107,0.14)',
+               desc:'Ages 3–5 · mornings 9:30 AM – 1:00 PM', route:'bears' }
+    };
+    var MCHIPS=[
+      { label:'All', key:null },
+      { label:'Campmeeting', key:'main', dot:ORG },
+      { label:'Youth (13–19)', key:'youth', dot:BLU },
+      { label:'Kids (6–12)', key:'kids', dot:GRN },
+      { label:'Kids (3–5)', key:'bears', dot:GRN }
+    ];
+    var mapSel=null;
+    function renderMapChips(){
+      var c=el('shMapChips'); c.innerHTML='';
+      MCHIPS.forEach(function(ch){
+        var b=document.createElement('button');
+        b.className='shMChip'+((ch.key===mapSel||(ch.key===null&&mapSel===null))?' on':'');
+        b.innerHTML=(ch.dot?'<span class="shDot" style="background:'+ch.dot+';"></span>':'')+esc(ch.label);
+        b.addEventListener('click', function(){
+          if(ch.key===null || ch.key===mapSel){ hideSheet(); if(window.MapAPI) window.MapAPI.selectNone(); if(ch.key===null) return; }
+          else { openSheet(ch.key); if(window.MapAPI) window.MapAPI.setRoute(VENUES[ch.key].route, true); }
+        });
+        c.appendChild(b);
+      });
+    }
+    function openSheet(key){
+      mapSel=key; renderMapChips();
+      var v=VENUES[key]; var s=el('shMapSheet');
+      s.innerHTML='<div class="shSheetHandle"></div>'+
+        '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;">'+
+        '<span style="font-weight:800;font-size:19px;white-space:nowrap;">'+esc(v.title)+'</span>'+
+        '<span class="shSheetTag" style="color:'+v.tagFg+';background:'+v.tagBg+';">'+esc(v.tag)+'</span></div>'+
+        '<div style="font-size:13px;color:var(--sh-mut);margin-top:4px;">'+esc(v.desc)+'</div>'+
+        '<div style="display:flex;gap:9px;margin-top:14px;">'+
+        '<button class="shSheetBtn" id="shWalk" style="background:var(--sh-org);color:#fff;font-weight:700;border:0;">Walk me there</button>'+
+        (v.booth?'<button class="shSheetBtn" id="shBooth" style="background:none;border:1.5px solid #34343a;color:var(--sh-lt);font-weight:600;">Booth layout</button>':'')+
+        '</div>';
+      s.classList.add('open');
+      el('shWalk').addEventListener('click', function(){ if(window.MapAPI) window.MapAPI.setRoute(v.route, true); });
+      var bl=document.getElementById('shBooth');
+      if(bl) bl.addEventListener('click', function(){ if(window.MapAPI&&window.MapAPI.openPavModal) window.MapAPI.openPavModal(); });
+      var h=s.querySelector('.shSheetHandle');
+      h.style.cursor='pointer';
+      h.addEventListener('click', hideSheet);
+    }
+    function hideSheet(){ mapSel=null; el('shMapSheet').classList.remove('open'); renderMapChips(); }
+    /* building taps on the 3D map open the matching venue sheet */
+    window.__shellVenue=function(key){ if(VENUES[key]) openSheet(key); };
+    window.__shellVendors=function(){ showTab('vendors'); };
+
+    /* ---- tabs ---- */
+    var SCREENS={ today:'shellToday', schedule:'shellSchedule', vendors:'shellVendors' };
+    function setBarActive(name){
+      var btns=document.querySelectorAll('#shellBar .shTab');
+      for(var i=0;i<btns.length;i++){ btns[i].classList.toggle('on', btns[i].getAttribute('data-tab')===name); }
+    }
+    function showTab(name){
+      if(menuOpen) closeMenu(true);
+      if(faqOpen) closeFaq();
+      tab=name;
+      Object.keys(SCREENS).forEach(function(k){ el(SCREENS[k]).classList.toggle('on', k===name); });
+      document.body.classList.toggle('shellMap', name==='map');
+      setBarActive(name);
+      if(name!=='map'){ hideSheet(); if(window.MapAPI) window.MapAPI.selectNone && window.MapAPI.selectNone(); }
+      else renderMapChips();
+      renderAll();
+    }
+    /* ---- Menu sheet: slides up over the current page ---- */
+    var menuOpen=false;
+    function openMenu(){ menuOpen=true; el('shellMenu').classList.add('open'); setBarActive('menu'); }
+    function closeMenu(silent){ menuOpen=false; el('shellMenu').classList.remove('open'); if(!silent) setBarActive(tab); }
+    function goMapRoute(route){
+      showTab('map');
+      if(window.MapAPI && route){ window.MapAPI.setRoute(route, true);
+        var k; for(k in VENUES){ if(VENUES[k].route===route){ openSheet(k); break; } } }
+    }
+    function renderAll(){
+      if(tab==='today'){ renderTodayHead();
+        /* Today is locked to the current day; tapping a date browses that day on the Schedule tab */
+        buildWk('shWkToday', todayDay(), function(d){ selDay=d; showTab('schedule'); });
+        renderNow(); renderUpNext(); }
+      if(tab==='schedule'){ buildWk('shWkSched', selDay, function(d){ selDay=d; renderAll(); }); renderChips(); renderSessions(); }
+      if(tab==='vendors'){ renderVendors(); }
+    }
+
+    /* ---- FAQs sheet (content from fire.revival.com, per age group) ---- */
+    var FAQ_GROUPS=[
+      { key:'gen',   label:'GENERAL',      color:'#9a9aa2', chip:null },
+      { key:'camp',  label:'CAMPMEETING',  color:'#ff8a52', chip:{label:'Campmeeting', dot:ORG} },
+      { key:'youth', label:'YOUTH',        color:'#6fa8ff', chip:{label:'Youth (13–19)', dot:BLU} },
+      { key:'k612',  label:'KIDS (6–12)',  color:'#5ecb8e', chip:{label:'Kids (6–12)', dot:GRN} },
+      { key:'k35',   label:'KIDS (3–5)',   color:'#5ecb8e', chip:{label:'Kids (3–5)', dot:GRN} }
+    ];
+    var FAQS=[
+      { g:'gen', q:"Is there a registration fee?", a:"Fire Conference is a FREE event." },
+      { g:'gen', q:"Is this an overnight event?", a:"This is NOT an overnight event. Youth & kids pick-up is directly after the AM and PM services, and attendees cannot stay on the property between sessions." },
+      { g:'gen', q:"Can I watch online?", a:"Every service will be live-streamed on Revival.com, RevivalTV.com, Facebook, and YouTube." },
+      { g:'gen', q:"Is there reserved seating?", a:"Registration confirms you will be attending the conference. It does not reserve a specific seat. Doors open 1 hour prior to service." },
+      { g:'gen', q:"Banned items", a:"Illegal drugs, alcohol, marijuana, tents, selfie sticks, glass bottles, extension poles, flags, animals, vaping, e-cigarettes, and smoking." },
+      { g:'gen', q:"¿Habrá traducción en Español?", a:"¡Sí! Cada servicio será traducido al Español." },
+      { g:'camp', q:"Who can come?", a:"Summer Campmeeting is open to everyone that is hungry for more of God. Bring your friends, family, and unsaved loved ones! Kids Week is open to ages 3–12 and Youth Week to ages 13–19." },
+      { g:'camp', q:"Is there childcare?", a:"Nursery (ages 1–2) is available during all services. River Bears (ages 3–5) and River Kids (ages 6–12) run their own programs throughout the week, and a parents' room is available. Space is limited and available on a first-come, first-served basis." },
+      { g:'camp', q:"Will services be inside or outside?", a:"All Fire Conference services will be inside the Main Sanctuary. Youth Week is in the River Pavilion, Kids Week in the White Tent, River Bears in Studio B, and the Nursery on the North Balcony." },
+      { g:'camp', q:"What do I need to bring?", a:"Proper identification (such as a driver's license) and your digital event registration." },
+      { g:'youth', q:"Who can come?", a:"Fire Conference: Youth Week is open to youth ages 13–19 that are hungry for more of God and desire to be used by Him." },
+      { g:'youth', q:"Is there parent seating?", a:"Parents attending Summer Campmeeting can sit in the Main Sanctuary. Parents will not be able to sit with youth in the Pavilion during services — youth pastors and leaders will be seated with their groups." },
+      { g:'youth', q:"What do I need to bring?", a:"Proper identification, a signed Student Waiver and Medical Release Form, Bible, pen, and notebook. For water activities, bring a towel and clothes you can get wet and dirty in." },
+      { g:'youth', q:"Meals", a:"Every day (Tuesday–Friday) after the morning service there will be food trucks where students can purchase lunch before afternoon activities." },
+      { g:'youth', q:"Will services be inside or outside?", a:"All Youth Week services will be outside in the River Pavilion." },
+      { g:'k612', q:"Who can come?", a:"Fire Conference: Kids Week is open to children ages 3–12. Nursery care (ages 1–2) is also available. Children must be fully potty trained." },
+      { g:'k612', q:"What is the schedule?", a:"River Kids (ages 6–12) participate Monday PM and Tuesday–Friday AM & PM. Space may be limited." },
+      { g:'k612', q:"Is there parent seating?", a:"Parents cannot sit with children during Kids services but may attend Summer Campmeeting in the Main Sanctuary. For special needs accommodations, email riverkids@revival.com." },
+      { g:'k612', q:"Pick-up", a:"Child pick-up is directly after the AM & PM services. Please arrive 30 minutes before the service ends." },
+      { g:'k612', q:"Group registration", a:"Groups of 10 or more get early check-in from 4–5 PM on opening night, with student wristbands." },
+      { g:'k612', q:"What do I need to bring?", a:"Identification for guardians, your registration (digital or printed), a Bible and notebook, and a modest bathing suit and towel for Water Day." },
+      { g:'k612', q:"Meals", a:"Food trucks (Tuesday–Friday) offer lunch for around $5–$15. Ages 6–12 should eat breakfast and dinner at home." },
+      { g:'k612', q:"Will services be inside or outside?", a:"Kids Week services for ages 6–12 are held in the White Tent." },
+      { g:'k35', q:"Who can come?", a:"Kids Week is open to ages 3–12. Children ages 3–5 MUST be potty trained to attend the services. Nursery (ages 1–2) and a Mother's Room are also available." },
+      { g:'k35', q:"Are services only Tuesday–Friday?", a:"Special Kids Week services for ages 3–5 run Tuesday–Friday mornings. We will be open for all 16 services of Fire Conference, however space may be limited." },
+      { g:'k35', q:"Pick-up", a:"Child pick-up is directly after the AM & PM services. Please arrive 30 minutes before the service ends." },
+      { g:'k35', q:"What do I need to bring?", a:"Valid identification and your registration. Please pack a snack/meal for your child for every service. For Water Day, bring a modest bathing suit and towel." },
+      { g:'k35', q:"Meals", a:"River Bears (ages 3–5) should bring a packed meal/snack to each service. Food trucks operate daily at the food court ($5–$15)." },
+      { g:'k35', q:"Will services be inside or outside?", a:"All services for ages 3–5 are in Studio B." }
+    ];
+    var faqFilter='All', faqOpen=false;
+    function renderFaqChips(){
+      var c=el('shFaqChips'); c.innerHTML='';
+      var defs=[{label:'All', value:'All', dot:'#141415'}].concat(
+        FAQ_GROUPS.filter(function(g){return g.chip;}).map(function(g){return {label:g.chip.label, value:g.key, dot:g.chip.dot};}));
+      defs.forEach(function(ch){
+        var b=document.createElement('button'); b.className='shChip'+(faqFilter===ch.value?' on':'');
+        b.innerHTML='<span class="shDot" style="background:'+ch.dot+';"></span>'+esc(ch.label);
+        b.addEventListener('click', function(){ faqFilter=ch.value; renderFaqChips(); renderFaqs(); });
+        c.appendChild(b);
+      });
+    }
+    function renderFaqs(){
+      var c=el('shFaqList'); c.innerHTML='';
+      FAQ_GROUPS.forEach(function(g){
+        if(faqFilter!=='All' && g.key!=='gen' && g.key!==faqFilter) return;
+        var items=FAQS.filter(function(f){ return f.g===g.key; });
+        if(!items.length) return;
+        var h=document.createElement('div');
+        h.className='shMono';
+        h.style.cssText='font-size:9.5px;letter-spacing:1.8px;color:'+g.color+';margin:10px 2px 8px;';
+        h.textContent=g.label;
+        c.appendChild(h);
+        items.forEach(function(f){
+          var it=document.createElement('div'); it.className='faqItem';
+          it.innerHTML='<button class="faqQ"><span>'+esc(f.q)+'</span>'+
+            '<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>'+
+            '<div class="faqA">'+esc(f.a)+'</div>';
+          it.querySelector('.faqQ').addEventListener('click', function(){ it.classList.toggle('open'); });
+          c.appendChild(it);
+        });
+      });
+    }
+    function openFaq(){ faqOpen=true; if(!el('shFaqChips').childNodes.length){ renderFaqChips(); renderFaqs(); } el('shellFaq').classList.add('open'); }
+    function closeFaq(){ faqOpen=false; el('shellFaq').classList.remove('open'); }
+
+    /* ---- wire up ---- */
+    document.querySelectorAll('#shellBar .shTab').forEach(function(b){
+      b.addEventListener('click', function(){
+        var t=b.getAttribute('data-tab');
+        if(t==='menu'){ menuOpen ? closeMenu() : openMenu(); return; }
+        showTab(t);
+      });
+    });
+    el('shMenuClose').addEventListener('click', function(){ closeMenu(); });
+    el('shFullSched').addEventListener('click', function(){ showTab('schedule'); });
+    el('shMenuVendors').addEventListener('click', function(){ showTab('vendors'); });
+    el('shMenuFaq').addEventListener('click', function(){ openFaq(); });
+    el('shFaqClose').addEventListener('click', function(){ closeFaq(); });
+    /* food-truck pin on the map now opens the Vendors tab; capture-phase intercept
+       on document beats the legacy modal handler without touching the pin node */
+    document.addEventListener('click', function(e){
+      if(e.target && e.target.closest && e.target.closest('#ftPin')){
+        e.stopPropagation(); e.preventDefault(); showTab('vendors');
+      }
+    }, true);
+    renderCovers();
+    /* preview-mode indicator: tap to exit back to real time */
+    if(pvOn){
+      var pv=document.createElement('a');
+      pv.href=location.pathname;
+      pv.style.cssText='position:fixed;bottom:calc(var(--sh-barH) + var(--sh-safe) + 10px);left:50%;transform:translateX(-50%);z-index:90;'+
+        'background:rgba(255,92,31,0.92);color:#fff;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:1.4px;'+
+        'border-radius:12px;padding:5px 11px;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,0.4);white-space:nowrap;';
+      var pd=new Date(EVT_Y,EVT_M,pvDay);
+      pv.textContent='PREVIEW · '+WD[pd.getDay()].toUpperCase()+' JUL '+pvDay+' '+(('0'+(+pvTime[0]||10)).slice(-2))+':'+(('0'+(+pvTime[1]||0)).slice(-2))+' · TAP TO EXIT';
+      document.body.appendChild(pv);
+    }
+    /* refresh live NOW state every minute */
+    setInterval(function(){ if(tab==='today'||tab==='schedule') renderAll(); }, 60000);
+    showTab('today');
   })();
   </script>
 </body>
