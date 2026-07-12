@@ -737,7 +737,7 @@
       </div>
       <div style="font-size:13px;color:var(--sh-mut);line-height:1.55;margin-top:12px;">Be the first to know when the schedule changes or there&rsquo;s news during Fire Conference week.</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
-        <button id="shAskGo">Enable Alerts</button>
+        <button id="shAskGo">Enable Notifications</button>
         <button id="shAskLater">Not now</button>
       </div>
     </div>
@@ -2539,15 +2539,25 @@
         .catch(function(){ refreshAlertsRow(); });
     }
     function maybeAskAlerts(){
-      /* second prompt: fires on first launch of the installed app, before any decision */
+      /* first launch of the installed app: initial ask. Later launches: gentle
+         reminders while undecided — max once per ~20h, max 2 reminders after the
+         initial ask. Never shown once subscribed or OS-level denied. */
       if(!isStandalone() || !pushSupported() || Notification.permission!=='default') return;
-      if(localStorage.getItem('fc_alerts_prompted')==='1') return;
       swReg.pushManager.getSubscription().then(function(sub){
         if(sub) return;
+        var now=Date.now();
+        var count=parseInt(localStorage.getItem('fc_ask_count')||'0',10)||0;
+        if(!count && localStorage.getItem('fc_alerts_prompted')==='1') count=1; /* pre-reminder installs */
+        var last=parseInt(localStorage.getItem('fc_ask_last')||'0',10)||0;
+        var isReminder=count>0;
+        if(isReminder && (count>=3 || now-last < 20*3600*1000)) return;
         setTimeout(function(){
           localStorage.setItem('fc_alerts_prompted','1');
+          localStorage.setItem('fc_ask_count', String(count+1));
+          localStorage.setItem('fc_ask_last', String(now));
           el('shellAsk').classList.add('open');
-          trackEvent('alerts_prompt_shown');
+          if(isReminder) trackEvent('alerts_reminder_shown',{nth:count+1});
+          else trackEvent('alerts_prompt_shown');
         }, 1200);
       });
     }
