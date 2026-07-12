@@ -16,16 +16,33 @@ function idFor(endpoint) {
   return crypto.createHash('sha256').update(endpoint).digest('hex');
 }
 
+// Overwritten blobs keep their URL, and the CDN can serve stale content for a long
+// time; cap the cache and bust it on read so overwrites (group changes, config
+// flips) become visible quickly.
+const FRESH_PUT_OPTS = {
+  access: 'private',
+  addRandomSuffix: false,
+  contentType: 'application/json',
+  allowOverwrite: true,
+  cacheControlMaxAge: 60,
+};
+
+function bust(url) {
+  return url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cb=' + Date.now();
+}
+
+async function fetchBlobJson(item) {
+  const res = await fetch(bust(item.downloadUrl || item.url), {
+    headers: { authorization: 'Bearer ' + process.env.BLOB_READ_WRITE_TOKEN },
+  });
+  return res.ok ? res.json() : null;
+}
+
 async function saveSub(sub) {
   const id = idFor(sub.endpoint);
   if (hasBlob()) {
     const { put } = require('@vercel/blob');
-    await put(PREFIX + id + '.json', JSON.stringify(sub), {
-      access: 'private',
-      addRandomSuffix: false,
-      contentType: 'application/json',
-      allowOverwrite: true,
-    });
+    await put(PREFIX + id + '.json', JSON.stringify(sub), FRESH_PUT_OPTS);
     return { id, mode: 'blob' };
   }
   mem.set(id, sub);
@@ -52,11 +69,8 @@ async function listSubs() {
       const page = await list({ prefix: PREFIX, cursor, limit: 1000 });
       for (const item of page.blobs) {
         try {
-          const url = item.downloadUrl || item.url;
-          const res = await fetch(url, {
-            headers: { authorization: 'Bearer ' + process.env.BLOB_READ_WRITE_TOKEN },
-          });
-          if (res.ok) subs.push({ sub: await res.json(), pathname: item.pathname });
+          const sub = await fetchBlobJson(item);
+          if (sub) subs.push({ sub, pathname: item.pathname });
         } catch (e) { /* skip unreadable blob */ }
       }
       cursor = page.cursor;
@@ -82,12 +96,7 @@ async function logSend(entry) {
   if (hasBlob()) {
     const { put } = require('@vercel/blob');
     const id = Date.now() + '-' + crypto.randomBytes(4).toString('hex');
-    await put(LOG_PREFIX + id + '.json', JSON.stringify(entry), {
-      access: 'private',
-      addRandomSuffix: false,
-      contentType: 'application/json',
-      allowOverwrite: true,
-    });
+    await put(LOG_PREFIX + id + '.json', JSON.stringify(entry), FRESH_PUT_OPTS);
     return { mode: 'blob' };
   }
   memLog.push(entry);
@@ -103,11 +112,8 @@ async function listLog() {
       const page = await list({ prefix: LOG_PREFIX, cursor, limit: 1000 });
       for (const item of page.blobs) {
         try {
-          const url = item.downloadUrl || item.url;
-          const res = await fetch(url, {
-            headers: { authorization: 'Bearer ' + process.env.BLOB_READ_WRITE_TOKEN },
-          });
-          if (res.ok) entries.push(await res.json());
+          const entry = await fetchBlobJson(item);
+          if (entry) entries.push(entry);
         } catch (e) { /* skip unreadable blob */ }
       }
       cursor = page.cursor;
@@ -120,16 +126,13 @@ async function listLog() {
 
 async function getConfig() {
   if (hasBlob()) {
-    const { list } = require('@vercel/blob');
+    const { head } = require('@vercel/blob');
     try {
-      const page = await list({ prefix: CFG_PATH, limit: 1 });
-      if (page.blobs.length) {
-        const res = await fetch(page.blobs[0].downloadUrl || page.blobs[0].url, {
-          headers: { authorization: 'Bearer ' + process.env.BLOB_READ_WRITE_TOKEN },
-        });
-        if (res.ok) return { config: await res.json(), mode: 'blob' };
-      }
-    } catch (e) { /* fall through to defaults */ }
+      // head() gives fresh per-call metadata; bust() skips the CDN cache of overwrites
+      const item = await head(CFG_PATH);
+      const config = await fetchBlobJson(item);
+      if (config) return { config, mode: 'blob' };
+    } catch (e) { /* not found yet, or transient — fall through to defaults */ }
     return { config: {}, mode: 'blob' };
   }
   return { config: memCfg, mode: 'memory' };
@@ -139,12 +142,7 @@ async function setConfig(patch) {
   const next = Object.assign({}, (await getConfig()).config, patch);
   if (hasBlob()) {
     const { put } = require('@vercel/blob');
-    await put(CFG_PATH, JSON.stringify(next), {
-      access: 'private',
-      addRandomSuffix: false,
-      contentType: 'application/json',
-      allowOverwrite: true,
-    });
+    await put(CFG_PATH, JSON.stringify(next), FRESH_PUT_OPTS);
     return { config: next, mode: 'blob' };
   }
   Object.assign(memCfg, patch);
