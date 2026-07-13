@@ -2897,7 +2897,7 @@
       [].slice.call(el('nwsSheet').querySelectorAll('[data-nwstheme]')).forEach(function(c){
         c.addEventListener('click', function(){ setNewsTheme(c.getAttribute('data-nwstheme')); });
       });
-      sc.addEventListener('scroll', function(){ if(!newsRaf){ newsRaf=requestAnimationFrame(nwsSpy); } });
+      sc.addEventListener('scroll', function(){ if(!newsRaf){ newsRaf=setTimeout(nwsSpy,60); } });
       applyNewsTheme();
       nwsPaint();
     }
@@ -2930,19 +2930,18 @@
     }
     var nwsAnim=0;
     function nwsScrollTo(target){
-      /* rAF-driven eased scroll: element.scrollTo({behavior:'smooth'}) silently no-ops
-         on older iOS Safari (options-object form unsupported) */
-      var sc=el('nwsScroll'), from=sc.scrollTop, dist=target-from, t0=null, DUR=460;
-      cancelAnimationFrame(nwsAnim);
+      /* timer-driven eased scroll: element.scrollTo({behavior:'smooth'}) silently
+         no-ops on older iOS Safari, and rAF can be suspended in embedded webviews */
+      var sc=el('nwsScroll'), from=sc.scrollTop, dist=target-from, t0=performance.now(), DUR=460;
+      clearTimeout(nwsAnim);
       function ease(x){ return x<0.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2; }
-      function step(ts){
-        if(t0===null) t0=ts;
-        var p=Math.min(1,(ts-t0)/DUR);
+      function step(){
+        var p=Math.min(1,(performance.now()-t0)/DUR);
         sc.scrollTop=from+dist*ease(p);
-        if(p<1) nwsAnim=requestAnimationFrame(step);
+        if(p<1) nwsAnim=setTimeout(step,16);
         else { nwsAnim=0; nwsSpy(); }
       }
-      nwsAnim=requestAnimationFrame(step);
+      nwsAnim=setTimeout(step,0);
     }
     function nwsJump(i){
       newsSec=i; nwsPaint(); nwsSheet(false);
