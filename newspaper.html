@@ -56,10 +56,10 @@
   .nwsK{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:#a63c17;margin-bottom:6px;}
   .nwsH1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:23px;line-height:1.12;margin-bottom:7px;}
   .nwsBy{font-size:11px;font-style:italic;color:#6b6353;border-bottom:1px solid rgba(32,29,22,0.25);padding-bottom:8px;margin-bottom:10px;}
-  .nwsDek{font-size:12.5px;font-style:italic;color:#6b6353;margin-bottom:12px;}
-  .nwsP{font-size:14.5px;line-height:1.62;text-align:justify;margin:0 0 10px;color:#2a261d;hyphens:none;-webkit-hyphens:none;}
+  .nwsDek{font-size:calc(12.5px*var(--fz,1));font-style:italic;color:#6b6353;margin-bottom:12px;}
+  .nwsP{font-size:calc(14.5px*var(--fz,1));line-height:1.62;text-align:justify;margin:0 0 10px;color:#2a261d;hyphens:none;-webkit-hyphens:none;}
   .nwsDC{float:left;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:46px;line-height:0.8;padding:5px 7px 0 0;}
-  .nwsSig{font-size:13px;font-style:italic;color:#2a261d;margin:0 0 6px;}
+  .nwsSig{font-size:calc(13px*var(--fz,1));font-style:italic;color:#2a261d;margin:0 0 6px;}
   .nwsH2{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;line-height:1.2;margin:18px 0 2px;}
   .nwsH3{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:15px;margin:0 0 4px;}
   .nwsSub{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.2px;color:#8a8171;margin-bottom:9px;}
@@ -73,7 +73,7 @@
   .nwsStrip img{height:92px;width:auto;border:1px solid rgba(32,29,22,0.35);display:block;flex:0 0 auto;}
   .nwsStrip.tall img{height:118px;}
   .nwsQ{border-top:1px solid rgba(32,29,22,0.45);border-bottom:1px solid rgba(32,29,22,0.45);padding:13px 10px;margin:0 0 12px;text-align:center;}
-  .nwsQ .q{font-size:16.5px;font-style:italic;line-height:1.4;}
+  .nwsQ .q{font-size:calc(16.5px*var(--fz,1));font-style:italic;line-height:1.4;}
   .nwsQ .a{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1.5px;color:#a63c17;margin-top:6px;}
   .nwsStats{display:flex;gap:10px;margin-bottom:14px;}
   .nwsStats>div{flex:1;border-top:2.5px solid #201d16;padding-top:7px;}
@@ -154,7 +154,7 @@
   #shellNews.ink .nwsH1{font-family:'Archivo',sans-serif;font-weight:800;color:#fff;font-size:21px;}
   #shellNews.ink .nwsBy{font-style:normal;color:#9a9aa2;border-bottom-color:rgba(255,255,255,0.08);}
   #shellNews.ink .nwsDek{color:#9a9aa2;}
-  #shellNews.ink .nwsP{font-size:14px;line-height:1.66;text-align:left;color:#cfccc5;}
+  #shellNews.ink .nwsP{font-size:calc(14px*var(--fz,1));line-height:1.66;text-align:left;color:#cfccc5;}
   #shellNews.ink .nwsDC{float:none;font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;padding:0;}
   #shellNews.ink .nwsSig{color:#cfccc5;}
   #shellNews.ink .nwsH2,#shellNews.ink .nwsH3{font-family:'Archivo',sans-serif;font-weight:800;color:#fff;}
@@ -165,7 +165,7 @@
   #shellNews.ink .nwsStrip img{border:0;border-radius:10px;}
   #shellNews.ink .nwsQ{border:0;text-align:left;position:relative;padding:2px 0 2px 34px;}
   #shellNews.ink .nwsQ::before{content:'\201C';position:absolute;left:0;top:-4px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:44px;line-height:1;color:#ff5c1f;}
-  #shellNews.ink .nwsQ .q{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:16px;color:#fff;}
+  #shellNews.ink .nwsQ .q{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:calc(16px*var(--fz,1));color:#fff;}
   #shellNews.ink .nwsQ .a{color:#ff5c1f;}
   #shellNews.ink .nwsStats>div{border-top:0;background:#1f1f22;border-radius:12px;padding:10px 11px;}
   #shellNews.ink .nwsStats .v{font-family:'Archivo',sans-serif;font-weight:800;color:#ff5c1f;}
@@ -239,6 +239,14 @@
   #shellNews.paper .nwsSet .hd .t{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:19px;}
   #shellNews.ink .nwsSet .hd .t{font-family:'Archivo',sans-serif;font-weight:800;font-size:18px;}
   .nwsSet .bd{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 18px calc(16px + env(safe-area-inset-bottom,0px));min-height:0;}
+  .nwsSizeRow{display:flex;align-items:stretch;border-radius:12px;overflow:hidden;margin-top:10px;}
+  #shellNews.paper .nwsSizeRow{border:1px solid rgba(32,29,22,0.3);}
+  #shellNews.ink .nwsSizeRow{background:#26262a;}
+  .nwsSizeRow button{flex:1;background:none;border:0;padding:11px 0;cursor:pointer;color:inherit;font-family:Georgia,serif;line-height:1;}
+  .nwsSizeRow button:disabled{opacity:0.3;}
+  .nwsSizeRow i{width:1px;flex:0 0 auto;}
+  #shellNews.paper .nwsSizeRow i{background:rgba(32,29,22,0.25);}
+  #shellNews.ink .nwsSizeRow i{background:rgba(255,255,255,0.12);}
   .nwsSetLbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.4px;margin:12px 0 8px;}
   #shellNews.paper .nwsSetLbl{color:#8a8171;}
   #shellNews.ink .nwsSetLbl{color:#77777e;}
@@ -299,6 +307,10 @@
       <div class="hd"><span class="t">Themes &amp; Settings</span>
         <button class="nwsShX" id="nwsSetX" aria-label="Close settings"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>
       <div class="bd">
+        <div class="nwsSizeRow">
+          <button id="nwsSzDn" aria-label="Smaller text"><span style="font-size:13px;">A</span></button><i></i>
+          <button id="nwsSzUp" aria-label="Larger text"><span style="font-size:19px;">A</span></button>
+        </div>
         <div class="nwsSetLbl">THEME</div>
         <div class="nwsThemes">
           <button class="nwsThemeCard tPaper" data-nwstheme="paper"><div class="aa">Aa</div><div class="nm">Newspaper</div></button>
@@ -460,6 +472,7 @@
       el('nwsResume').addEventListener('click', function(){ nwsSheet(false); });
       applyNewsTheme();
       applyNewsFont();
+      applyNewsSize();
       nwsPaint();
     }
     function applyNewsTheme(){
@@ -524,6 +537,21 @@
     }
     function nwsSheet(open){ el('shellNews').classList.toggle('sheet', !!open); if(open) el('shellNews').classList.remove('set'); }
     function nwsSet(open){ el('shellNews').classList.toggle('set', !!open); if(open) el('shellNews').classList.remove('sheet'); }
+    var NWS_SIZES=[0.85,0.925,1,1.08,1.16];
+    function nwsSize(){ var i=2; try{ i=parseInt(localStorage.getItem('fc_news_size'),10); }catch(e){}
+      return (i>=0 && i<NWS_SIZES.length) ? i : 2; }
+    function applyNewsSize(){
+      var i=nwsSize();
+      el('shellNews').style.setProperty('--fz', NWS_SIZES[i]);
+      el('nwsSzDn').disabled = i<=0;
+      el('nwsSzUp').disabled = i>=NWS_SIZES.length-1;
+    }
+    function stepNewsSize(d){
+      var i=Math.max(0, Math.min(NWS_SIZES.length-1, nwsSize()+d));
+      try{ localStorage.setItem('fc_news_size', String(i)); }catch(e){}
+      applyNewsSize();
+      trackEvent('news_size',{step:i});
+    }
     var NWS_FONTS=['orig','ny','charter','palatino','times','sf'];
     function nwsFont(){ try{ var f=localStorage.getItem('fc_news_font'); return NWS_FONTS.indexOf(f)>=0?f:'orig'; }catch(e){ return 'orig'; } }
     function applyNewsFont(){
@@ -570,6 +598,8 @@
       el('nwsBack').addEventListener('click', leaveNews);
       el('nwsAa').addEventListener('click', function(){ nwsSet(true); trackEvent('news_settings_open'); });
       el('nwsSetX').addEventListener('click', function(){ nwsSet(false); });
+      el('nwsSzDn').addEventListener('click', function(){ stepNewsSize(-1); });
+      el('nwsSzUp').addEventListener('click', function(){ stepNewsSize(1); });
       el('nwsPill').addEventListener('click', function(){ nwsSheet(true); });
       el('nwsScrim').addEventListener('click', function(){ nwsSheet(false); nwsSet(false); });
       [].slice.call(el('nwsSet').querySelectorAll('[data-nwstheme]')).forEach(function(c){
