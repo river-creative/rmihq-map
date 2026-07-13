@@ -2923,13 +2923,30 @@
     }
     function nwsSpy(){
       newsRaf=0;
+      if(nwsAnim) return; /* keep the committed target section during an animated jump */
       var sc=el('nwsScroll'), top=sc.scrollTop, cur=0;
       for(var i=0;i<newsSecEls.length;i++){ if(newsSecEls[i].offsetTop-60<=top) cur=i; else break; }
       if(cur!==newsSec){ newsSec=cur; nwsPaint(); }
     }
+    var nwsAnim=0;
+    function nwsScrollTo(target){
+      /* rAF-driven eased scroll: element.scrollTo({behavior:'smooth'}) silently no-ops
+         on older iOS Safari (options-object form unsupported) */
+      var sc=el('nwsScroll'), from=sc.scrollTop, dist=target-from, t0=null, DUR=460;
+      cancelAnimationFrame(nwsAnim);
+      function ease(x){ return x<0.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2; }
+      function step(ts){
+        if(t0===null) t0=ts;
+        var p=Math.min(1,(ts-t0)/DUR);
+        sc.scrollTop=from+dist*ease(p);
+        if(p<1) nwsAnim=requestAnimationFrame(step);
+        else { nwsAnim=0; nwsSpy(); }
+      }
+      nwsAnim=requestAnimationFrame(step);
+    }
     function nwsJump(i){
       newsSec=i; nwsPaint(); nwsSheet(false);
-      var sec=newsSecEls[i]; if(sec) el('nwsScroll').scrollTo({top:Math.max(0,sec.offsetTop-6), behavior:'smooth'});
+      var sec=newsSecEls[i]; if(sec) nwsScrollTo(Math.max(0,sec.offsetTop-6));
       trackEvent('news_jump',{section:window.COR_ISSUE.sections[i].id});
     }
     function nwsSheet(open){ el('shellNews').classList.toggle('sheet', !!open); }
