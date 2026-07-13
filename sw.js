@@ -22,8 +22,13 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(
       fetch(e.request)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('/', copy)).catch(() => {});
+          // Only the app shell may refresh the '/' cache entry. Caching every
+          // navigation here poisoned the offline shell when users visited other
+          // pages (e.g. /admin.html) — their response became the '/' fallback.
+          if (url.pathname === '/' || url.pathname === '/index.html') {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put('/', copy)).catch(() => {});
+          }
           return res;
         })
         .catch(() => caches.match('/'))
