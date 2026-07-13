@@ -511,118 +511,6 @@
   .pavFrameWrap.full .pavHint{display:none;}
   .pavFrameWrap.full .pavMapClose{display:flex;}
 </style>
-<style id="newsStyles">
-  /* ============ Chronicles of Revival reader ============ */
-  #shellNews{position:fixed;inset:0;z-index:100;display:none;flex-direction:column;transition:opacity .28s ease;}
-  #shellNews.open{display:flex;}
-  #shellNews.fading{opacity:0;}
-  /* ---- Paper (newsprint) theme ---- */
-  #shellNews.paper{background:url('/cor/paper-grain.png') repeat, #f6f1e7;color:#201d16;font-family:Georgia,'Times New Roman',serif;}
-  .nwsChrome{padding:max(18px,env(safe-area-inset-top,18px)) 18px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-  .nwsBack,.nwsAa,.nwsMark{width:34px;height:34px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;cursor:pointer;background:none;border:0;padding:0;font-family:inherit;}
-  #shellNews.paper .nwsBack,#shellNews.paper .nwsAa{border:1px solid rgba(32,29,22,0.3);color:#201d16;}
-  .nwsBack i{width:8px;height:8px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:3px;}
-  .nwsLbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;flex:1;text-align:center;white-space:nowrap;overflow:hidden;}
-  #shellNews.paper .nwsLbl{color:#8a8171;}
-  .nwsAa .a1{font-size:10px;line-height:1;}.nwsAa .a2{font-size:14px;line-height:1;}
-  #shellNews.paper .nwsMark{display:none;}
-  /* masthead (paper) */
-  .nwsMastP{padding:2px 0 0;text-align:center;}
-  .nwsMastP .r3{border-top:3px solid #201d16;margin-bottom:2px;}
-  .nwsMastP .r1{border-top:1px solid #201d16;padding-top:8px;}
-  .nwsMastP .nm{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:29px;letter-spacing:-0.5px;line-height:1;}
-  .nwsMastP .ed{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.6px;color:#6b6353;margin-top:7px;}
-  .nwsMastP .folio{display:flex;justify-content:space-between;border-top:1px solid rgba(32,29,22,0.55);border-bottom:2px solid #201d16;margin-top:7px;padding:4px 2px;}
-  .nwsMastP .folio span{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.2px;}
-  .nwsMastP .folio .souls{color:#a63c17;}
-  #shellNews.ink .nwsMastP{display:none;}
-  /* scroll flow */
-  .nwsScroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 18px 130px;position:relative;scrollbar-width:none;touch-action:pan-y;overscroll-behavior-y:contain;}
-  .nwsScroll::-webkit-scrollbar{display:none;}
-  .nwsScroll::before{content:"";float:left;width:0;height:calc(100% + 1px);}
-  .nwsSec{padding-top:18px;}
-  .nwsDiv{display:flex;align-items:center;gap:12px;padding:20px 0;}
-  .nwsDiv i{flex:1;border-top:1px solid rgba(32,29,22,0.3);}
-  .nwsDiv b{width:6px;height:6px;background:rgba(32,29,22,0.5);transform:rotate(45deg);flex:0 0 auto;}
-  /* blocks — paper values; ink overrides come in phase 2 */
-  .nwsK{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:#a63c17;margin-bottom:6px;}
-  .nwsH1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:23px;line-height:1.12;margin-bottom:7px;}
-  .nwsBy{font-size:11px;font-style:italic;color:#6b6353;border-bottom:1px solid rgba(32,29,22,0.25);padding-bottom:8px;margin-bottom:10px;}
-  .nwsDek{font-size:12.5px;font-style:italic;color:#6b6353;margin-bottom:12px;}
-  .nwsP{font-size:14.5px;line-height:1.62;text-align:justify;margin:0 0 10px;color:#2a261d;hyphens:none;-webkit-hyphens:none;}
-  .nwsDC{float:left;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:46px;line-height:0.8;padding:5px 7px 0 0;}
-  .nwsSig{font-size:13px;font-style:italic;color:#2a261d;margin:0 0 6px;}
-  .nwsH2{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;line-height:1.2;margin:18px 0 2px;}
-  .nwsH3{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:15px;margin:0 0 4px;}
-  .nwsSub{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.2px;color:#8a8171;margin-bottom:9px;}
-  .nwsImg{width:100%;display:block;border:1px solid rgba(32,29,22,0.35);}
-  .nwsCap{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1px;color:#8a8171;margin:6px 0 12px;line-height:1.5;}
-  .nwsPhR{float:right;width:126px;margin:3px 0 8px 12px;}
-  .nwsPhR img{width:100%;display:block;border:1px solid rgba(32,29,22,0.35);}
-  .nwsPhR .nwsCap{margin:4px 0 0;font-size:7.5px;letter-spacing:0.8px;}
-  .nwsStrip{display:flex;gap:6px;overflow-x:auto;margin:0 -18px;padding:0 18px;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;}
-  .nwsStrip::-webkit-scrollbar{display:none;}
-  .nwsStrip img{height:92px;width:auto;border:1px solid rgba(32,29,22,0.35);display:block;flex:0 0 auto;}
-  .nwsStrip.tall img{height:118px;}
-  .nwsQ{border-top:1px solid rgba(32,29,22,0.45);border-bottom:1px solid rgba(32,29,22,0.45);padding:13px 10px;margin:0 0 12px;text-align:center;}
-  .nwsQ .q{font-size:16.5px;font-style:italic;line-height:1.4;}
-  .nwsQ .a{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1.5px;color:#a63c17;margin-top:6px;}
-  .nwsStats{display:flex;gap:10px;margin-bottom:14px;}
-  .nwsStats>div{flex:1;border-top:2.5px solid #201d16;padding-top:7px;}
-  .nwsStats .v{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:18px;}
-  .nwsStats .l{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:1px;color:#6b6353;margin-top:2px;}
-  .nwsLog{border-top:2px solid #201d16;}
-  .nwsLog>div{padding:8px 0;border-bottom:1px solid rgba(32,29,22,0.25);}
-  .nwsLog .t{font-size:12.5px;font-weight:bold;}
-  .nwsLog .t span{font-weight:normal;color:#6b6353;font-size:11px;}
-  .nwsLog .m{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.5px;color:#6b6353;margin-top:3px;}
-  .nwsLdr{border-top:2px solid #201d16;margin-bottom:12px;}
-  .nwsLdr>div{display:flex;align-items:baseline;gap:10px;padding:6.5px 0;border-bottom:1px solid rgba(32,29,22,0.25);}
-  .nwsLdr .n{font-size:13px;}
-  .nwsLdr .d{flex:1;border-bottom:2px dotted rgba(32,29,22,0.3);transform:translateY(-3px);}
-  .nwsLdr .v{font-family:'IBM Plex Mono',monospace;font-size:11px;}
-  .nwsLdr .tot{border-top:1px solid #201d16;border-bottom:2.5px solid #201d16;padding:7.5px 0;}
-  .nwsLdr .tot .n{font-size:13.5px;font-weight:bold;}
-  .nwsLdr .tot .v{font-size:12px;font-weight:bold;color:#a63c17;}
-  .nwsBox{border:1px solid rgba(32,29,22,0.45);padding:11px 12px;margin-top:16px;}
-  .nwsBox .cap2{border-top:2px solid #201d16;margin:-11px -12px 9px;padding-top:2px;}
-  .nwsBox .row{display:flex;gap:10px;font-size:10.5px;line-height:1.5;margin-bottom:5px;}
-  .nwsBox .row:last-child{margin-bottom:0;}
-  .nwsBox .row .k{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:1px;color:#a63c17;width:92px;flex:0 0 auto;padding-top:2px;}
-  .nwsLink{display:block;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#a63c17;text-decoration:none;margin:2px 0 12px;}
-  .nwsEnd{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:#8a8171;padding:26px 0 8px;}
-  /* bottom pill (paper) */
-  .nwsPill{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:5;
-    background:#201d16;color:#f6f1e7;border:0;border-radius:999px;padding:12px 17px;display:flex;align-items:center;gap:9px;cursor:pointer;
-    box-shadow:0 10px 30px rgba(32,29,22,0.4);font-family:'Archivo',sans-serif;font-size:12.5px;font-weight:600;white-space:nowrap;}
-  .nwsPill .pg{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(246,241,231,0.75);border-left:1px solid rgba(246,241,231,0.3);padding-left:9px;}
-  #shellNews.ink .nwsPill{display:none;}
-  /* contents sheet (paper skin) */
-  .nwsScrim{position:absolute;inset:0;z-index:8;background:rgba(25,20,8,0.45);opacity:0;pointer-events:none;transition:opacity .28s ease;}
-  #shellNews.sheet .nwsScrim{opacity:1;pointer-events:auto;}
-  .nwsSheet{position:absolute;left:0;right:0;bottom:0;z-index:9;max-height:74%;display:flex;flex-direction:column;
-    border-radius:22px 22px 0 0;transform:translateY(103%);transition:transform .28s ease;}
-  #shellNews.sheet .nwsSheet{transform:translateY(0);}
-  #shellNews.paper .nwsSheet{background:url('/cor/paper-grain.png') repeat, #faf6ec;color:#201d16;box-shadow:0 -14px 40px rgba(32,29,22,0.35);}
-  .nwsShHandle{width:40px;height:4px;border-radius:2px;background:rgba(32,29,22,0.25);margin:10px auto 6px;flex:0 0 auto;}
-  .nwsShHead{display:flex;align-items:center;justify-content:space-between;padding:2px 18px 0;flex:0 0 auto;}
-  #shellNews.paper .nwsShHead .t{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:21px;}
-  .nwsShX{width:32px;height:32px;border-radius:50%;border:1px solid rgba(32,29,22,0.3);background:none;color:inherit;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
-  .nwsShSub{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.4px;color:#8a8171;padding:6px 18px 10px;border-bottom:1px solid rgba(32,29,22,0.25);flex:0 0 auto;}
-  .nwsToc{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 18px;min-height:0;}
-  .nwsTocRow{display:flex;align-items:baseline;gap:10px;width:100%;padding:10px 0;background:none;border:0;border-bottom:1px solid rgba(32,29,22,0.14);cursor:pointer;font-family:inherit;color:inherit;text-align:left;}
-  .nwsTocRow .n{font-size:14px;font-family:Georgia,serif;}
-  .nwsTocRow .d{flex:1;border-bottom:2px dotted rgba(32,29,22,0.3);transform:translateY(-3px);}
-  .nwsTocRow .p{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6353;}
-  #shellNews.paper .nwsTocRow.on .n{color:#a63c17;font-weight:bold;}
-  #shellNews.paper .nwsTocRow.on .p{color:#a63c17;}
-  .nwsShFoot{display:flex;align-items:center;justify-content:space-between;padding:12px 18px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(32,29,22,0.25);flex:0 0 auto;}
-  .nwsShFoot .lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.4px;color:#8a8171;}
-  .nwsChips{display:flex;gap:7px;}
-  .nwsChip{border-radius:999px;padding:7px 14px;font-family:'Archivo',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;}
-  #shellNews.paper .nwsChip{border:1px solid rgba(32,29,22,0.4);background:none;color:#201d16;}
-  #shellNews.paper .nwsChip.on{background:#201d16;color:#f6f1e7;border-color:#201d16;}
-</style>
 </head>
 <body>
 <div id="app">
@@ -757,17 +645,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <div id="shellNews" class="paper" aria-hidden="true">
-    <div class="nwsChrome">
-      <button class="nwsBack" id="nwsBack" aria-label="Close newspaper"><i></i></button>
-      <span class="nwsLbl" id="nwsLbl">FIRE CONF &middot; NEWSPAPER</span>
-      <button class="nwsAa" id="nwsAa" aria-label="Switch appearance"><span class="a1">a</span><span class="a2">A</span></button>
-    </div>
-    <div class="nwsScroll" id="nwsScroll"></div>
-    <button class="nwsPill" id="nwsPill"></button>
-    <div class="nwsScrim" id="nwsScrim"></div>
-    <div class="nwsSheet" id="nwsSheet" role="dialog" aria-modal="true" aria-label="Inside this issue"></div>
   </div>
   <div id="vendorModal" aria-hidden="true">
     <button id="vendorClose" class="schedClose" aria-label="Close food vendors">&times;</button>
@@ -2360,81 +2237,6 @@
     }
   })();
   </script>
-  <script id="newsData">
-  /* Chronicles of Revival - July 2026 issue. Content ported from the design handoff
-     (canvas 5a = canonical copy). Sections 3-15 land in the next build. */
-  window.COR_ISSUE={
-    edition:'July 2026', vol:'7', no:'05', pages:24, souls:'58,835,324', readMins:18,
-    sections:[
-      {id:'welcome', toc:'Welcome', page:2, kicker:'WELCOME · PAGE 2',
-       title:'Welcome to the 3‑in‑1 Family Fire Conference',
-       byline:'By Drs. Rodney & Adonica Howard‑Browne',
-       blocks:[
-        {t:'photoR', src:'p02-1.jpg', alt:'Drs. Rodney and Adonica Howard-Browne', cap:'DRS. RODNEY & ADONICA HOWARD‑BROWNE'},
-        {t:'drop', text:'We’re thrilled to welcome you to our annual 3‑in‑1 Family Fire Conference! This is one of our favorite weeks of the year, as families from around the world gather to encounter God together.'},
-        {t:'p', text:'From the very beginning, God designed the family to be a place where His presence dwells and where faith is passed from one generation to the next. This week is about raising up strong families, passionate young people, and children who know God and are unashamed of the Gospel.'},
-        {t:'p', text:'Take every opportunity to be in every service. Come expecting His Word to strengthen you, His presence to refresh you, and His power to transform your life. God always meets those who are hungry — and this week, you will be marked for eternity.'},
-        {t:'sig', lines:['For the Harvest,','Drs. Rodney & Adonica Howard‑Browne']},
-        {t:'box', rows:[['PUBLISHER','Revival Ministries International'],['EDITOR-IN-CHIEF','Dr. Rodney Howard‑Browne'],['MANAGING EDITOR','Dr. Adonica Howard‑Browne'],['EDITORIAL ASSTS.','Somalia Alsobrooks · Darrain & Christine Matthews']]},
-        {t:'h2', text:'About: Drs. Rodney & Adonica Howard‑Browne', sub:'UPDATED JULY 2026'},
-        {t:'p', text:'Drs. Rodney and Adonica Howard‑Browne are the founders of Revival Ministries International (R.M.I.), The River at Tampa Bay Church, and River University – River Bible Institute (R.U.) in Tampa, Florida.'},
-        {t:'p', text:'In December of 1987, Rodney, along with his wife, Adonica, and their three children, Kirsten, Kelly, and Kenneth, moved from their native land, South Africa, to the United States, called by God as missionaries from Africa to America. In a word of prophecy spoken through Rodney, the Lord said, “As America has sown missionaries over the last 200 years, I am going to raise up people from other nations to come to the United States of America. I am sending a mighty revival to America.”'},
-        {t:'p', text:'In April of 1989, the Lord sent a revival of signs, wonders, and miracles that began in a church in Clifton Park, New York. That revival has continued, resulting in thousands of people being touched and changed as they encounter the presence of the living God. God is still moving today—saving, healing, delivering, restoring, and setting people free!'},
-        {t:'p', text:'Drs. Rodney and Adonica’s second daughter, Kelly, was born with an incurable lung disease called cystic fibrosis. Early on Christmas morning in 2002, at the age of 18, she ran out of lung capacity and breathed out her last breath. They placed her into the arms of her Lord and Savior, and vowed that the devil would pay for what he had done to their family — and to do everything in their power, with the help of the Lord, to win 100 million souls to Jesus and to put $1 billion into world missions and the harvest of souls.'},
-        {t:'p', text:'Believing for a Great Spiritual Awakening, they conducted Celebrate America D.C., a massive soul‑winning event, preaching the Gospel for 50 nights in Washington, D.C. and surrounding areas from 2014 to 2019 — 58,033 individuals made decisions for Jesus Christ. During the Covid era they took a stand for the Gospel and our God‑given liberties; The Stand nightly services have continued for over 2,220 nights.'},
-        {t:'p', text:'With a passion for souls, they have conducted revivals and soul‑winning efforts throughout 101 nations with the 500 City World Tour, Good News campaigns, R.M.I. Revivals, the Great Awakening Tours and television, and The Stand. As a result, over 58,835,324 precious people have received salvation or recommitted their lives to Christ at the time of this publication. For more information, visit revival.com.'}
-       ]},
-      {id:'books', toc:'Book Release', page:3, kicker:'BOOK RELEASE · PAGE 3',
-       title:'New Books Are Out and Ready for You!',
-       blocks:[
-        {t:'dek', text:'Stop by the bookstore and grab them all before they’re gone — fresh titles for Summer campmeeting are here now.'},
-        {t:'strip', tall:true, imgs:[['p03-8.jpg','12 Qualifications and Responsibilities of Leadership'],['p03-9.jpg','This Is Your Jubilee'],['p03-0.jpg','The Source of Your Joy'],['p03-1.jpg','The Holy Spirit in the Life of Holiness'],['p03-10.jpg','Run to the Roar'],['p03-4.jpg','Diligence in Business'],['p03-5.jpg','Righteous']]},
-        {t:'cap', text:'NEW TITLES AT THE CAMPMEETING BOOKSTORE · PG. 3'},
-        {t:'h2', text:'12 Qualifications and Responsibilities of Leadership'},
-        {t:'dek', text:'By Dr. Rodney Howard‑Browne'},
-        {t:'p', text:'Leadership today is often measured by power, popularity, and influence. However, Heaven measures it by something far greater: character, integrity, and the fear of the Lord. This book is a clear, uncompromising call back to God’s standard — every leader, whether in the home, the Church, the marketplace, or government, is under authority and will give an account to Almighty God.'},
-        {t:'p', text:'You will discover the biblical qualifications that define true leadership: obedience to God’s Word, a pure heart, wisdom, honesty, and courage in the face of pressure. It also exposes the subtle compromises that weaken leadership and equips you to lead with righteousness and boldness in a world that rewards the opposite.'},
-        {t:'h2', text:'This Is Your Jubilee'},
-        {t:'dek', text:'By Dr. Rodney Howard‑Browne'},
-        {t:'p', text:'The acceptable year of the Lord is not a date on a calendar — it is a present reality in Christ. When Jesus declared, “This day is this scripture fulfilled,” He announced the arrival of permanent Jubilee: freedom for the captive, restoration for the broken, and the overflowing favor of God for every believer.'},
-        {t:'p', text:'This book confronts every religious mindset that keeps people bound to lack, fear, and striving. You will be challenged to step out of a survival mindset and into a life of faith and supernatural supply. You were not redeemed to struggle — you were redeemed to live in God’s blessing and prosperity. Your Jubilee is now.'},
-        {t:'link', text:'PURCHASE ONLINE · REVIVAL.COM · OR VISIT THE BOOKSTORE', href:'https://revival.com'}
-       ]},
-      {id:'tour', toc:'500 City World Tour Update', page:4, kicker:'UPDATE · PAGE 4',
-       title:'500 City World Tour: Revival Is Sweeping Across the Land!',
-       blocks:[
-        {t:'quote', text:'“This is not an hour for the believers of Jesus Christ to run and hide. This is an hour to occupy until He comes.”', attr:'— DR. RODNEY HOWARD‑BROWNE'},
-        {t:'stats', cells:[['326','CITIES'],['674,474','ATTENDANCE'],['575,565','TOTAL ALTAR'],['411,749','MOBILIZED']]},
-        {t:'h3', text:'Recent stops — statistical highlights'},
-        {t:'log', rows:[
-          {title:'City #320 · Baltimore County, MD', date:'— Wed, June 24', meta:'ATT 620 · ALTAR 113 · MOBILIZED 483'},
-          {title:'City #321 · Temple Hills, MD', date:'— Fri, June 26', meta:'ATT 330 · ALTAR 239 · MOBILIZED 265'},
-          {title:'Ballou High School', meta:'ATT 3,337 · ALTAR 639 · STREET 1,449 · SOULS 2,088 · MOB 2,670'},
-          {title:'City #322 · Upper Marlboro, MD', date:'— Sun, June 28', meta:'ATT 630 · ALTAR 174 · MOBILIZED 541'},
-          {title:'City #323 · Northwest Washington, DC', date:'— Wed, July 1', meta:'ATT 611 · ALTAR 527 · MOBILIZED 564'},
-          {title:'City #324 · Lanham, MD', date:'— Fri, July 3', meta:'ATT 582 · ALTAR 212 · MOBILIZED 477'},
-          {title:'Cherry Hill Outreach', date:'— Sat, July 4', meta:'ATT 2,096 · ALTAR 1,181 · STREET 288 · SOULS 1,469'},
-          {title:'City #325 · Springfield, VA', date:'— Sun, July 5', meta:'ATT 513 · ALTAR 265 · MOBILIZED 373'},
-          {title:'City #326 · Riverdale Park, MD', date:'— Wed, July 8', meta:'ATT 265 · ALTAR 41'}
-        ]},
-        {t:'strip', imgs:[['p06-0.jpg','Tour crowd'],['p06-3.jpg','Street outreach'],['p06-5.jpg','Community rally'],['p07-1.jpg','Church service'],['p07-11.jpg','Outdoor rally'],['p07-12.jpg','Celebrate America stage'],['p07-13.jpg','Crowd under umbrellas']]},
-        {t:'cap', text:'REVIVAL IS SWEEPING ACROSS THE LAND · PGS. 6–7 PHOTO SPREAD'}
-       ]},
-      {id:'dc', toc:'Celebrate America D.C.', page:5, kicker:'UPDATE · PAGE 5', title:'The Great Awakening Is Happening!', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'fire-home', toc:'The Fire That Starts at Home', page:8, kicker:'FEATURE · PAGES 8–9', title:'The Fire That Starts at Home', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'everywhere', toc:'Revival Everywhere You Go!', page:10, kicker:'BOOKS · PAGE 10', title:'Revival Everywhere You Go!', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'ru-grad', toc:'River University Graduation', page:11, kicker:'RIVER UNIVERSITY · PAGE 11', title:'River University Graduation', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'real', toc:'As Real As It Gets', page:12, kicker:'RECAP · PAGE 12', title:'As Real As It Gets', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'banquet', toc:'R.U. Banquet for the History Books', page:13, kicker:'RECAP · PAGE 13', title:'R.U. Banquet for the History Books', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'witness', toc:'The Power to Be a Witness', page:14, kicker:'FEATURE · PAGES 14–17', title:'The Power to Be a Witness', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'mobilized', toc:'A Ministry Mobilized', page:18, kicker:'MINISTRIES · PAGES 18–19', title:'A Ministry Mobilized', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'ru', toc:'River University', page:20, kicker:'RIVER UNIVERSITY · PAGE 20', title:'River University', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'vow', toc:'Vow of Prosperity', page:21, kicker:'DEVOTIONAL · PAGE 21', title:'Vow of Prosperity', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'events', toc:'Upcoming Events', page:22, kicker:'EVENTS · PAGE 22', title:'Upcoming Events', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'map', toc:'Property Map', page:23, kicker:'CAMPUS · PAGE 23', title:'Property Map', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'watch', toc:'Ways to Watch', page:24, kicker:'BROADCAST · PAGE 24', title:'Ways to Watch', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]}
-    ]};
-  </script>
   <script id="shellScript">
   /* ============ FIRE CONF app shell logic (concept 3a) ============ */
   (function(){
@@ -2850,133 +2652,6 @@
       });
     }
 
-    /* ============ Chronicles of Revival reader ============ */
-    var newsOpen=false, newsBuilt=false, newsSec=0, newsSecEls=[], newsRaf=0, newsPoll=0, newsLastTop=-1;
-    function nwsTheme(){ try{ return localStorage.getItem('fc_news_theme')==='ink'?'ink':'paper'; }catch(e){ return 'paper'; } }
-    function nwsBlock(b){
-      var h='';
-      if(b.t==='p') h='<p class="nwsP">'+esc(b.text)+'</p>';
-      else if(b.t==='drop') h='<p class="nwsP"><span class="nwsDC">'+esc(b.text.charAt(0))+'</span>'+esc(b.text.slice(1))+'</p>';
-      else if(b.t==='dek') h='<div class="nwsDek">'+esc(b.text)+'</div>';
-      else if(b.t==='sig') h='<div class="nwsSig">'+b.lines.map(esc).join('<br>')+'</div>';
-      else if(b.t==='h2') h='<div class="nwsH2">'+esc(b.text)+'</div>'+(b.sub?'<div class="nwsSub">'+esc(b.sub)+'</div>':'');
-      else if(b.t==='h3') h='<div class="nwsH3">'+esc(b.text)+'</div>';
-      else if(b.t==='photo') h='<img class="nwsImg" loading="lazy" src="/cor/'+b.src+'" alt="'+esc(b.alt||'')+'">'+(b.cap?'<div class="nwsCap">'+esc(b.cap)+'</div>':'');
-      else if(b.t==='photoR') h='<div class="nwsPhR"><img loading="lazy" src="/cor/'+b.src+'" alt="'+esc(b.alt||'')+'"><div class="nwsCap">'+esc(b.cap||'')+'</div></div>';
-      else if(b.t==='strip') h='<div class="nwsStrip'+(b.tall?' tall':'')+'">'+b.imgs.map(function(im){ return '<img loading="lazy" src="/cor/'+im[0]+'" alt="'+esc(im[1]||'')+'">'; }).join('')+'</div>';
-      else if(b.t==='cap') h='<div class="nwsCap">'+esc(b.text)+'</div>';
-      else if(b.t==='quote') h='<div class="nwsQ"><div class="q">'+esc(b.text)+'</div><div class="a">'+esc(b.attr||'')+'</div></div>';
-      else if(b.t==='stats') h='<div class="nwsStats">'+b.cells.map(function(c){ return '<div><div class="v">'+esc(c[0])+'</div><div class="l">'+esc(c[1])+'</div></div>'; }).join('')+'</div>';
-      else if(b.t==='log') h='<div class="nwsLog">'+b.rows.map(function(r){ return '<div><div class="t">'+esc(r.title)+(r.date?' <span>'+esc(r.date)+'</span>':'')+'</div><div class="m">'+esc(r.meta)+'</div></div>'; }).join('')+'</div>';
-      else if(b.t==='leader') h='<div class="nwsLdr">'+b.rows.map(function(r){ return '<div><span class="n">'+esc(r[0])+'</span><span class="d"></span><span class="v">'+esc(r[1])+'</span></div>'; }).join('')+(b.total?'<div class="tot"><span class="n">'+esc(b.total[0])+'</span><span style="flex:1;"></span><span class="v">'+esc(b.total[1])+'</span></div>':'')+'</div>';
-      else if(b.t==='box') h='<div class="nwsBox"><div class="cap2"></div>'+(b.rows?b.rows.map(function(r){ return '<div class="row"><span class="k">'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>'; }).join(''):(b.blocks||[]).map(nwsBlock).join(''))+'</div>';
-      else if(b.t==='link') h='<a class="nwsLink" href="'+esc(b.href)+'" target="_blank" rel="noopener">'+esc(b.text)+'</a>';
-      return h;
-    }
-    function buildNews(){
-      if(newsBuilt) return; newsBuilt=true;
-      var I=window.COR_ISSUE, sc=el('nwsScroll');
-      var h='<div class="nwsMastP"><div class="r3"></div><div class="r1"></div><div class="nm">Chronicles of Revival</div><div class="ed">FAMILY FIRE CONFERENCE EDITION</div><div class="folio"><span>VOL. '+I.vol+' · NO. '+I.no+'</span><span>'+I.edition.toUpperCase()+'</span><span class="souls">SOULS: '+I.souls+'</span></div></div>';
-      I.sections.forEach(function(s,i){
-        if(i>0) h+='<div class="nwsDiv"><i></i><b></b><i></i></div>';
-        h+='<div class="nwsSec" data-nws="'+i+'"><div class="nwsK">'+esc(s.kicker)+'</div><div class="nwsH1">'+esc(s.title)+'</div>'+(s.byline?'<div class="nwsBy">'+esc(s.byline)+'</div>':'')+s.blocks.map(nwsBlock).join('')+'<div style="clear:both;"></div></div>';
-      });
-      h+='<div class="nwsEnd">— END OF ISSUE · '+I.pages+' PAGES —</div>';
-      sc.innerHTML=h;
-      newsSecEls=[].slice.call(sc.querySelectorAll('[data-nws]'));
-      /* contents sheet */
-      var sh='<div class="nwsShHandle"></div><div class="nwsShHead"><span class="t">Inside this issue</span><button class="nwsShX" id="nwsShX" aria-label="Close contents"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>';
-      sh+='<div class="nwsShSub">'+I.edition.toUpperCase()+' · VOL. '+I.vol+' NO. '+I.no+' · '+I.pages+' PAGES</div><div class="nwsToc" id="nwsToc">';
-      I.sections.forEach(function(s,i){ sh+='<button class="nwsTocRow" data-nwsjump="'+i+'"><span class="n">'+esc(s.toc)+'</span><span class="d"></span><span class="p">PG '+s.page+'</span></button>'; });
-      sh+='</div><div class="nwsShFoot"><span class="lbl">APPEARANCE</span><span class="nwsChips"><button class="nwsChip" data-nwstheme="paper">Paper</button><button class="nwsChip" data-nwstheme="ink">Ink</button></span></div>';
-      el('nwsSheet').innerHTML=sh;
-      el('nwsShX').addEventListener('click', function(){ nwsSheet(false); });
-      [].slice.call(el('nwsToc').querySelectorAll('[data-nwsjump]')).forEach(function(r){
-        r.addEventListener('click', function(){ nwsJump(parseInt(r.getAttribute('data-nwsjump'),10)); });
-      });
-      [].slice.call(el('nwsSheet').querySelectorAll('[data-nwstheme]')).forEach(function(c){
-        c.addEventListener('click', function(){ setNewsTheme(c.getAttribute('data-nwstheme')); });
-      });
-      sc.addEventListener('scroll', function(){ if(!newsRaf){ newsRaf=setTimeout(nwsSpy,60); } });
-      applyNewsTheme();
-      nwsPaint();
-    }
-    function applyNewsTheme(){
-      var t=nwsTheme(), root=el('shellNews');
-      root.classList.toggle('paper', t==='paper');
-      root.classList.toggle('ink', t==='ink');
-      el('nwsLbl').textContent = t==='paper' ? 'FIRE CONF · NEWSPAPER' : 'NEWSPAPER';
-      [].slice.call(root.querySelectorAll('[data-nwstheme]')).forEach(function(c){ c.classList.toggle('on', c.getAttribute('data-nwstheme')===t); });
-    }
-    function setNewsTheme(t){
-      try{ localStorage.setItem('fc_news_theme', t); }catch(e){}
-      var root=el('shellNews');
-      root.classList.add('fading');
-      setTimeout(function(){ applyNewsTheme(); root.classList.remove('fading'); }, 160);
-      trackEvent('news_theme',{theme:t});
-    }
-    function nwsPaint(){
-      var I=window.COR_ISSUE, s=I.sections[newsSec], pct=Math.round(s.page/I.pages*100);
-      el('nwsPill').innerHTML='<span style="font-size:14px;line-height:1;">☰</span><span>Inside this issue</span><span class="pg">PG '+s.page+' · '+pct+'%</span>';
-      var rows=el('nwsToc')?el('nwsToc').querySelectorAll('.nwsTocRow'):[];
-      [].slice.call(rows).forEach(function(r,i){ r.classList.toggle('on', i===newsSec); });
-    }
-    function nwsSpy(){
-      newsRaf=0;
-      if(nwsAnim) return; /* keep the committed target section during an animated jump */
-      var sc=el('nwsScroll'), top=sc.scrollTop, cur=0;
-      for(var i=0;i<newsSecEls.length;i++){ if(newsSecEls[i].offsetTop-60<=top) cur=i; else break; }
-      if(cur!==newsSec){ newsSec=cur; nwsPaint(); }
-    }
-    var nwsAnim=0;
-    function nwsScrollTo(target){
-      /* timer-driven eased scroll: element.scrollTo({behavior:'smooth'}) silently
-         no-ops on older iOS Safari, and rAF can be suspended in embedded webviews */
-      var sc=el('nwsScroll'), from=sc.scrollTop, dist=target-from, t0=performance.now(), DUR=460;
-      clearTimeout(nwsAnim);
-      function ease(x){ return x<0.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2; }
-      function step(){
-        var p=Math.min(1,(performance.now()-t0)/DUR);
-        sc.scrollTop=from+dist*ease(p);
-        if(p<1) nwsAnim=setTimeout(step,16);
-        else { nwsAnim=0; nwsSpy(); }
-      }
-      nwsAnim=setTimeout(step,0);
-    }
-    function nwsJump(i){
-      newsSec=i; nwsPaint(); nwsSheet(false);
-      var sec=newsSecEls[i]; if(sec) nwsScrollTo(Math.max(0,sec.offsetTop-6));
-      trackEvent('news_jump',{section:window.COR_ISSUE.sections[i].id});
-    }
-    function nwsSheet(open){ el('shellNews').classList.toggle('sheet', !!open); }
-    function openNews(src){
-      buildNews();
-      newsOpen=true;
-      el('shellNews').classList.add('open');
-      el('shellNews').setAttribute('aria-hidden','false');
-      try{
-        localStorage.setItem('fc_news_opened','1');
-        var pos=parseInt(localStorage.getItem('fc_news_pos')||'0',10);
-        if(pos>0) el('nwsScroll').scrollTop=pos;
-      }catch(e){}
-      nwsSpy();
-      /* poll fallback: some webviews suspend scroll events entirely */
-      if(!newsPoll) newsPoll=setInterval(function(){
-        var t=el('nwsScroll').scrollTop;
-        if(t!==newsLastTop){ newsLastTop=t; nwsSpy(); }
-      }, 400);
-      track('/newspaper'); trackEvent('news_open',{src:src||'menu'});
-      refreshNewsRows();
-    }
-    function closeNews(){
-      if(!newsOpen) return;
-      newsOpen=false;
-      if(newsPoll){ clearInterval(newsPoll); newsPoll=0; }
-      try{ localStorage.setItem('fc_news_pos', String(el('nwsScroll').scrollTop)); }catch(e){}
-      nwsSheet(false);
-      el('shellNews').classList.remove('open');
-      el('shellNews').setAttribute('aria-hidden','true');
-    }
     function refreshNewsRows(){
       var opened=false; try{ opened=localStorage.getItem('fc_news_opened')==='1'; }catch(e){}
       var tag=el('shMenuNewsNew'); if(tag) tag.style.display=opened?'none':'inline-block';
@@ -3133,7 +2808,6 @@
       if(menuOpen) closeMenu(true);
       if(faqOpen) closeFaq();
       if(alertsOpen) closeAlerts();
-      if(newsOpen) closeNews();
       tab=name;
       Object.keys(SCREENS).forEach(function(k){ el(SCREENS[k]).classList.toggle('on', k===name); });
       document.body.classList.toggle('shellMap', name==='map');
@@ -3251,12 +2925,7 @@
     el('shMenuAlerts').addEventListener('click', function(){ openAlerts(); });
     el('shAskGo').addEventListener('click', function(){ closeAsk(); toggleAlerts(); });
     el('shAlertsClose').addEventListener('click', function(){ closeAlerts(); });
-    el('shMenuNews').addEventListener('click', function(){ openNews('menu'); });
-    el('nwsBack').addEventListener('click', function(){ closeNews(); });
-    el('nwsAa').addEventListener('click', function(){ setNewsTheme(nwsTheme()==='paper'?'ink':'paper'); });
-    el('nwsPill').addEventListener('click', function(){ nwsSheet(true); });
-    el('nwsScrim').addEventListener('click', function(){ nwsSheet(false); });
-    document.addEventListener('keydown', function(e){ if((e.key==='Escape'||e.key==='Esc') && newsOpen){ if(el('shellNews').classList.contains('sheet')) nwsSheet(false); else closeNews(); } });
+    el('shMenuNews').addEventListener('click', function(){ location.href='/newspaper.html?src=menu'; });
     refreshNewsRows();
     el('alMaster').addEventListener('click', function(){ toggleAlerts(); });
     el('alYouth').addEventListener('click', function(){ setGroup('youth', !hasGroup('youth')); });
