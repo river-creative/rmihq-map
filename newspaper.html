@@ -107,7 +107,7 @@
   #shellNews.ink .nwsPill{display:none;}
   /* contents sheet (paper skin) */
   .nwsScrim{position:absolute;inset:0;z-index:8;background:rgba(25,20,8,0.45);opacity:0;pointer-events:none;transition:opacity .28s ease;}
-  #shellNews.sheet .nwsScrim{opacity:1;pointer-events:auto;}
+  #shellNews.sheet .nwsScrim,#shellNews.set .nwsScrim{opacity:1;pointer-events:auto;}
   .nwsSheet{position:absolute;left:0;right:0;bottom:0;z-index:9;max-height:74%;display:flex;flex-direction:column;
     border-radius:22px 22px 0 0;transform:translateY(103%);transition:transform .28s ease;}
   #shellNews.sheet .nwsSheet{transform:translateY(0);}
@@ -133,6 +133,149 @@
   .nwsFlow{padding:0 18px 130px;min-height:100%;}
   #shellNews.paper .nwsFlow{background:url('/cor/paper-grain.png') repeat, #f6f1e7;}
 
+  /* ---- Ink (dark) theme — 5b mockup ---- */
+  #shellNews.ink{background:#141415;color:#fff;font-family:'Archivo',sans-serif;}
+  #shellNews.ink .nwsBack,#shellNews.ink .nwsAa{background:#1f1f22;border:0;color:#fff;}
+  #shellNews.ink .nwsLbl{color:#9a9aa2;}
+  /* ink masthead */
+  .nwsMastI{display:none;padding:4px 0 0;}
+  #shellNews.ink .nwsMastI{display:block;}
+  .nwsMastI .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:#ff5c1f;}
+  .nwsMastI .ttl{font-family:'Archivo',sans-serif;font-weight:800;font-size:24px;line-height:1.1;margin-top:5px;color:#fff;}
+  .nwsMastI .meta{font-size:11px;color:#9a9aa2;margin-top:5px;}
+  .nwsMastI .track{height:3px;background:#1f1f22;border-radius:2px;margin-top:10px;overflow:hidden;}
+  .nwsMastI .track i{display:block;height:100%;width:0;background:#ff5c1f;border-radius:2px;transition:width .3s ease;}
+  /* ink blocks */
+  #shellNews.ink .nwsSec{padding-top:26px;}
+  #shellNews.ink .nwsDiv{padding:12px 0 0;}
+  #shellNews.ink .nwsDiv i{border-color:rgba(255,255,255,0.06);}
+  #shellNews.ink .nwsDiv b{display:none;}
+  #shellNews.ink .nwsK{color:#ff5c1f;}
+  #shellNews.ink .nwsH1{font-family:'Archivo',sans-serif;font-weight:800;color:#fff;font-size:21px;}
+  #shellNews.ink .nwsBy{font-style:normal;color:#9a9aa2;border-bottom-color:rgba(255,255,255,0.08);}
+  #shellNews.ink .nwsDek{color:#9a9aa2;}
+  #shellNews.ink .nwsP{font-size:14px;line-height:1.66;text-align:left;color:#cfccc5;}
+  #shellNews.ink .nwsDC{float:none;font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;padding:0;}
+  #shellNews.ink .nwsSig{color:#cfccc5;}
+  #shellNews.ink .nwsH2,#shellNews.ink .nwsH3{font-family:'Archivo',sans-serif;font-weight:800;color:#fff;}
+  #shellNews.ink .nwsSub{color:#77777e;}
+  #shellNews.ink .nwsImg{border:0;border-radius:12px;}
+  #shellNews.ink .nwsCap{color:#77777e;}
+  #shellNews.ink .nwsPhR img{border:0;border-radius:10px;}
+  #shellNews.ink .nwsStrip img{border:0;border-radius:10px;}
+  #shellNews.ink .nwsQ{border:0;text-align:left;position:relative;padding:2px 0 2px 34px;}
+  #shellNews.ink .nwsQ::before{content:'\201C';position:absolute;left:0;top:-4px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:44px;line-height:1;color:#ff5c1f;}
+  #shellNews.ink .nwsQ .q{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:16px;color:#fff;}
+  #shellNews.ink .nwsQ .a{color:#ff5c1f;}
+  #shellNews.ink .nwsStats>div{border-top:0;background:#1f1f22;border-radius:12px;padding:10px 11px;}
+  #shellNews.ink .nwsStats .v{font-family:'Archivo',sans-serif;font-weight:800;color:#ff5c1f;}
+  #shellNews.ink .nwsStats .l{color:#9a9aa2;}
+  #shellNews.ink .nwsLog{border-top:0;}
+  #shellNews.ink .nwsLog>div{background:#1f1f22;border-radius:12px;padding:9px 12px;border-bottom:0;margin-bottom:7px;}
+  #shellNews.ink .nwsLog .t{color:#fff;}
+  #shellNews.ink .nwsLog .t span{color:#9a9aa2;}
+  #shellNews.ink .nwsLog .m{color:#9a9aa2;}
+  #shellNews.ink .nwsLdr{border-top-color:rgba(255,255,255,0.25);}
+  #shellNews.ink .nwsLdr>div{border-bottom-color:rgba(255,255,255,0.08);}
+  #shellNews.ink .nwsLdr .n{color:#cfccc5;}
+  #shellNews.ink .nwsLdr .d{border-bottom-color:rgba(255,255,255,0.18);}
+  #shellNews.ink .nwsLdr .tot{border-top-color:rgba(255,255,255,0.25);border-bottom-color:rgba(255,255,255,0.4);}
+  #shellNews.ink .nwsLdr .tot .v{color:#ff5c1f;}
+  #shellNews.ink .nwsBox{background:#1f1f22;border:0;border-radius:14px;padding:13px 14px;}
+  #shellNews.ink .nwsBox .cap2{display:none;}
+  #shellNews.ink .nwsBox .row .k{color:#ff5c1f;}
+  #shellNews.ink .nwsLink{color:#ff5c1f;}
+  #shellNews.ink .nwsEnd{color:#77777e;}
+  #shellNews.ink .nwsFlow{padding-bottom:150px;}
+  /* ink bottom bar: tick rail + section label + Sections button */
+  .nwsBar{display:none;position:absolute;left:0;right:0;bottom:0;z-index:5;background:rgba(16,16,17,0.95);
+    border-top:1px solid rgba(255,255,255,0.07);padding:8px 14px calc(10px + env(safe-area-inset-bottom,0px));}
+  #shellNews.ink .nwsBar{display:block;}
+  .nwsTicks{display:flex;gap:3px;}
+  .nwsTicks button{flex:1;height:20px;background:none;border:0;padding:0;cursor:pointer;display:flex;align-items:center;}
+  .nwsTicks button i{display:block;width:100%;height:3.5px;border-radius:2px;background:rgba(255,255,255,0.14);}
+  .nwsTicks button.read i{background:rgba(255,92,31,0.45);}
+  .nwsTicks button.cur i{background:#ff5c1f;}
+  .nwsBar .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:2px;}
+  .nwsBar .now{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.2px;color:#9a9aa2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .nwsBar .secBtn{background:#1f1f22;color:#fff;border:0;border-radius:999px;padding:9px 14px;font-family:'Archivo',sans-serif;
+    font-size:11.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;flex:0 0 auto;}
+  .nwsBar .secBtn .dots{display:grid;grid-template-columns:4px 4px;gap:2px;}
+  .nwsBar .secBtn .dots i{width:4px;height:4px;border-radius:50%;background:#ff5c1f;}
+  /* ink contents = full-screen fade overlay */
+  #shellNews.ink .nwsSheet{top:0;max-height:none;border-radius:0;background:rgba(12,12,13,0.98);color:#fff;
+    transform:none;opacity:0;pointer-events:none;transition:opacity .22s ease;box-shadow:none;padding-top:max(10px,env(safe-area-inset-top,10px));}
+  #shellNews.ink.sheet .nwsSheet{opacity:1;pointer-events:auto;transform:none;}
+  #shellNews.ink .nwsShHandle{display:none;}
+  #shellNews.ink .nwsShHead .t{font-family:'Archivo',sans-serif;font-weight:800;font-size:20px;}
+  #shellNews.ink .nwsShX{border-color:rgba(255,255,255,0.2);}
+  #shellNews.ink .nwsShSub{display:none;}
+  .nwsResume{display:none;width:calc(100% - 36px);margin:12px 18px 4px;background:#1f1f22;border:0;border-radius:16px;padding:13px 14px;
+    cursor:pointer;text-align:left;font-family:'Archivo',sans-serif;color:#fff;align-items:center;gap:12px;}
+  #shellNews.ink .nwsResume{display:flex;}
+  .nwsResume .k{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.5px;color:#ff5c1f;}
+  .nwsResume .t{font-weight:700;font-size:14.5px;margin-top:3px;}
+  .nwsResume .m{font-size:10.5px;color:#9a9aa2;margin-top:2px;}
+  .nwsResume .play{width:34px;height:34px;border-radius:50%;background:#ff5c1f;flex:0 0 auto;display:flex;align-items:center;justify-content:center;margin-left:auto;}
+  .nwsResume .play i{width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:9px solid #fff;margin-left:2px;}
+  .nwsTocRow .no{display:none;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#77777e;width:22px;flex:0 0 auto;}
+  #shellNews.ink .nwsTocRow{border-bottom-color:rgba(255,255,255,0.06);}
+  #shellNews.ink .nwsTocRow .no{display:inline-block;}
+  #shellNews.ink .nwsTocRow.on .no{color:#ff5c1f;}
+  #shellNews.ink .nwsTocRow .n{font-family:'Archivo',sans-serif;font-size:13.5px;color:#cfccc5;}
+  #shellNews.ink .nwsTocRow.on .n{color:#ff5c1f;font-weight:700;}
+  #shellNews.ink .nwsTocRow .d{visibility:hidden;}
+  #shellNews.ink .nwsTocRow .p{color:#77777e;}
+  #shellNews.ink .nwsShFoot{border-top-color:rgba(255,255,255,0.08);}
+  #shellNews.ink .nwsChip{border:1px solid rgba(255,255,255,0.22);background:none;color:#fff;}
+  #shellNews.ink .nwsChip.on{background:#ff5c1f;border-color:#ff5c1f;color:#fff;}
+  /* ---- Themes & Settings panel (Books-style) ---- */
+  .nwsSet{position:absolute;left:0;right:0;bottom:0;z-index:10;display:flex;flex-direction:column;max-height:80%;
+    border-radius:22px 22px 0 0;transform:translateY(103%);transition:transform .28s ease;}
+  #shellNews.set .nwsSet{transform:translateY(0);}
+  #shellNews.paper .nwsSet{background:url('/cor/paper-grain.png') repeat, #faf6ec;color:#201d16;box-shadow:0 -14px 40px rgba(32,29,22,0.35);}
+  #shellNews.ink .nwsSet{background:#1a1a1d;color:#fff;box-shadow:0 -14px 40px rgba(0,0,0,0.6);}
+  .nwsSet .hd{display:flex;align-items:center;justify-content:space-between;padding:4px 18px 0;flex:0 0 auto;}
+  #shellNews.paper .nwsSet .hd .t{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:19px;}
+  #shellNews.ink .nwsSet .hd .t{font-family:'Archivo',sans-serif;font-weight:800;font-size:18px;}
+  .nwsSet .bd{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 18px calc(16px + env(safe-area-inset-bottom,0px));min-height:0;}
+  .nwsSetLbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.4px;margin:12px 0 8px;}
+  #shellNews.paper .nwsSetLbl{color:#8a8171;}
+  #shellNews.ink .nwsSetLbl{color:#77777e;}
+  .nwsThemes{display:flex;gap:10px;}
+  .nwsThemeCard{flex:1;border-radius:14px;padding:14px 10px 11px;cursor:pointer;text-align:center;font-family:'Archivo',sans-serif;position:relative;border:2px solid transparent;}
+  .nwsThemeCard .aa{font-size:24px;line-height:1;}
+  .nwsThemeCard .nm{font-size:11.5px;font-weight:600;margin-top:7px;}
+  .nwsThemeCard.tPaper{background:url('/cor/paper-grain.png') repeat, #f6f1e7;color:#201d16;border-color:rgba(32,29,22,0.25);}
+  .nwsThemeCard.tPaper .aa{font-family:'Fraunces',Georgia,serif;font-weight:600;}
+  .nwsThemeCard.tInk{background:#141415;color:#fff;border-color:rgba(255,255,255,0.14);}
+  .nwsThemeCard.tInk .aa{font-family:'Archivo',sans-serif;font-weight:800;}
+  .nwsThemeCard.on{border-color:#ff5c1f;box-shadow:0 0 0 1px #ff5c1f;}
+  .nwsFonts{display:flex;flex-direction:column;}
+  .nwsFontRow{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;background:none;border:0;padding:0 2px;
+    cursor:pointer;font-size:16px;text-align:left;color:inherit;}
+  #shellNews.paper .nwsFontRow{border-bottom:1px solid rgba(32,29,22,0.14);}
+  #shellNews.ink .nwsFontRow{border-bottom:1px solid rgba(255,255,255,0.07);}
+  .nwsFontRow:last-child{border-bottom:0 !important;}
+  .nwsFontRow .chk{width:18px;height:18px;flex:0 0 auto;visibility:hidden;}
+  .nwsFontRow.on .chk{visibility:visible;}
+  .nwsFontRow .chk path{stroke:#ff5c1f;}
+  .nwsFontRow .sub{font-size:10px;margin-left:auto;flex:0 0 auto;}
+  #shellNews.paper .nwsFontRow .sub{color:#8a8171;}
+  #shellNews.ink .nwsFontRow .sub{color:#77777e;}
+  .fp-orig{font-family:inherit;}
+  .fp-ny{font-family:ui-serif,'New York',Georgia,serif;}
+  .fp-charter{font-family:'Charter','Bitstream Charter','Sitka Text',Cambria,Georgia,serif;}
+  .fp-palatino{font-family:'Palatino','Palatino Linotype','Book Antiqua','URW Palladio L',Georgia,serif;}
+  .fp-times{font-family:'Times New Roman',Times,serif;}
+  .fp-sf{font-family:system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;}
+  /* body-font overrides (prose only; Original = theme default) */
+  #shellNews.f-ny .nwsP,#shellNews.f-ny .nwsDek,#shellNews.f-ny .nwsSig,#shellNews.f-ny .nwsBy,#shellNews.f-ny .nwsQ .q{font-family:ui-serif,'New York',Georgia,serif;}
+  #shellNews.f-charter .nwsP,#shellNews.f-charter .nwsDek,#shellNews.f-charter .nwsSig,#shellNews.f-charter .nwsBy,#shellNews.f-charter .nwsQ .q{font-family:'Charter','Bitstream Charter','Sitka Text',Cambria,Georgia,serif;}
+  #shellNews.f-palatino .nwsP,#shellNews.f-palatino .nwsDek,#shellNews.f-palatino .nwsSig,#shellNews.f-palatino .nwsBy,#shellNews.f-palatino .nwsQ .q{font-family:'Palatino','Palatino Linotype','Book Antiqua','URW Palladio L',Georgia,serif;}
+  #shellNews.f-times .nwsP,#shellNews.f-times .nwsDek,#shellNews.f-times .nwsSig,#shellNews.f-times .nwsBy,#shellNews.f-times .nwsQ .q{font-family:'Times New Roman',Times,serif;}
+  #shellNews.f-sf .nwsP,#shellNews.f-sf .nwsDek,#shellNews.f-sf .nwsSig,#shellNews.f-sf .nwsBy,#shellNews.f-sf .nwsQ .q{font-family:system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;}
+
 </style>
 </head>
 <body>
@@ -146,6 +289,32 @@
     <button class="nwsPill" id="nwsPill"></button>
     <div class="nwsScrim" id="nwsScrim"></div>
     <div class="nwsSheet" id="nwsSheet" role="dialog" aria-modal="true" aria-label="Inside this issue"></div>
+    <div class="nwsBar" id="nwsBar">
+      <div class="nwsTicks" id="nwsTicks"></div>
+      <div class="row"><span class="now" id="nwsNow"></span>
+        <button class="secBtn" id="nwsSecBtn"><span class="dots"><i></i><i></i><i></i><i></i></span>Sections</button></div>
+    </div>
+    <div class="nwsSet" id="nwsSet" role="dialog" aria-modal="true" aria-label="Themes and settings">
+      <div class="nwsShHandle"></div>
+      <div class="hd"><span class="t">Themes &amp; Settings</span>
+        <button class="nwsShX" id="nwsSetX" aria-label="Close settings"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>
+      <div class="bd">
+        <div class="nwsSetLbl">THEME</div>
+        <div class="nwsThemes">
+          <button class="nwsThemeCard tPaper" data-nwstheme="paper"><div class="aa">Aa</div><div class="nm">Newspaper</div></button>
+          <button class="nwsThemeCard tInk" data-nwstheme="ink"><div class="aa">Aa</div><div class="nm">Dark</div></button>
+        </div>
+        <div class="nwsSetLbl">FONT</div>
+        <div class="nwsFonts" id="nwsFonts">
+          <button class="nwsFontRow fp-orig" data-nwsfont="orig"><span>Original</span><span class="sub">THEME DEFAULT</span><svg class="chk" viewBox="0 0 18 18" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5l4 4 8-9"/></svg></button>
+          <button class="nwsFontRow fp-ny" data-nwsfont="ny"><span>New York</span><svg class="chk" viewBox="0 0 18 18" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5l4 4 8-9"/></svg></button>
+          <button class="nwsFontRow fp-charter" data-nwsfont="charter"><span>Charter</span><svg class="chk" viewBox="0 0 18 18" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5l4 4 8-9"/></svg></button>
+          <button class="nwsFontRow fp-palatino" data-nwsfont="palatino"><span>Palatino</span><svg class="chk" viewBox="0 0 18 18" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5l4 4 8-9"/></svg></button>
+          <button class="nwsFontRow fp-times" data-nwsfont="times"><span>Times New Roman</span><svg class="chk" viewBox="0 0 18 18" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5l4 4 8-9"/></svg></button>
+          <button class="nwsFontRow fp-sf" data-nwsfont="sf"><span>San Francisco</span><svg class="chk" viewBox="0 0 18 18" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5l4 4 8-9"/></svg></button>
+        </div>
+      </div>
+    </div>
   </div>
 <script>
   /* Chronicles of Revival - July 2026 issue. Content ported from the design handoff
@@ -254,7 +423,8 @@
     function buildNews(){
       if(newsBuilt) return; newsBuilt=true;
       var I=window.COR_ISSUE, sc=el('nwsFlow');
-      var h='<div class="nwsMastP"><div class="r3"></div><div class="r1"></div><div class="nm">Chronicles of Revival</div><div class="ed">FAMILY FIRE CONFERENCE EDITION</div><div class="folio"><span>VOL. '+I.vol+' · NO. '+I.no+'</span><span>'+I.edition.toUpperCase()+'</span><span class="souls">SOULS: '+I.souls+'</span></div></div>';
+      var h='<div class="nwsMastI"><div class="eyebrow">NEWSPAPER · '+I.edition.toUpperCase()+'</div><div class="ttl">Chronicles of Revival</div><div class="meta">Vol. '+I.vol+' · No. '+I.no+' — '+I.sections.length+' sections · '+I.pages+' pages · ≈'+I.readMins+' min</div><div class="track"><i id="nwsProg"></i></div></div>'+
+            '<div class="nwsMastP"><div class="r3"></div><div class="r1"></div><div class="nm">Chronicles of Revival</div><div class="ed">FAMILY FIRE CONFERENCE EDITION</div><div class="folio"><span>VOL. '+I.vol+' · NO. '+I.no+'</span><span>'+I.edition.toUpperCase()+'</span><span class="souls">SOULS: '+I.souls+'</span></div></div>';
       I.sections.forEach(function(s,i){
         if(i>0) h+='<div class="nwsDiv"><i></i><b></b><i></i></div>';
         h+='<div class="nwsSec" data-nws="'+i+'"><div class="nwsK">'+esc(s.kicker)+'</div><div class="nwsH1">'+esc(s.title)+'</div>'+(s.byline?'<div class="nwsBy">'+esc(s.byline)+'</div>':'')+s.blocks.map(nwsBlock).join('')+'<div style="clear:both;"></div></div>';
@@ -264,9 +434,11 @@
       sc=el('nwsScroll');
       newsSecEls=[].slice.call(sc.querySelectorAll('[data-nws]'));
       /* contents sheet */
-      var sh='<div class="nwsShHandle"></div><div class="nwsShHead"><span class="t">Inside this issue</span><button class="nwsShX" id="nwsShX" aria-label="Close contents"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>';
-      sh+='<div class="nwsShSub">'+I.edition.toUpperCase()+' · VOL. '+I.vol+' NO. '+I.no+' · '+I.pages+' PAGES</div><div class="nwsToc" id="nwsToc">';
-      I.sections.forEach(function(s,i){ sh+='<button class="nwsTocRow" data-nwsjump="'+i+'"><span class="n">'+esc(s.toc)+'</span><span class="d"></span><span class="p">PG '+s.page+'</span></button>'; });
+      var sh='<div class="nwsShHandle"></div><div class="nwsShHead"><span class="t" id="nwsShT">Inside this issue</span><button class="nwsShX" id="nwsShX" aria-label="Close contents"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>';
+      sh+='<div class="nwsShSub">'+I.edition.toUpperCase()+' · VOL. '+I.vol+' NO. '+I.no+' · '+I.pages+' PAGES</div>';
+      sh+='<button class="nwsResume" id="nwsResume"><span><span class="k">CONTINUE READING</span><span class="t" style="display:block;" id="nwsResT"></span><span class="m" style="display:block;" id="nwsResM"></span></span><span class="play"><i></i></span></button>';
+      sh+='<div class="nwsToc" id="nwsToc">';
+      I.sections.forEach(function(s,i){ sh+='<button class="nwsTocRow" data-nwsjump="'+i+'"><span class="no">'+('0'+(i+1)).slice(-2)+'</span><span class="n">'+esc(s.toc)+'</span><span class="d"></span><span class="p">PG '+s.page+'</span></button>'; });
       sh+='</div><div class="nwsShFoot"><span class="lbl">APPEARANCE</span><span class="nwsChips"><button class="nwsChip" data-nwstheme="paper">Paper</button><button class="nwsChip" data-nwstheme="ink">Ink</button></span></div>';
       el('nwsSheet').innerHTML=sh;
       el('nwsShX').addEventListener('click', function(){ nwsSheet(false); });
@@ -277,7 +449,17 @@
         c.addEventListener('click', function(){ setNewsTheme(c.getAttribute('data-nwstheme')); });
       });
       sc.addEventListener('scroll', function(){ if(!newsRaf){ newsRaf=setTimeout(nwsSpy,60); } });
+      /* ink tick rail */
+      var tk='';
+      I.sections.forEach(function(s,i){ tk+='<button data-nwsjump="'+i+'" aria-label="'+esc(s.toc)+'"><i></i></button>'; });
+      el('nwsTicks').innerHTML=tk;
+      [].slice.call(el('nwsTicks').querySelectorAll('[data-nwsjump]')).forEach(function(r){
+        r.addEventListener('click', function(){ nwsJump(parseInt(r.getAttribute('data-nwsjump'),10)); });
+      });
+      el('nwsSecBtn').addEventListener('click', function(){ nwsSheet(true); });
+      el('nwsResume').addEventListener('click', function(){ nwsSheet(false); });
       applyNewsTheme();
+      applyNewsFont();
       nwsPaint();
     }
     function applyNewsTheme(){
@@ -285,6 +467,7 @@
       root.classList.toggle('paper', t==='paper');
       root.classList.toggle('ink', t==='ink');
       el('nwsLbl').textContent = t==='paper' ? 'FIRE CONF · NEWSPAPER' : 'NEWSPAPER';
+      var sht=el('nwsShT'); if(sht) sht.textContent = t==='paper' ? 'Inside this issue' : 'Sections';
       var mt=document.querySelector('meta[name=theme-color]'); if(mt) mt.setAttribute('content', t==='paper'?'#f6f1e7':'#141415');
       [].slice.call(root.querySelectorAll('[data-nwstheme]')).forEach(function(c){ c.classList.toggle('on', c.getAttribute('data-nwstheme')===t); });
     }
@@ -295,11 +478,22 @@
       setTimeout(function(){ applyNewsTheme(); root.classList.remove('fading'); }, 160);
       trackEvent('news_theme',{theme:t});
     }
+    var newsMax=0;
+    try{ newsMax=parseInt(localStorage.getItem('fc_news_max')||'0',10)||0; }catch(e){}
     function nwsPaint(){
       var I=window.COR_ISSUE, s=I.sections[newsSec], pct=Math.round(s.page/I.pages*100);
+      if(newsSec>newsMax){ newsMax=newsSec; try{ localStorage.setItem('fc_news_max',String(newsMax)); }catch(e){} }
       el('nwsPill').innerHTML='<span style="font-size:14px;line-height:1;">☰</span><span>Inside this issue</span><span class="pg">PG '+s.page+' · '+pct+'%</span>';
       var rows=el('nwsToc')?el('nwsToc').querySelectorAll('.nwsTocRow'):[];
       [].slice.call(rows).forEach(function(r,i){ r.classList.toggle('on', i===newsSec); });
+      var prog=el('nwsProg'); if(prog) prog.style.width=pct+'%';
+      var now=el('nwsNow'); if(now) now.textContent=('0'+(newsSec+1)).slice(-2)+' · '+s.toc.toUpperCase();
+      var ticks=el('nwsTicks')?el('nwsTicks').children:[];
+      [].slice.call(ticks).forEach(function(t,i){
+        t.classList.toggle('cur', i===newsSec);
+        t.classList.toggle('read', i!==newsSec && i<=newsMax);
+      });
+      var rt=el('nwsResT'); if(rt){ rt.textContent=s.title; el('nwsResM').textContent='Section '+('0'+(newsSec+1)).slice(-2)+' · Pg '+s.page+' · '+pct+'% read'; }
     }
     function nwsSpy(){
       newsRaf=0;
@@ -328,7 +522,20 @@
       var sec=newsSecEls[i]; if(sec) nwsScrollTo(Math.max(0,sec.offsetTop-6));
       trackEvent('news_jump',{section:window.COR_ISSUE.sections[i].id});
     }
-    function nwsSheet(open){ el('shellNews').classList.toggle('sheet', !!open); }
+    function nwsSheet(open){ el('shellNews').classList.toggle('sheet', !!open); if(open) el('shellNews').classList.remove('set'); }
+    function nwsSet(open){ el('shellNews').classList.toggle('set', !!open); if(open) el('shellNews').classList.remove('sheet'); }
+    var NWS_FONTS=['orig','ny','charter','palatino','times','sf'];
+    function nwsFont(){ try{ var f=localStorage.getItem('fc_news_font'); return NWS_FONTS.indexOf(f)>=0?f:'orig'; }catch(e){ return 'orig'; } }
+    function applyNewsFont(){
+      var f=nwsFont(), root=el('shellNews');
+      NWS_FONTS.forEach(function(x){ root.classList.toggle('f-'+x, x===f && x!=='orig'); });
+      [].slice.call(document.querySelectorAll('[data-nwsfont]')).forEach(function(r){ r.classList.toggle('on', r.getAttribute('data-nwsfont')===f); });
+    }
+    function setNewsFont(f){
+      try{ localStorage.setItem('fc_news_font', f); }catch(e){}
+      applyNewsFont();
+      trackEvent('news_font',{font:f});
+    }
     function savePos(){ try{ localStorage.setItem('fc_news_pos', String(el('nwsScroll').scrollTop)); }catch(e){} }
     function leaveNews(){
       savePos();
@@ -353,12 +560,24 @@
       window.addEventListener('pagehide', savePos);
       document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='hidden') savePos(); });
       document.addEventListener('keydown', function(e){
-        if(e.key==='Escape'||e.key==='Esc'){ if(el('shellNews').classList.contains('sheet')) nwsSheet(false); else leaveNews(); }
+        if(e.key==='Escape'||e.key==='Esc'){
+          var root=el('shellNews');
+          if(root.classList.contains('set')) nwsSet(false);
+          else if(root.classList.contains('sheet')) nwsSheet(false);
+          else leaveNews();
+        }
       });
       el('nwsBack').addEventListener('click', leaveNews);
-      el('nwsAa').addEventListener('click', function(){ setNewsTheme(nwsTheme()==='paper'?'ink':'paper'); });
+      el('nwsAa').addEventListener('click', function(){ nwsSet(true); trackEvent('news_settings_open'); });
+      el('nwsSetX').addEventListener('click', function(){ nwsSet(false); });
       el('nwsPill').addEventListener('click', function(){ nwsSheet(true); });
-      el('nwsScrim').addEventListener('click', function(){ nwsSheet(false); });
+      el('nwsScrim').addEventListener('click', function(){ nwsSheet(false); nwsSet(false); });
+      [].slice.call(el('nwsSet').querySelectorAll('[data-nwstheme]')).forEach(function(c){
+        c.addEventListener('click', function(){ setNewsTheme(c.getAttribute('data-nwstheme')); });
+      });
+      [].slice.call(el('nwsFonts').querySelectorAll('[data-nwsfont]')).forEach(function(r){
+        r.addEventListener('click', function(){ setNewsFont(r.getAttribute('data-nwsfont')); });
+      });
     }
     initNews();
 
