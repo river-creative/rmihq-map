@@ -2851,7 +2851,7 @@
     }
 
     /* ============ Chronicles of Revival reader ============ */
-    var newsOpen=false, newsBuilt=false, newsSec=0, newsSecEls=[], newsRaf=0;
+    var newsOpen=false, newsBuilt=false, newsSec=0, newsSecEls=[], newsRaf=0, newsPoll=0, newsLastTop=-1;
     function nwsTheme(){ try{ return localStorage.getItem('fc_news_theme')==='ink'?'ink':'paper'; }catch(e){ return 'paper'; } }
     function nwsBlock(b){
       var h='';
@@ -2960,12 +2960,18 @@
         if(pos>0) el('nwsScroll').scrollTop=pos;
       }catch(e){}
       nwsSpy();
+      /* poll fallback: some webviews suspend scroll events entirely */
+      if(!newsPoll) newsPoll=setInterval(function(){
+        var t=el('nwsScroll').scrollTop;
+        if(t!==newsLastTop){ newsLastTop=t; nwsSpy(); }
+      }, 400);
       track('/newspaper'); trackEvent('news_open',{src:src||'menu'});
       refreshNewsRows();
     }
     function closeNews(){
       if(!newsOpen) return;
       newsOpen=false;
+      if(newsPoll){ clearInterval(newsPoll); newsPoll=0; }
       try{ localStorage.setItem('fc_news_pos', String(el('nwsScroll').scrollTop)); }catch(e){}
       nwsSheet(false);
       el('shellNews').classList.remove('open');
