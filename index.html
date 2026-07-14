@@ -2827,7 +2827,40 @@
       var btns=document.querySelectorAll('#shellBar .shTab');
       for(var i=0;i<btns.length;i++){ btns[i].classList.toggle('on', btns[i].getAttribute('data-tab')===name); }
     }
+
+    /* ---- silent auto-update: pick up new deploys while the app stays open ----
+       sw.js uses skipWaiting+clients.claim, so once reg.update() finds a new build
+       it takes control and fires controllerchange. We then reload at moments the
+       user won't notice: returning to the app, or after 60s without interaction.
+       Current tab is restored via sessionStorage so the reload is invisible. */
+    if('serviceWorker' in navigator){
+      (function(){
+        var pending=false, hadCtrl=!!navigator.serviceWorker.controller, lastTouch=Date.now();
+        function check(){ if(swReg && swReg.update) swReg.update().catch(function(){}); }
+        navigator.serviceWorker.addEventListener('controllerchange', function(){
+          if(!hadCtrl){ hadCtrl=true; return; } /* first install, not an update */
+          pending=true;
+        });
+        function safeReload(){
+          if(!pending) return; pending=false;
+          try{ sessionStorage.setItem('fc_resume_tab', tab||''); }catch(e){}
+          trackEvent('auto_update_reload');
+          location.reload();
+        }
+        document.addEventListener('visibilitychange', function(){
+          if(document.visibilityState==='visible'){ check(); setTimeout(safeReload, 400); }
+        });
+        ['touchstart','scroll','pointerdown','keydown'].forEach(function(ev){
+          document.addEventListener(ev, function(){ lastTouch=Date.now(); }, {passive:true});
+        });
+        setInterval(function(){ if(pending && Date.now()-lastTouch>60000) safeReload(); }, 15000);
+        setInterval(check, 600000);
+        setTimeout(check, 30000);
+      })();
+    }
     var urlTab=(location.search.match(/[?&]tab=(today|schedule|map|vendors)/)||[])[1];
+    var resumeTab=null; try{ resumeTab=sessionStorage.getItem('fc_resume_tab')||null; sessionStorage.removeItem('fc_resume_tab'); }catch(e){}
+    if(resumeTab && !/^(today|schedule|map|vendors)$/.test(resumeTab)) resumeTab=null;
     function showTab(name){
       if(menuOpen) closeMenu(true);
       if(faqOpen) closeFaq();
@@ -2999,7 +3032,7 @@
     }
     /* refresh live NOW state every minute */
     setInterval(function(){ if(tab==='today'||tab==='schedule') renderAll(); }, 60000);
-    showTab(urlTab||'today');
+    showTab(urlTab||resumeTab||'today');
     /* deep link from the newspaper's Property Map section */
     if(/[?&]booth=1/.test(location.search)){ try{ openPavModal(); }catch(e){} }
   })();

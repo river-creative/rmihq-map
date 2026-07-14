@@ -1056,6 +1056,33 @@
         r.addEventListener('click', function(){ setNewsFont(r.getAttribute('data-nwsfont')); });
       });
     }
+
+    /* silent auto-update: reading position persists via savePos, so a reload is invisible */
+    if('serviceWorker' in navigator){
+      (function(){
+        var pending=false, hadCtrl=!!navigator.serviceWorker.controller, lastTouch=Date.now();
+        function check(){ navigator.serviceWorker.getRegistration().then(function(r){ if(r) r.update().catch(function(){}); }).catch(function(){}); }
+        navigator.serviceWorker.addEventListener('controllerchange', function(){
+          if(!hadCtrl){ hadCtrl=true; return; }
+          pending=true;
+        });
+        function safeReload(){
+          if(!pending) return; pending=false;
+          savePos();
+          trackEvent('auto_update_reload');
+          location.reload();
+        }
+        document.addEventListener('visibilitychange', function(){
+          if(document.visibilityState==='visible'){ check(); setTimeout(safeReload, 400); }
+        });
+        ['touchstart','scroll','pointerdown','keydown'].forEach(function(ev){
+          document.addEventListener(ev, function(){ lastTouch=Date.now(); }, {passive:true});
+        });
+        setInterval(function(){ if(pending && Date.now()-lastTouch>60000) safeReload(); }, 15000);
+        setInterval(check, 600000);
+        setTimeout(check, 30000);
+      })();
+    }
     initNews();
 
 })();
