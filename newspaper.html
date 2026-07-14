@@ -55,51 +55,67 @@
   /* blocks — paper values; ink overrides come in phase 2 */
   .nwsK{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:#a63c17;margin-bottom:6px;}
   .nwsH1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:23px;line-height:1.12;margin-bottom:7px;}
-  .nwsBy{font-size:12px;font-style:italic;color:#6b6353;border-bottom:1px solid rgba(32,29,22,0.25);padding-bottom:8px;margin-bottom:10px;}
+  .nwsBy{font-size:calc(12.5px*var(--fz,1));font-style:italic;color:#6b6353;border-bottom:1px solid rgba(32,29,22,0.25);padding-bottom:8px;margin-bottom:10px;}
   .nwsDek{font-size:calc(14px*var(--fz,1));font-style:italic;color:#6b6353;margin-bottom:12px;}
   .nwsP{font-size:calc(16px*var(--fz,1));line-height:1.62;text-align:justify;margin:0 0 10px;color:#2a261d;hyphens:none;-webkit-hyphens:none;}
   .nwsDC{float:left;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:50px;line-height:0.8;padding:5px 7px 0 0;}
   .nwsSig{font-size:calc(14.5px*var(--fz,1));font-style:italic;color:#2a261d;margin:0 0 6px;}
   .nwsH2{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;line-height:1.2;margin:18px 0 2px;}
   .nwsH3{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:15px;margin:0 0 4px;}
-  .nwsSub{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.2px;color:#8a8171;margin-bottom:9px;}
+  .nwsSub{font-family:'IBM Plex Mono',monospace;font-size:calc(9px*var(--fz,1));letter-spacing:1.2px;color:#8a8171;margin-bottom:9px;}
   .nwsImg{width:100%;display:block;border:1px solid rgba(32,29,22,0.35);background:rgba(32,29,22,0.08);}
-  .nwsCap{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1px;color:#8a8171;margin:6px 0 12px;line-height:1.5;}
+  .nwsCap{font-family:'IBM Plex Mono',monospace;font-size:calc(9px*var(--fz,1));letter-spacing:1px;color:#8a8171;margin:6px 0 12px;line-height:1.5;}
   .nwsPhR{float:right;width:126px;margin:3px 0 8px 12px;}
   .nwsPhR img{width:100%;display:block;border:1px solid rgba(32,29,22,0.35);background:rgba(32,29,22,0.08);}
-  .nwsPhR .nwsCap{margin:4px 0 0;font-size:7.5px;letter-spacing:0.8px;}
+  .nwsPhR .nwsCap{margin:4px 0 0;font-size:calc(8.5px*var(--fz,1));letter-spacing:0.8px;}
   .nwsStrip{display:flex;gap:6px;overflow-x:auto;margin:0 calc(var(--gut,18px)*-1);padding:0 var(--gut,18px);scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;}
   .nwsStrip::-webkit-scrollbar{display:none;}
   .nwsStrip img{height:92px;width:auto;border:1px solid rgba(32,29,22,0.35);display:block;flex:0 0 auto;background:rgba(32,29,22,0.08);}
   .nwsStrip.tall img{height:118px;}
   .nwsQ{border-top:1px solid rgba(32,29,22,0.45);border-bottom:1px solid rgba(32,29,22,0.45);padding:13px 10px;margin:0 0 12px;text-align:center;}
   .nwsQ .q{font-size:calc(18px*var(--fz,1));font-style:italic;line-height:1.4;}
-  .nwsQ .a{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1.5px;color:#a63c17;margin-top:6px;}
+  .nwsQ .a{font-family:'IBM Plex Mono',monospace;font-size:calc(9.5px*var(--fz,1));letter-spacing:1.5px;color:#a63c17;margin-top:6px;}
   .nwsStats{display:flex;gap:10px;margin-bottom:14px;}
   .nwsStats>div{flex:1;border-top:2.5px solid #201d16;padding-top:7px;}
-  .nwsStats .v{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:18px;}
-  .nwsStats .l{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:1px;color:#6b6353;margin-top:2px;}
+  .nwsStats .v{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:calc(19px*var(--fz,1));}
+  .nwsStats .l{font-family:'IBM Plex Mono',monospace;font-size:calc(9px*var(--fz,1));letter-spacing:1px;color:#6b6353;margin-top:2px;}
   .nwsLog{border-top:2px solid #201d16;}
-  .nwsLog>div{padding:8px 0;border-bottom:1px solid rgba(32,29,22,0.25);}
-  .nwsLog .t{font-size:12.5px;font-weight:bold;}
-  .nwsLog .t span{font-weight:normal;color:#6b6353;font-size:11px;}
-  .nwsLog .m{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.5px;color:#6b6353;margin-top:3px;}
+  .nwsLog>div,.nwsLog>a{display:block;padding:8px 0;border-bottom:1px solid rgba(32,29,22,0.25);color:inherit;text-decoration:none;position:relative;}
+  .nwsLog>a{padding-right:22px;}
+  .nwsLog>a .ch{position:absolute;right:6px;top:50%;width:8px;height:8px;border-right:2px solid #a63c17;border-top:2px solid #a63c17;transform:translateY(-50%) rotate(45deg);}
+  .nwsLog .t{font-size:calc(14px*var(--fz,1));font-weight:bold;}
+  .nwsLog .t span{font-weight:normal;color:#6b6353;font-size:calc(12px*var(--fz,1));}
+  .nwsLog .m{font-family:'IBM Plex Mono',monospace;font-size:calc(10.5px*var(--fz,1));letter-spacing:0.5px;color:#6b6353;margin-top:3px;}
   .nwsLdr{border-top:2px solid #201d16;margin-bottom:12px;}
   .nwsLdr>div{display:flex;align-items:baseline;gap:10px;padding:6.5px 0;border-bottom:1px solid rgba(32,29,22,0.25);}
-  .nwsLdr .n{font-size:13px;}
+  .nwsLdr .n{font-size:calc(14px*var(--fz,1));}
   .nwsLdr .d{flex:1;border-bottom:2px dotted rgba(32,29,22,0.3);transform:translateY(-3px);}
-  .nwsLdr .v{font-family:'IBM Plex Mono',monospace;font-size:11px;}
+  .nwsLdr .v{font-family:'IBM Plex Mono',monospace;font-size:calc(12px*var(--fz,1));}
   .nwsLdr .tot{border-top:1px solid #201d16;border-bottom:2.5px solid #201d16;padding:7.5px 0;}
-  .nwsLdr .tot .n{font-size:13.5px;font-weight:bold;}
-  .nwsLdr .tot .v{font-size:12px;font-weight:bold;color:#a63c17;}
+  .nwsLdr .tot .n{font-size:calc(14.5px*var(--fz,1));font-weight:bold;}
+  .nwsLdr .tot .v{font-size:calc(13px*var(--fz,1));font-weight:bold;color:#a63c17;}
   .nwsBox{border:1px solid rgba(32,29,22,0.45);padding:11px 12px;margin-top:16px;}
   .nwsBox .cap2{border-top:2px solid #201d16;margin:-11px -12px 9px;padding-top:2px;}
-  .nwsBox .row{display:flex;gap:10px;font-size:10.5px;line-height:1.5;margin-bottom:5px;}
+  .nwsBox .row{display:flex;gap:10px;font-size:calc(12.5px*var(--fz,1));line-height:1.5;margin-bottom:5px;}
   .nwsBox .row:last-child{margin-bottom:0;}
-  .nwsBox .row .k{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:1px;color:#a63c17;width:92px;flex:0 0 auto;padding-top:2px;}
-  .nwsLink{display:block;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#a63c17;text-decoration:none;margin:2px 0 12px;}
-  .nwsCols{font-family:'IBM Plex Mono',monospace;font-size:8px;line-height:1.85;color:#6b6353;column-count:2;column-gap:14px;margin:0 0 12px;}
+  .nwsBox .row .k{font-family:'IBM Plex Mono',monospace;font-size:calc(9px*var(--fz,1));letter-spacing:1px;color:#a63c17;width:92px;flex:0 0 auto;padding-top:2px;}
+  .nwsLink{display:block;font-family:'IBM Plex Mono',monospace;font-size:calc(10.5px*var(--fz,1));letter-spacing:1px;color:#a63c17;text-decoration:none;margin:2px 0 12px;padding:4px 0;}
+  .nwsCols{font-family:'IBM Plex Mono',monospace;font-size:calc(10px*var(--fz,1));line-height:1.85;color:#6b6353;column-count:2;column-gap:14px;margin:0 0 12px;}
   #shellNews.ink .nwsCols{color:#77777e;}
+  .nwsSoc2{margin:0 0 12px;}
+  .nwsSoc2 a{display:flex;align-items:center;gap:12px;min-height:50px;text-decoration:none;color:inherit;position:relative;padding-right:20px;}
+  #shellNews.paper .nwsSoc2 a{border-bottom:1px solid rgba(32,29,22,0.2);}
+  #shellNews.ink .nwsSoc2 a{border-bottom:1px solid rgba(255,255,255,0.07);}
+  .nwsSoc2 .ic{width:32px;height:32px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;}
+  .nwsSoc2 .ic svg{width:15px;height:15px;display:block;}
+  #shellNews.paper .nwsSoc2 .ic{border:1px solid rgba(32,29,22,0.4);color:#a63c17;}
+  #shellNews.ink .nwsSoc2 .ic{background:rgba(255,92,31,0.16);color:#ff5c1f;}
+  .nwsSoc2 .lb{font-size:calc(13.5px*var(--fz,1));font-weight:bold;line-height:1.25;}
+  .nwsSoc2 .lb i{display:block;font-style:normal;font-weight:normal;font-family:'IBM Plex Mono',monospace;font-size:calc(9px*var(--fz,1));letter-spacing:1px;margin-top:2px;}
+  #shellNews.paper .nwsSoc2 .lb i{color:#8a8171;}
+  #shellNews.ink .nwsSoc2 .lb i{color:#77777e;}
+  .nwsSoc2 .ch{position:absolute;right:4px;top:50%;width:8px;height:8px;border-right:2px solid currentColor;border-top:2px solid currentColor;transform:translateY(-50%) rotate(45deg);opacity:0.5;}
+  #shellNews.ink .nwsSoc2 a{color:#fff;}
   .nwsEnd{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:#8a8171;padding:26px 0 8px;}
   /* bottom pill (paper) */
   .nwsPill{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:5;
@@ -194,7 +210,9 @@
   #shellNews.ink .nwsStats .v{font-family:'Archivo',sans-serif;font-weight:800;color:#ff5c1f;}
   #shellNews.ink .nwsStats .l{color:#9a9aa2;}
   #shellNews.ink .nwsLog{border-top:0;}
-  #shellNews.ink .nwsLog>div{background:#1f1f22;border-radius:12px;padding:9px 12px;border-bottom:0;margin-bottom:7px;}
+  #shellNews.ink .nwsLog>div,#shellNews.ink .nwsLog>a{background:#1f1f22;border-radius:12px;padding:9px 12px;border-bottom:0;margin-bottom:7px;}
+  #shellNews.ink .nwsLog>a{padding-right:26px;}
+  #shellNews.ink .nwsLog>a .ch{border-color:#ff5c1f;right:12px;}
   #shellNews.ink .nwsLog .t{color:#fff;}
   #shellNews.ink .nwsLog .t span{color:#9a9aa2;}
   #shellNews.ink .nwsLog .m{color:#9a9aa2;}
@@ -596,10 +614,10 @@
        title:'Upcoming Events',
        blocks:[
         {t:'log', rows:[
-          {title:'Fire Conference: Youth Week (ages 13–19)', meta:'JUL 13–17'},
-          {title:'Fire Conference: Kids Week (ages 3–12)', meta:'JUL 13–17'},
-          {title:'Men’s Conference 2026', meta:'SEP 2–5'},
-          {title:'Fall Ministers & Leaders’ Conference', meta:'OCT 18–25'}
+          {title:'Men’s Conference 2026', meta:'SEP 2–5 · RMI WORLD HEADQUARTERS', href:'https://events.revival.com/event/mens-conference-2026'},
+          {title:'Fall Ministers & Leaders’ Conference', meta:'OCT 18–25 · RMI WORLD HEADQUARTERS', href:'https://events.revival.com/event/fall-ministers-leaders-conference-2026'},
+          {title:'Prayer Conference | Winter Campmeeting 2027', meta:'JAN 24–31, 2027 · RMI WORLD HEADQUARTERS', href:'https://events.revival.com/event/prayer-conference-winter-campmeeting-2027'},
+          {title:'Covenant Women’s Conference 2027', meta:'MAR 31–APR 3, 2027 · RMI WORLD HEADQUARTERS', href:'https://events.revival.com/event/covenant-womens-conference-2027'}
         ]},
         {t:'cap', text:'REVIVAL.COM/EVENTS · R.M.I. WORLD HEADQUARTERS'},
         {t:'cap', text:'3738 RIVER INTERNATIONAL DR. TAMPA, FL 33610 · DATES SUBJECT TO CHANGE'},
@@ -612,8 +630,9 @@
       {id:'map', toc:'Property Map', page:23, kicker:'DIRECTORY · PAGE 23',
        title:'Property Map & Conference Directory',
        blocks:[
-        {t:'photo', src:'p23-4.jpg', alt:'Campus property map schematic', cap:'PROPERTY MAP · PG. 23'},
+        {t:'photo', href:'/?tab=map', src:'p23-4.jpg', alt:'Campus property map schematic', cap:'PROPERTY MAP · PG. 23'},
         {t:'link', text:'TAP TO OPEN THE LIVE CAMPUS MAP', href:'/?tab=map'},
+        {t:'link', text:'TAP TO OPEN THE PAVILION BOOTH LAYOUT', href:'/?booth=1'},
         {t:'leader', rows:[
           ['Main Auditorium','SUMMER CAMPMEETING · ADULTS / ALL AGES'],
           ['River Pavilion','YOUTH · 13–19 YEARS'],
@@ -666,12 +685,20 @@
         {t:'cols', lines:['GREENVILLE SC · WASV-LD 50','CHATTANOOGA TN · WNGS-LD 50','WICHITA KS · WOOT-LD 6','SAN ANTONIO TX · KSMI-LD 30','RAPID CITY SD · KRTX-LD 20','BIRMINGHAM AL · KRPC-LD 33','TAMPA FL · WSWH-LD 22','MINNEAPOLIS MN · WDNP-LD 36','HUNTSVILLE AL · KKTW-LD 19','KNOXVILLE TN · WNAL-LD 27','TULSA OK · WKXT-LD 34','RALEIGH NC · KTUO-LD 22','COLUMBUS OH · WDRH-LD 16','NASHVILLE TN · WOOH-LD 29','LAS VEGAS NV · WWHL-LD 27','DENVER CO · KVGA-LD 51','CHARLESTON SC · KAVC-LD 48','GREENVILLE SC · WLOW-LD 19','JACKSONVILLE FL · WJVF-LD 23','INDIANAPOLIS IN · WSWY-LD 27','CHICO CA · KXCH-LD 19','OKLAHOMA CITY OK · KWRW-LD 33','GREENVILLE NC · WJGC-LD 33','SPRINGFIELD MO · KSFZ-LD 41','JOPLIN MO · KJLN-LD 50','SHREVEPORT LA · KVPO-LD 30','COLUMBUS GA · WXVK-LD 30','GAINESVILLE FL · WFGZ-LD 22','BUFFALO NY · WBUO-LD 30','TOPEKA KS · KTPE-LD 31','COLUMBUS MS · WLMS-LD 25','SIOUX FALLS SD · KSFX-LD 56','FARGO ND · KFGX-LD 35','BISMARCK ND · K28MS-D 46','POCATELLO ID · KPTO-LD 41','SAVANNAH GA · W31FE-D 23','BATON ROUGE LA · WRVG-LD 50']},
         {t:'h2', text:'Week in Review'},
         {t:'p', text:'Join Dr. Rodney for the “Week in Review,” a weekly news update for CTN and RTN, in conjunction with River University and the River School of Government — covering world news and current events, and reminding American citizens of their rights under the U.S. Constitution. With censorship taking place at an increasing rate, we urge you to register today on rodneyhowardbrowne.com. Check your local listings for broadcast times.'},
-        {t:'box', rows:[
-          ['FOLLOW','Dr. Rodney — F /rodneyadonicahowardbrowne · X @rhowardbrowne · YT /rodneyhowardbrowne · IG @rodneyhowardbrowne'],
-          ['','Dr. Adonica — X @ahowardbrowne · IG @adonicashowardbrowne'],
-          ['SERVICES','Sunday 9:30 AM & 7 PM (ET) · Monday–Friday 7 PM (ET)'],
-          ['CONTACT','(813) 971‑9999 · fax (813) 971‑0701 · 3738 River International Dr., Tampa, FL 33610 · PO Box 292888 · office Mon 10 AM–5 PM (ET) · Revival.com']
+        {t:'h2', text:'Follow'},
+        {t:'social', rows:[
+          {net:'fb', label:'Drs. Rodney & Adonica Howard‑Browne', sub:'Facebook', href:'https://www.facebook.com/rodneyadonicahowardbrowne/'},
+          {net:'ig', label:'@rodneyhowardbrowne', sub:'Dr. Rodney · Instagram', href:'https://www.instagram.com/rodneyhowardbrowne/'},
+          {net:'ig', label:'@adonicashowardbrowne', sub:'Dr. Adonica · Instagram', href:'https://www.instagram.com/adonicashowardbrowne/'},
+          {net:'x', label:'@rhowardbrowne', sub:'Dr. Rodney · X', href:'https://x.com/rhowardbrowne'},
+          {net:'x', label:'@ahowardbrowne', sub:'Dr. Adonica · X', href:'https://x.com/ahowardbrowne'},
+          {net:'yt', label:'Rodney Howard‑Browne', sub:'YouTube', href:'https://www.youtube.com/@rodneyhowardbrowne'}
         ]},
+        {t:'h2', text:'Service Times'},
+        {t:'p', text:'Sunday 9:30 AM & 7 PM (ET) · Monday–Friday 7 PM (ET)'},
+        {t:'h2', text:'Contact'},
+        {t:'p', text:'3738 River International Dr., Tampa, FL 33610 · PO Box 292888 · fax (813) 971‑0701 · office Mon 10 AM–5 PM (ET) · Revival.com'},
+        {t:'link', text:'CALL · (813) 971‑9999', href:'tel:+18139719999'},
         {t:'link', text:'ALL WAYS TO WATCH · REVIVAL.COM/TVBROADCAST', href:'https://www.revival.com/tvbroadcast'},
         {t:'link', text:'WATCH ON YOUTUBE · RODNEY HOWARD-BROWNE', href:'https://www.youtube.com/user/rodneyhowardbrowne'}
        ]}
@@ -688,6 +715,12 @@
     /* ============ Chronicles of Revival reader ============ */
     var newsBuilt=false, newsSec=0, newsSecEls=[], newsRaf=0, newsPoll=0, newsLastTop=-1;
     function nwsTheme(){ try{ return localStorage.getItem('fc_news_theme')==='ink'?'ink':'paper'; }catch(e){ return 'paper'; } }
+    var NWS_SOC_ICONS={
+      fb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><path d="M15.6 8.1h-1.5c-.6 0-1 .5-1 1.1v1.5h2.4l-.4 2.4h-2v5.4h-2.5v-5.4H8.8v-2.4h1.8V9.1c0-1.9 1.2-3.2 3.1-3.2h1.9z" fill="currentColor" stroke="none"/></svg>',
+      ig:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.3" cy="6.7" r="1.4" fill="currentColor" stroke="none"/></svg>',
+      x:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.7 3h3l-6.6 7.6L22 21h-6.1l-4.8-6.3L5.6 21h-3l7.1-8.1L2 3h6.3l4.3 5.7L17.7 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11 14.5z"/></svg>',
+      yt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5.5" width="20" height="13" rx="4"/><path d="M10.2 9.4l4.8 2.6-4.8 2.6z" fill="currentColor" stroke="none"/></svg>'
+    };
     function nwsBlock(b){
       var h='';
       if(b.t==='p') h='<p class="nwsP">'+esc(b.text)+'</p>';
@@ -696,17 +729,20 @@
       else if(b.t==='sig') h='<div class="nwsSig">'+b.lines.map(esc).join('<br>')+'</div>';
       else if(b.t==='h2') h='<div class="nwsH2">'+esc(b.text)+'</div>'+(b.sub?'<div class="nwsSub">'+esc(b.sub)+'</div>':'');
       else if(b.t==='h3') h='<div class="nwsH3">'+esc(b.text)+'</div>';
-      else if(b.t==='photo') h='<img class="nwsImg" loading="lazy" decoding="async"'+arS(b.src)+' src="/cor/'+b.src+'" alt="'+esc(b.alt||'')+'">'+(b.cap?'<div class="nwsCap">'+esc(b.cap)+'</div>':'');
+      else if(b.t==='photo'){ var pim='<img class="nwsImg" loading="lazy" decoding="async"'+arS(b.src)+' src="/cor/'+b.src+'" alt="'+esc(b.alt||'')+'">'; h=(b.href?'<a href="'+esc(b.href)+'">'+pim+'</a>':pim)+(b.cap?'<div class="nwsCap">'+esc(b.cap)+'</div>':''); }
       else if(b.t==='photoR') h='<div class="nwsPhR"><img loading="lazy" decoding="async"'+arS(b.src)+' src="/cor/'+b.src+'" alt="'+esc(b.alt||'')+'"><div class="nwsCap">'+esc(b.cap||'')+'</div></div>';
       else if(b.t==='strip') h='<div class="nwsStrip'+(b.tall?' tall':'')+'">'+b.imgs.map(function(im){ return '<img loading="lazy" decoding="async"'+arS(im[0])+' src="/cor/'+im[0]+'" alt="'+esc(im[1]||'')+'">'; }).join('')+'</div>';
       else if(b.t==='cap') h='<div class="nwsCap">'+esc(b.text)+'</div>';
       else if(b.t==='quote') h='<div class="nwsQ"><div class="q">'+esc(b.text)+'</div><div class="a">'+esc(b.attr||'')+'</div></div>';
       else if(b.t==='stats') h='<div class="nwsStats">'+b.cells.map(function(c){ return '<div><div class="v">'+esc(c[0])+'</div><div class="l">'+esc(c[1])+'</div></div>'; }).join('')+'</div>';
-      else if(b.t==='log') h='<div class="nwsLog">'+b.rows.map(function(r){ return '<div><div class="t">'+esc(r.title)+(r.date?' <span>'+esc(r.date)+'</span>':'')+'</div><div class="m">'+esc(r.meta)+'</div></div>'; }).join('')+'</div>';
+      else if(b.t==='log') h='<div class="nwsLog">'+b.rows.map(function(r){ var inner='<div class="t">'+esc(r.title)+(r.date?' <span>'+esc(r.date)+'</span>':'')+'</div><div class="m">'+esc(r.meta)+'</div>'; return r.href ? '<a href="'+esc(r.href)+'"'+(/^https?:/.test(r.href)?' target="_blank" rel="noopener"':'')+'>'+inner+'<b class="ch"></b></a>' : '<div>'+inner+'</div>'; }).join('')+'</div>';
       else if(b.t==='leader') h='<div class="nwsLdr">'+b.rows.map(function(r){ return '<div><span class="n">'+esc(r[0])+'</span><span class="d"></span><span class="v">'+esc(r[1])+'</span></div>'; }).join('')+(b.total?'<div class="tot"><span class="n">'+esc(b.total[0])+'</span><span style="flex:1;"></span><span class="v">'+esc(b.total[1])+'</span></div>':'')+'</div>';
       else if(b.t==='box') h='<div class="nwsBox"><div class="cap2"></div>'+(b.rows?b.rows.map(function(r){ return '<div class="row"><span class="k">'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>'; }).join(''):(b.blocks||[]).map(nwsBlock).join(''))+'</div>';
-      else if(b.t==='link') h='<a class="nwsLink" href="'+esc(b.href)+'"'+(b.href.charAt(0)==='/'?'':' target="_blank" rel="noopener"')+'>'+esc(b.text)+'</a>';
+      else if(b.t==='link') h='<a class="nwsLink" href="'+esc(b.href)+'"'+(/^https?:/.test(b.href)?' target="_blank" rel="noopener"':'')+'>'+esc(b.text)+'</a>';
       else if(b.t==='cols') h='<div class="nwsCols">'+b.lines.map(esc).join('<br>')+'</div>';
+      else if(b.t==='social') h='<div class="nwsSoc2">'+b.rows.map(function(r){
+        return '<a href="'+esc(r.href)+'" target="_blank" rel="noopener"><span class="ic">'+(NWS_SOC_ICONS[r.net]||'')+'</span><span class="lb">'+esc(r.label)+'<i>'+esc(r.sub)+'</i></span><b class="ch"></b></a>';
+      }).join('')+'</div>';
       return h;
     }
     function buildNews(){
@@ -761,11 +797,21 @@
       var mt=document.querySelector('meta[name=theme-color]'); if(mt) mt.setAttribute('content', t==='paper'?'#f6f1e7':'#141415');
       [].slice.call(root.querySelectorAll('[data-nwstheme]')).forEach(function(c){ c.classList.toggle('on', c.getAttribute('data-nwstheme')===t); });
     }
+    function nwsKeepPlace(apply){
+      var sc=el('nwsScroll'), top=sc.scrollTop, sec=null;
+      for(var i=newsSecEls.length-1;i>=0;i--){ if(newsSecEls[i].offsetTop<=top){ sec=newsSecEls[i]; break; } }
+      var frac=sec ? (top-sec.offsetTop)/(sec.offsetHeight||1) : 0;
+      apply();
+      setTimeout(function(){
+        sc.scrollTop = sec ? Math.round(sec.offsetTop + frac*(sec.offsetHeight||1)) : top;
+        nwsSpy();
+      }, 30);
+    }
     function setNewsTheme(t){
       try{ localStorage.setItem('fc_news_theme', t); }catch(e){}
       var root=el('shellNews');
       root.classList.add('fading');
-      setTimeout(function(){ applyNewsTheme(); root.classList.remove('fading'); }, 160);
+      setTimeout(function(){ nwsKeepPlace(applyNewsTheme); root.classList.remove('fading'); }, 160);
       trackEvent('news_theme',{theme:t});
     }
     var newsMax=0;
@@ -826,7 +872,7 @@
     function stepNewsSize(d){
       var i=Math.max(0, Math.min(NWS_SIZES.length-1, nwsSize()+d));
       try{ localStorage.setItem('fc_news_size', String(i)); }catch(e){}
-      applyNewsSize();
+      nwsKeepPlace(applyNewsSize);
       trackEvent('news_size',{step:i});
     }
     var NWS_FONTS=['orig','ny','charter','palatino','times','sf'];
@@ -838,7 +884,7 @@
     }
     function setNewsFont(f){
       try{ localStorage.setItem('fc_news_font', f); }catch(e){}
-      applyNewsFont();
+      nwsKeepPlace(applyNewsFont);
       trackEvent('news_font',{font:f});
     }
     function savePos(){ try{ localStorage.setItem('fc_news_pos', String(el('nwsScroll').scrollTop)); }catch(e){} }
@@ -875,8 +921,8 @@
       });
       el('nwsBack').addEventListener('click', leaveNews);
       el('nwsFlow').addEventListener('click', function(e){
-        var a=e.target.closest ? e.target.closest('a.nwsLink') : null;
-        if(a) trackEvent('news_link',{href:a.getAttribute('href')});
+        var a=e.target.closest ? e.target.closest('a') : null;
+        if(a && a.getAttribute('href')) trackEvent('news_link',{href:a.getAttribute('href')});
       });
       /* ---- media viewer: gallery slider + pinch zoom + Instagram context ---- */
       var IG_BY_SECTION={ 'tour':'celebrateamericadc', 'dc':'celebrateamericadc' };
@@ -915,6 +961,7 @@
       el('nwsFlow').addEventListener('click', function(e){
         var im=e.target;
         if(!im || im.tagName!=='IMG') return;
+        if(im.closest && im.closest('a')) return; /* linked images navigate, no lightbox */
         var secEl=im.closest ? im.closest('[data-nws]') : null;
         galSec=secEl ? (window.COR_ISSUE.sections[parseInt(secEl.getAttribute('data-nws'),10)]||{}).id : '';
         var strip=im.closest ? im.closest('.nwsStrip') : null;

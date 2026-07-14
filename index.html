@@ -2991,6 +2991,8 @@
     /* refresh live NOW state every minute */
     setInterval(function(){ if(tab==='today'||tab==='schedule') renderAll(); }, 60000);
     showTab(urlTab||'today');
+    /* deep link from the newspaper's Property Map section */
+    if(/[?&]booth=1/.test(location.search)){ try{ openPavModal(); }catch(e){} }
   })();
   </script>
 </body>
