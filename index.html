@@ -1810,6 +1810,7 @@
     pm.classList.add('open'); pm.setAttribute('aria-hidden','false'); pm.scrollTop=0; }
   function hidePavModal(){ var pm=document.getElementById('pavModal'); if(!pm) return;
     pm.classList.remove('open'); pm.setAttribute('aria-hidden','true'); }
+  window.openPavModal=openPavModal; /* deep-linked from the newspaper (?booth=1) — this whole script is module-scoped */
   (function(){ var pc=document.getElementById('pavClose'); if(pc) pc.addEventListener('click', hidePavModal);
     document.addEventListener('keydown', function(e){ var pm=document.getElementById('pavModal');
       if((e.key==='Escape'||e.key==='Esc') && pm && pm.classList.contains('open')) hidePavModal(); }); })();
