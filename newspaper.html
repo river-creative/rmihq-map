@@ -1087,7 +1087,7 @@
           location.reload();
         }
         document.addEventListener('visibilitychange', function(){
-          if(document.visibilityState==='visible'){ check(); setTimeout(safeReload, 400); }
+          if(document.visibilityState==='visible'){ check(); setTimeout(safeReload, 400); setTimeout(safeReload, 1800); }
         });
         ['touchstart','scroll','pointerdown','keydown'].forEach(function(ev){
           document.addEventListener(ev, function(){ lastTouch=Date.now(); }, {passive:true});
