@@ -1,6 +1,6 @@
 /* FIRE CONF service worker: push notifications + light offline shell */
-const CACHE = 'fireconf-v1';
-const PRECACHE = ['/', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png'];
+const CACHE = 'fireconf-v2';
+const PRECACHE = ['/', '/newspaper.html', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png', '/cor/paper-grain.png', '/cor/p01-0.jpg'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
@@ -28,15 +28,27 @@ self.addEventListener('fetch', (e) => {
           if (url.pathname === '/' || url.pathname === '/index.html') {
             const copy = res.clone();
             caches.open(CACHE).then((c) => c.put('/', copy)).catch(() => {});
+          } else if (url.pathname === '/newspaper.html') {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put('/newspaper.html', copy)).catch(() => {});
           }
           return res;
         })
-        .catch(() => caches.match('/'))
+        .catch(() => caches.match(url.pathname === '/newspaper.html' ? '/newspaper.html' : '/'))
     );
     return;
   }
-  if (url.origin === location.origin && /\.(png|webmanifest)$/.test(url.pathname)) {
-    e.respondWith(caches.match(e.request).then((hit) => hit || fetch(e.request)));
+  if (url.origin === location.origin && /\.(png|jpe?g|webmanifest)$/.test(url.pathname)) {
+    // cache-first with runtime fill: article images become readable offline after first view
+    e.respondWith(
+      caches.match(e.request).then((hit) => hit || fetch(e.request).then((res) => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+        }
+        return res;
+      }))
+    );
   }
 });
 

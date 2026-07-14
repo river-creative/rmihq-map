@@ -131,6 +131,14 @@
   #shellNews.paper .nwsChip{border:1px solid rgba(32,29,22,0.4);background:none;color:#201d16;}
   #shellNews.paper .nwsChip.on{background:#201d16;color:#f6f1e7;border-color:#201d16;}
   .nwsFlow{padding:0 18px 130px;min-height:100%;}
+  .nwsFlow img{cursor:zoom-in;}
+  .nwsLight{position:fixed;inset:0;z-index:40;background:rgba(8,8,9,0.96);display:none;flex-direction:column;
+    align-items:center;justify-content:center;padding:20px;cursor:zoom-out;}
+  .nwsLight.open{display:flex;}
+  .nwsLight img{max-width:100%;max-height:82vh;border-radius:6px;box-shadow:0 20px 80px rgba(0,0,0,0.7);}
+  .nwsLight .cap{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.2px;color:#9a9aa2;margin-top:14px;text-align:center;max-width:340px;line-height:1.6;}
+  .nwsLight .x{position:absolute;top:max(16px,env(safe-area-inset-top,16px));right:16px;width:38px;height:38px;border-radius:50%;
+    background:rgba(255,255,255,0.1);border:0;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
   #shellNews.paper .nwsFlow{background:url('/cor/paper-grain.png') repeat, #f6f1e7;}
 
   /* ---- Ink (dark) theme — 5b mockup ---- */
@@ -154,7 +162,7 @@
   #shellNews.ink .nwsH1{font-family:'Archivo',sans-serif;font-weight:800;color:#fff;font-size:21px;}
   #shellNews.ink .nwsBy{font-style:normal;color:#9a9aa2;border-bottom-color:rgba(255,255,255,0.08);}
   #shellNews.ink .nwsDek{color:#9a9aa2;}
-  #shellNews.ink .nwsP{font-size:calc(15.5px*var(--fz,1));line-height:1.66;text-align:left;color:#cfccc5;}
+  #shellNews.ink .nwsP{font-size:calc(16px*var(--fz,1));line-height:1.66;text-align:left;color:#cfccc5;}
   #shellNews.ink .nwsDC{float:none;font-family:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;padding:0;}
   #shellNews.ink .nwsSig{color:#cfccc5;}
   #shellNews.ink .nwsH2,#shellNews.ink .nwsH3{font-family:'Archivo',sans-serif;font-weight:800;color:#fff;}
@@ -301,6 +309,11 @@
       <div class="nwsTicks" id="nwsTicks"></div>
       <div class="row"><span class="now" id="nwsNow"></span>
         <button class="secBtn" id="nwsSecBtn"><span class="dots"><i></i><i></i><i></i><i></i></span>Sections</button></div>
+    </div>
+    <div class="nwsLight" id="nwsLight" role="dialog" aria-modal="true" aria-label="Image viewer">
+      <button class="x" id="nwsLightX" aria-label="Close image"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg></button>
+      <img id="nwsLightImg" alt="">
+      <div class="cap" id="nwsLightCap"></div>
     </div>
     <div class="nwsSet" id="nwsSet" role="dialog" aria-modal="true" aria-label="Themes and settings">
       <div class="nwsShHandle"></div>
@@ -537,7 +550,7 @@
     }
     function nwsSheet(open){ el('shellNews').classList.toggle('sheet', !!open); if(open) el('shellNews').classList.remove('set'); }
     function nwsSet(open){ el('shellNews').classList.toggle('set', !!open); if(open) el('shellNews').classList.remove('sheet'); }
-    var NWS_SIZES=[0.85,0.925,1,1.08,1.16];
+    var NWS_SIZES=[0.875,0.9375,1,1.125,1.25];
     function nwsSize(){ var i=2; try{ i=parseInt(localStorage.getItem('fc_news_size'),10); }catch(e){}
       return (i>=0 && i<NWS_SIZES.length) ? i : 2; }
     function applyNewsSize(){
@@ -590,12 +603,29 @@
       document.addEventListener('keydown', function(e){
         if(e.key==='Escape'||e.key==='Esc'){
           var root=el('shellNews');
+          if(el('nwsLight').classList.contains('open')){ el('nwsLight').classList.remove('open'); return; }
           if(root.classList.contains('set')) nwsSet(false);
           else if(root.classList.contains('sheet')) nwsSheet(false);
           else leaveNews();
         }
       });
       el('nwsBack').addEventListener('click', leaveNews);
+      /* lightbox: tap any article image to view full-screen */
+      el('nwsFlow').addEventListener('click', function(e){
+        var im=e.target;
+        if(im && im.tagName==='IMG'){
+          el('nwsLightImg').src=im.src;
+          el('nwsLightImg').alt=im.alt||'';
+          var wrap=im.closest ? im.closest('.nwsPhR') : null;
+          var capEl=wrap ? wrap.querySelector('.nwsCap') : (im.nextElementSibling && im.nextElementSibling.className==='nwsCap' ? im.nextElementSibling : null);
+          el('nwsLightCap').textContent=(capEl?capEl.textContent:im.alt)||'';
+          el('nwsLight').classList.add('open');
+          trackEvent('news_image_view');
+        }
+      });
+      function closeLight(){ el('nwsLight').classList.remove('open'); el('nwsLightImg').src=''; }
+      el('nwsLight').addEventListener('click', closeLight);
+      el('nwsLightX').addEventListener('click', closeLight);
       el('nwsAa').addEventListener('click', function(){ nwsSet(true); trackEvent('news_settings_open'); });
       el('nwsSetX').addEventListener('click', function(){ nwsSet(false); });
       el('nwsSzDn').addEventListener('click', function(){ stepNewsSize(-1); });
