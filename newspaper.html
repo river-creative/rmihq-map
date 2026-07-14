@@ -1061,7 +1061,18 @@
     if('serviceWorker' in navigator){
       (function(){
         var pending=false, hadCtrl=!!navigator.serviceWorker.controller, lastTouch=Date.now();
-        function check(){ navigator.serviceWorker.getRegistration().then(function(r){ if(r) r.update().catch(function(){}); }).catch(function(){}); }
+        var myTag=null;
+        function readTag(res){ return res.headers.get('etag')||res.headers.get('last-modified')||null; }
+        function check(){
+          /* the page's own ETag changes on every deploy — SW bytes usually don't */
+          fetch('/newspaper.html', {method:'HEAD', cache:'no-store'}).then(function(res){
+            var t=readTag(res); if(!t) return;
+            if(myTag===null){ myTag=t; return; }
+            if(t!==myTag){ pending=true; }
+          }).catch(function(){});
+          navigator.serviceWorker.getRegistration().then(function(r){ if(r) r.update().catch(function(){}); }).catch(function(){});
+        }
+        check(); /* baseline tag immediately */
         navigator.serviceWorker.addEventListener('controllerchange', function(){
           if(!hadCtrl){ hadCtrl=true; return; }
           pending=true;
