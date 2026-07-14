@@ -1059,6 +1059,9 @@
 
     /* silent auto-update: reading position persists via savePos, so a reload is invisible */
     if('serviceWorker' in navigator){
+      navigator.serviceWorker.addEventListener('message', function(ev){
+        var d=ev.data||{}; if(d.nav && typeof d.nav==='string'){ savePos(); location.href=d.nav; }
+      });
       (function(){
         var pending=false, hadCtrl=!!navigator.serviceWorker.controller, lastTouch=Date.now();
         var myTag=null;

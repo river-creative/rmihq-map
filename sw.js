@@ -71,7 +71,13 @@ self.addEventListener('notificationclick', (e) => {
   e.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((wins) => {
       for (const w of wins) {
-        if ('focus' in w) { w.navigate(url); return w.focus(); }
+        if ('focus' in w) {
+          // iOS does not implement WindowClient.navigate() — message the page
+          // so it navigates itself; keep navigate() for Android/desktop.
+          w.postMessage({ nav: url });
+          if (w.navigate) { try { w.navigate(url).catch(() => {}); } catch (err) {} }
+          return w.focus();
+        }
       }
       return clients.openWindow(url);
     })

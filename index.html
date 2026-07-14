@@ -2594,6 +2594,9 @@
       var a=new Uint8Array(b.length); for(var i=0;i<b.length;i++) a[i]=b.charCodeAt(i); return a; }
     var swReg=null;
     if('serviceWorker' in navigator){
+      navigator.serviceWorker.addEventListener('message', function(ev){
+        var d=ev.data||{}; if(d.nav && typeof d.nav==='string'){ location.href=d.nav; }
+      });
       navigator.serviceWorker.register('/sw.js').then(function(r){ swReg=r; refreshAlertsRow(); maybeAskAlerts(); })
         .catch(function(){ refreshAlertsRow(); });
     }
