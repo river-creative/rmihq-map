@@ -98,6 +98,8 @@
   .nwsBox .row:last-child{margin-bottom:0;}
   .nwsBox .row .k{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:1px;color:#a63c17;width:92px;flex:0 0 auto;padding-top:2px;}
   .nwsLink{display:block;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:1px;color:#a63c17;text-decoration:none;margin:2px 0 12px;}
+  .nwsCols{font-family:'IBM Plex Mono',monospace;font-size:8px;line-height:1.85;color:#6b6353;column-count:2;column-gap:14px;margin:0 0 12px;}
+  #shellNews.ink .nwsCols{color:#77777e;}
   .nwsEnd{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:#8a8171;padding:26px 0 8px;}
   /* bottom pill (paper) */
   .nwsPill{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:5;
@@ -364,7 +366,7 @@
   </div>
 <script>
   /* Chronicles of Revival - July 2026 issue. Content ported from the design handoff
-     (canvas 5a = canonical copy). Sections 3-15 land in the next build. */
+     (canvas 5a = canonical copy). Complete issue: all 16 sections. */
   window.COR_ISSUE={
     edition:'July 2026', vol:'7', no:'05', pages:24, souls:'58,835,324', readMins:18,
     sections:[
@@ -400,7 +402,7 @@
         {t:'dek', text:'By Dr. Rodney Howard‑Browne'},
         {t:'p', text:'The acceptable year of the Lord is not a date on a calendar — it is a present reality in Christ. When Jesus declared, “This day is this scripture fulfilled,” He announced the arrival of permanent Jubilee: freedom for the captive, restoration for the broken, and the overflowing favor of God for every believer.'},
         {t:'p', text:'This book confronts every religious mindset that keeps people bound to lack, fear, and striving. You will be challenged to step out of a survival mindset and into a life of faith and supernatural supply. You were not redeemed to struggle — you were redeemed to live in God’s blessing and prosperity. Your Jubilee is now.'},
-        {t:'link', text:'PURCHASE ONLINE · REVIVAL.COM · OR VISIT THE BOOKSTORE', href:'https://revival.com'}
+        {t:'link', text:'PURCHASE ONLINE · STORE.REVIVAL.COM · OR VISIT THE BOOKSTORE', href:'https://store.revival.com/'}
        ]},
       {id:'tour', toc:'500 City World Tour Update', page:4, kicker:'UPDATE · PAGE 4',
        title:'500 City World Tour: Revival Is Sweeping Across the Land!',
@@ -422,19 +424,251 @@
         {t:'strip', imgs:[['p06-0.jpg','Tour crowd'],['p06-3.jpg','Street outreach'],['p06-5.jpg','Community rally'],['p07-1.jpg','Church service'],['p07-11.jpg','Outdoor rally'],['p07-12.jpg','Celebrate America stage'],['p07-13.jpg','Crowd under umbrellas']]},
         {t:'cap', text:'REVIVAL IS SWEEPING ACROSS THE LAND · PGS. 6–7 PHOTO SPREAD'}
        ]},
-      {id:'dc', toc:'Celebrate America D.C.', page:5, kicker:'UPDATE · PAGE 5', title:'The Great Awakening Is Happening!', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'fire-home', toc:'The Fire That Starts at Home', page:8, kicker:'FEATURE · PAGES 8–9', title:'The Fire That Starts at Home', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'everywhere', toc:'Revival Everywhere You Go!', page:10, kicker:'BOOKS · PAGE 10', title:'Revival Everywhere You Go!', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'ru-grad', toc:'River University Graduation', page:11, kicker:'RIVER UNIVERSITY · PAGE 11', title:'River University Graduation', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'real', toc:'As Real As It Gets', page:12, kicker:'RECAP · PAGE 12', title:'As Real As It Gets', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'banquet', toc:'R.U. Banquet for the History Books', page:13, kicker:'RECAP · PAGE 13', title:'R.U. Banquet for the History Books', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'witness', toc:'The Power to Be a Witness', page:14, kicker:'FEATURE · PAGES 14–17', title:'The Power to Be a Witness', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'mobilized', toc:'A Ministry Mobilized', page:18, kicker:'MINISTRIES · PAGES 18–19', title:'A Ministry Mobilized', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'ru', toc:'River University', page:20, kicker:'RIVER UNIVERSITY · PAGE 20', title:'River University', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'vow', toc:'Vow of Prosperity', page:21, kicker:'DEVOTIONAL · PAGE 21', title:'Vow of Prosperity', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'events', toc:'Upcoming Events', page:22, kicker:'EVENTS · PAGE 22', title:'Upcoming Events', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'map', toc:'Property Map', page:23, kicker:'CAMPUS · PAGE 23', title:'Property Map', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]},
-      {id:'watch', toc:'Ways to Watch', page:24, kicker:'BROADCAST · PAGE 24', title:'Ways to Watch', blocks:[{t:'p', text:'(Full section arrives in the next build of this issue.)'}]}
+      {id:'dc', toc:'Celebrate America D.C.', page:5, kicker:'UPDATE · PAGE 5',
+       title:'The Great Awakening Is Happening!',
+       blocks:[
+        {t:'dek', text:'Celebrate America D.C. — carrying the fire across the DMV since June 24'},
+        {t:'stats', cells:[['357,872','SOULS RECORDED'],['5,175','LABORERS'],['326','CITIES TO DATE']]},
+        {t:'h3', text:'Soul Harvest Summary'},
+        {t:'leader', rows:[['Streets','203,111'],['HUB Churches','72,207'],['GEO Targeting DMV','55,901'],['Nursing Homes','20,511'],['Altar Call Outreach','3,557'],['Altar Call · One Night Rallies','1,571'],['Faith & Family Booth','1,014']], total:['Grand Total Souls','357,872']},
+        {t:'photo', src:'p05-1.jpg', alt:'Crowd at a Celebrate America D.C. rally', cap:'CROWDS AT A CELEBRATE AMERICA D.C. RALLY · PG. 5'},
+        {t:'p', text:'Since launching Celebrate America DC on June 24th, we’ve seen America being awakened before our eyes. From the streets, the National Mall, buses, trains, nursing homes, prisons, one‑night Holy Ghost rallies, and massive community outreaches, we are carrying the fire of God and reaching the lost.'},
+        {t:'p', text:'By God’s grace and favor, over 357,872 souls have already been recorded through the efforts of 5,175 laborers — God is on our side, surpassing our 250,000‑soul goal before the crusade ends on July 10.'},
+        {t:'p', text:'Behind each of those numbers is a life changed forever and an eternity rewritten. What moves our hearts most is watching believers who have never led one person to Christ come to our training sessions, step onto the National Mall, and lead whole groups of people to Jesus in the same afternoon. God does not need perfect vessels — He needs those who are yielding and willing.'},
+        {t:'p', text:'As part of the Great American State Fair, the Revival Ministries International exhibit booth at the Faith and Family Pavilion has been a hit! We are the only ministry in the building preaching the Gospel of Jesus Christ. This is not a coincidence, but a divine appointment.'},
+        {t:'strip', imgs:[['p05-0.jpg','D.C. memorial outreach'],['p05-2.jpg','Rally stage'],['p05-3.jpg','Preaching at the rally'],['p05-4.jpg','Prayer at the altar'],['p05-5.jpg','Celebrate America crowd panorama']]},
+        {t:'cap', text:'SCENES FROM THE D.M.V. · PG. 5'},
+        {t:'box', blocks:[{t:'dek', text:'Be on the lookout for our upcoming Special Edition: the Celebrate America D.C. recap newspaper.'}]}
+       ]},
+      {id:'fire-home', toc:'The Fire That Starts at Home', page:8, kicker:'FEATURE · PAGE 8',
+       title:'The Fire That Starts at Home',
+       byline:'By Drs. Rodney & Adonica Howard‑Browne',
+       blocks:[
+        {t:'photo', src:'p08-0.jpg', alt:'The Fire That Starts at Home — feature art', cap:'FEATURE ART FROM THE PRINT EDITION · PG. 8'},
+        {t:'drop', text:'The fire of God was never meant to stay within the four walls of a church. It was meant to burn in every home. From the beginning, God established the family as the foundation of society — a place where His presence is honored, His Word is lived, and one generation declares His works to the next.'},
+        {t:'quote', text:'“As for me and my house, we will serve the LORD.”', attr:'— JOSHUA 24:15'},
+        {t:'p', text:'God’s fire will set your home ablaze with purpose. God has a plan for every husband, every wife, every child, and every family. As you seek Him together, He will direct your steps and establish your home according to His Word.'},
+        {t:'p', text:'God’s fire will unify, restore, and realign your family. God’s Word declares, “Behold, how good and how pleasant it is for brethren to dwell together in unity!” (Psalm 133:1). Where there is forgiveness, humility, and love, the Lord commands His blessing.'},
+        {t:'p', text:'God’s fire will give your family boldness to fulfill God’s purpose together. Jesus said, “Ye are the light of the world” (Matthew 5:14). Your family was never called to blend into the darkness. You are called to shine, stand for truth, and be a witness of God’s goodness wherever He sends you.'},
+        {t:'p', text:'God’s fire will mark your marriage and your children. The Lord desires homes where husbands love, wives flourish, children are established in His ways, and every generation grows in the knowledge of Him.'},
+        {t:'quote', text:'“Train up a child in the way he should go: and when he is old, he will not depart from it.”', attr:'— PROVERBS 22:6'},
+        {t:'p', text:'Our world desperately needs families that burn with the fire of God. Homes filled with faith become places of peace. Homes built on God’s Word become places of strength. Families that seek the Lord together become living testimonies of His power and grace.'},
+        {t:'p', text:'We believe God wants to do more than touch individuals this week. He wants to strengthen entire families. As His fire fills your heart, let it fill your home. Let it transform your marriage, your children, and your future.'},
+        {t:'p', text:'“For our God is a consuming fire” (Hebrews 12:29). May His fire burn brightly in your family, and may your home become a light that points others to Jesus Christ.'}
+       ]},
+      {id:'everywhere', toc:'Revival Everywhere You Go!', page:10, kicker:'BOOKSHELF · PAGE 10',
+       title:'Revival Everywhere You Go!',
+       blocks:[
+        {t:'dek', text:'Four more titles from Dr. Rodney Howard‑Browne to carry the fire home.'},
+        {t:'strip', tall:true, imgs:[['p10-4.jpg','Prayer and Fasting'],['p10-5.jpg','The Gift of Faith'],['p10-6.jpg','The Five Pillars of Establishment'],['p10-7.jpg','The Marks of a Good Pastor']]},
+        {t:'h2', text:'Prayer & Fasting'},
+        {t:'p', text:'Dr. Rodney cuts through tradition and routine, calling believers to a lifestyle of true spiritual power through relationship, not ritual. Fasting is not a ritual, and prayer is not empty words — this book will propel you to build a consistent, powerful prayer life, hear God’s voice, and walk in spiritual authority that produces results.'},
+        {t:'h2', text:'The Gift of Faith'},
+        {t:'p', text:'In a world gripped by fear and shaking foundations, God is raising up a victorious Church empowered by supernatural faith. Drawing from Scripture, personal testimony, and decades of ministry, this book reveals how the gift of faith operates as a divine impartation — how to activate it, stand firm in adversity, and walk in the miraculous.'},
+        {t:'h2', text:'The Five Pillars of Establishment'},
+        {t:'p', text:'Your faith declaration to see what God has spoken brought into order, secured, and made permanent. Dr. Rodney reveals five key operations God uses to establish His work: Divine Order, Divine Fulfillment, Divine Alignment, Divine Manifestation, and Divine Harvest. As you align with God’s Word, stability replaces uncertainty and fulfillment replaces delay.'},
+        {t:'h2', text:'The Marks of a Good Pastor'},
+        {t:'p', text:'Pastoral ministry is not defined by personality, platform, or popularity — it is defined by Scripture. Rooted in God’s Word, it explores the character, calling, motives, anointing, and accountability of true under‑shepherds: how to discern a genuine divine call, the non‑negotiable character standards of leadership, and what it truly means to shepherd God’s people with courage and compassion.'},
+        {t:'link', text:'SCAN‑TO‑PURCHASE QR CODES IN PRINT → TAP A COVER TO BUY IN‑APP', href:'https://store.revival.com/collections/books'}
+       ]},
+      {id:'ru-grad', toc:'River University Graduation', page:11, kicker:'CAMPUS · PAGE 11',
+       title:'River University – Bible Institute Graduation',
+       blocks:[
+        {t:'photo', src:'p11-5.jpg', alt:'River University graduates celebrate', cap:'THE CLASS OF 2026 IS COMMISSIONED · MAY 25, 2026'},
+        {t:'p', text:'During the As Real As It Gets Spring Ministers’ & Leaders’ Conference, River University celebrated another milestone as graduates from the River University Bible Institute were commissioned on Sunday, May 25, 2026. This special service honored the dedication, perseverance, and spiritual growth of students who have committed themselves to preparing for a lifetime of ministry.'},
+        {t:'p', text:'These graduates leave equipped with a strong biblical foundation, practical ministry training, and an unwavering commitment to preach the uncompromised Gospel. They are being sent into churches, communities, businesses, schools, and nations to fulfill the Great Commission with boldness and the power of the Holy Spirit.'},
+        {t:'p', text:'Congratulations to the 2026 graduating class — we celebrate all that the Lord has done in your lives and look forward to seeing how He will use each of you to shake your generation with the Gospel and make an eternal impact around the world.'},
+        {t:'strip', imgs:[['p11-2.jpg','Commissioning service'],['p11-3.jpg','Graduating class'],['p11-6.jpg','Deans and honorees'],['p11-1.jpg','Worship at graduation'],['p11-7.jpg','Address to graduates']]},
+        {t:'cap', text:'SCENES FROM COMMISSIONING SUNDAY · PG. 11'}
+       ]},
+      {id:'real', toc:'As Real As It Gets', page:12, kicker:'CONFERENCE RECAP · PAGE 12',
+       title:'As Real As It Gets',
+       blocks:[
+        {t:'photo', src:'p12-1.jpg', alt:'As Real As It Gets conference art', cap:'SPRING MINISTERS’ & LEADERS’ CONFERENCE · PG. 12'},
+        {t:'p', text:'The As Real As It Gets Spring Ministers’ & Leaders’ Conference brought together pastors, evangelists, missionaries, church leaders, and ministry teams from around the world for a powerful week of refreshing, impartation, and equipping at The River Church in Tampa, Florida. Every service was marked by passionate worship, uncompromising preaching, and the tangible presence of God.'},
+        {t:'p', text:'Throughout the conference, Drs. Rodney and Adonica Howard‑Browne, along with special guest speakers, challenged ministers to remain steadfast in their calling, preach the uncompromised Word of God, and pursue lives of holiness, boldness, and complete dependence on the Holy Spirit. Messages focused on revival, soul winning, leadership, integrity, and the urgency of reaching this generation.'},
+        {t:'p', text:'Powerful altar ministry followed every service as ministers received fresh impartation, healing, renewed strength, and divine direction. Many testified of personal breakthrough, restored vision, physical healing, and a renewed passion to fulfill the Great Commission.'},
+        {t:'p', text:'The week concluded with a powerful commissioning, sending attendees back into the harvest field empowered by the Holy Spirit — once again a catalyst for revival, inspiring leaders to carry the fire of God wherever He has called them to minister.'},
+        {t:'strip', imgs:[['p12-6.jpg','Conference session'],['p12-10.jpg','Altar ministry'],['p12-4.jpg','Worship'],['p12-8.jpg','Ministers receiving prayer'],['p12-2.jpg','Packed sanctuary']]},
+        {t:'cap', text:'SCENES FROM THE WEEK · PG. 12'}
+       ]},
+      {id:'banquet', toc:'R.U. Banquet for the History Books', page:13, kicker:'CAMPUS · PAGE 13',
+       title:'An R.U. Banquet for the History Books!',
+       blocks:[
+        {t:'photo', src:'p13-14.jpg', alt:'Desert Oasis banquet', cap:'THE 28TH ANNUAL BANQUET’S DESERT OASIS THEME · PG. 13'},
+        {t:'p', text:'The 28th Annual River University Banquet was truly a night to remember. This year’s Desert Oasis theme provided the perfect setting as students, faculty, and guests gathered to celebrate another incredible year at River University.'},
+        {t:'p', text:'The evening was highlighted by the recognition of our Presidents, Drs. Rodney & Adonica Howard‑Browne, our Deans, Drs. Mark & Martha Cabrera, and our outstanding instructors, who were honored for their faithful service and received honorary degrees.'},
+        {t:'p', text:'Guests enjoyed an unforgettable evening filled with laughter, fellowship, exceptional cuisine, and outstanding student performances that showcased the remarkable talent, creativity, and excellence found throughout River University. More than just a banquet, the evening celebrated the vision, leadership, and commitment to raising up a generation that will impact the world with the Gospel — certainly one for the history books.'},
+        {t:'strip', imgs:[['p13-1.jpg','Presidents honored'],['p13-2.jpg','River University leaders'],['p13-7.jpg','Student performance'],['p13-5.jpg','Banquet guests'],['p13-6.jpg','Desert Oasis stage']]},
+        {t:'cap', text:'AN EVENING OF HONOR AND CELEBRATION · PG. 13'}
+       ]},
+      {id:'witness', toc:'The Power to Be a Witness', page:14, kicker:'FEATURE · PAGES 14–17',
+       title:'The Power to Be a Witness',
+       byline:'By Drs. Rodney & Adonica Howard‑Browne',
+       blocks:[
+        {t:'photo', src:'p14-2.jpg', alt:'Worship at sunrise', cap:'FEATURE ART FROM THE PRINT EDITION · PG. 14'},
+        {t:'quote', text:'“But ye shall receive power, after that the Holy Ghost is come upon you: and ye shall be witnesses unto me both in Jerusalem, and in all Judaea, and in Samaria, and unto the uttermost part of the earth.”', attr:'— ACTS 1:8 (KJV)'},
+        {t:'drop', text:'Jesus never intended for His Church to live powerless. The promise of the Holy Ghost was given so believers would have the power to be His witnesses — not only in their own city, but wherever He sends them.'},
+        {t:'p', text:'When you are genuinely born again and filled with the Holy Spirit, you cannot remain silent. The love of God compels you to tell others what Jesus has done, and you have to shout it out! The Holy Spirit gives you a greater awareness of the people around you. He opens your ears to hear the cries of the lost and moves your heart with compassion to reach them.'},
+        {t:'p', text:'Throughout the book of Acts, we see men and women led by the Holy Spirit to take the Gospel wherever He directed them. In Acts 16:9–10, Paul received a vision in the night of a man from Macedonia pleading, “Come over into Macedonia, and help us.” God still speaks today, and He is still calling people to carry the Good News to a lost and dying world.'},
+        {t:'quote', text:'A missionary is not one who crosses the sea but one who sees the Cross.', attr:''},
+        {t:'p', text:'As a young boy of twelve or thirteen years old, I experienced a life‑changing encounter with the Lord. In a dream, I saw Jesus and wept as I saw multitudes of people entering a lost eternity. I asked Jesus who would tell them about Him so they could be saved and make Heaven. He showed me that I would need to tell them, and I promised I would. The call to preach the Gospel is not reserved for a select few. I gave the Lord a wholehearted “yes,” a commitment that has since carried us to 101 nations of the world.'},
+        {t:'p', text:'To obey God’s Call and the Great Commission, you must have the Holy Ghost and fire. What happened on the Day of Pentecost in Acts 2 was not a one‑off experience — “While Peter yet spake these words, the Holy Ghost fell on all them which heard the word” (Acts 10:44).'},
+        {t:'p', text:'The Holy Spirit is still moving throughout the Earth. When you commit yourself to winning the lost at any cost, supernatural and miraculous things begin to happen. The mission Jesus gave His disciples in Acts 1:8 remains our mission today. It begins at home — sharing the Gospel with family, friends, neighbors, and coworkers — and continues as we minister in our communities and take the Gospel wherever the Lord opens a door. Fire was never meant to be contained. Fire spreads.'},
+        {t:'p', text:'God is still calling, anointing, and appointing men and women for His purpose. The question is not whether He is speaking, but whether we are listening. Get hungry. Get thirsty. Get desperate. Press into the presence of God. Today is your day to step into the assignment He has prepared for you.'},
+        {t:'box', blocks:[
+          {t:'photo', src:'p16-0.jpg', alt:'2026 - The Year of Establishment'},
+          {t:'h3', text:'2026 Is the Year of Establishment'},
+          {t:'p', text:'According to 1 Peter 5:10, the God of all grace perfects, establishes, strengthens, and settles His people after seasons of endurance. This year is not about beginning something new, but about standing firmly in what God has already spoken, initiated, and accelerated. What was once in motion is now secured. What was forming now functions. Establishment is God locking something in place — bringing stability, strength, and permanence to what He never intended to leave unfinished.'},
+          {t:'p', text:'In 2026, God is actively working through five divine pillars — and this is not a year of motion without result. Acceleration moves you forward; establishment makes you immovable.'},
+          {t:'log', rows:[
+            {title:'1 · Divine Order — everything brought into proper sequence, structure, and authority. Confusion removed; timing corrected; things stop colliding and start sequencing.', meta:'ECCL. 3:1 · COL. 1:17 · PROV. 16:3'},
+            {title:'2 · Divine Fulfillment — promises completed and brought to their intended end. Chapters closed, assignments completed; this is a finishing year.', meta:'NUM. 23:19 · JOSH. 21:45 · LUKE 1:45'},
+            {title:'3 · Divine Alignment — people, resources, timing, and purpose in exact position. Right relationships lock in; what was forced falls away.', meta:'AMOS 3:3 · PS. 37:23 · EPH. 2:10'},
+            {title:'4 · Divine Manifestation — what was hidden, prayed for, and believed made visible and undeniable. Prayers answered openly; testimonies undeniable.', meta:'MARK 4:22 · HAB. 2:3 · ROM. 8:19'},
+            {title:'5 · Divine Harvest — reaping without loss, increase without strain. Nothing wasted, nothing lost, nothing stolen.', meta:'GAL. 6:9 · 2 COR. 9:6 · PS. 126:6'}
+          ]},
+          {t:'dek', text:'What God ordered stays ordered. What God promised is fulfilled. What God aligned remains aligned. What God revealed cannot be hidden again. What God planted is fully harvested. What God has begun — He has now established.'}
+        ]}
+       ]},
+      {id:'mobilized', toc:'A Ministry Mobilized', page:18, kicker:'OUTREACH · PAGES 18–19',
+       title:'A Ministry Mobilized: Faith, Horsepower, and Heaven’s Purpose!',
+       blocks:[
+        {t:'dek', text:'Sometimes the best way to reach hearts is through horsepower.'},
+        {t:'photo', src:'p18-2.jpg', alt:'River Car Show custom build', cap:'THE RIVER CAR SHOW ON THE FIELD OF DREAMS · PG. 18'},
+        {t:'stats', cells:[['31,262','ATTENDANCE'],['4,114','CARS SHOWN'],['9,884','SOULS · SINCE 3/21']]},
+        {t:'p', text:'Our mission has always been about souls and fulfilling God’s divine purpose — nothing more, nothing less, and nothing else. But here at The River, we’ve discovered that sometimes the best way to reach hearts is through horsepower! Since March 2021, we’ve been turning wrenches and winning souls with our River Car Show, a dream that roared to life after Pastor Ron Phillips prophesied, “The day will come when people will come on the property just to see the cars.”'},
+        {t:'p', text:'That day came, and it hasn’t slowed down since! To date, we’ve showcased over 4,114 stunning rides under our Pavilion on the Field of Dreams — from classic cruisers to custom builds, muscle cars to modern marvels — and celebrated more than 9,884 salvation decisions along the way. Each show is a family‑friendly time of faith and fun, packed with live music, delicious food, and cash prizes for standout vehicles.'},
+        {t:'p', text:'Now we’re revving up for even greater adventures. The Church isn’t meant to stay parked; we’re built to move! This is a search and rescue mission, bringing the power of God into every lane of life: ministry, business, government, sports, and entertainment. Together, we will fulfill our vow to win 100 million souls and fuel $1 billion toward world missions. So grab your keys, shine your chrome, and join the movement that’s changing lives one engine rev at a time!'},
+        {t:'strip', imgs:[['p18-1.jpg','Classic rides under the Pavilion'],['p18-4.jpg','Custom classic'],['p18-3.jpg','Trophy presentation'],['p18-0.jpg','Car show crowd']]},
+        {t:'link', text:'RIVERCARSHOW.COM · UPCOMING SHOWS & PHOTOS', href:'https://rivercarshow.com/'},
+        {t:'h2', text:'Operation Eden: Beyond Organic Produce!'},
+        {t:'p', text:'Four words perfectly describe our land production goals: Sow, Grow, Educate, and Duplicate. Our mission is to maximize the growing capabilities of Operation Eden’s 5 acres, and educate and duplicate the results for communities and churches throughout Florida, the United States, and the world. In 2025 we continued hosting our U‑Pick Market, where River Church members picked their own produce — beyond organic from seed to harvest, nothing treated with chemicals, grown with heirloom seeds, organic soil, compost, and filtered water.'},
+        {t:'link', text:'OPERATION EDEN · REVIVAL.COM/RIVER/OPERATIONEDEN', href:'https://www.revival.com/river/operationeden'},
+        {t:'h2', text:'Kingdom Business Fellowship: Advancing the Kingdom Through Business'},
+        {t:'dek', text:'“There is an anointing to get wealth. That anointing is for daily life and for daily service.” — Dr. Rodney Howard‑Browne'},
+        {t:'p', text:'God is raising up a new breed of entrepreneurs — men and women who see their business as their ministry and their marketplace as their mission field. Through Kingdom Business Fellowship (K.B.F.), we are cultivating and raising up 300 Kingdom millionaires, a modern‑day Gideon’s army, to fund the end‑time harvest and advance God’s Kingdom across the earth (Deut. 8:17–18).'},
+        {t:'p', text:'K.B.F. training combines spiritual revelation and practical application: God’s blueprint for wealth creation, building and managing your business on biblical principles, avoiding the pitfalls of greed and pride, brands and marketing, taxes and financial stewardship. Because money is a wonderful servant but a terrible master, we train you to become a Kingdom builder, not a castle builder — to fund souls, feed nations, and fulfill the Great Commission through the vehicle of business.'},
+        {t:'link', text:'JOIN VIRTUALLY OR IN PERSON · 1ST & 3RD TUESDAYS · 6 P.M. (ET)', href:'https://kbftampa.com/'}
+       ]},
+      {id:'ru', toc:'River University', page:20, kicker:'ADMISSIONS · PAGE 20',
+       title:'River University: Raising Up Strong & Godly Leadership',
+       blocks:[
+        {t:'dek', text:'R.U. ready to write history? The August 2026 intake is quickly approaching.'},
+        {t:'p', text:'River University – River Bible Institute (R.U.) is raising up a new breed of revivalists for the 21st century. R.U. is a place where the Word of God and the Holy Spirit come together to produce life, birth ministries, and launch graduates into their respective areas of ministry and government. As you will discover, River University is not a traditional Bible school — it is a Holy Ghost training center, birthed specifically for those whose strongest desire is to know Christ and to make Him known.'},
+        {t:'h2', text:'River School of Government'},
+        {t:'p', text:'Founded in 2012, R.S.G. exists to raise up godly individuals with personal and public integrity to take up key positions in government. R.S.G. is non‑partisan — our goal is not to produce career politicians, but people who will govern according to solid, godly principles and faithfully defend the individual rights and freedoms guaranteed by God’s Natural Law and God’s Word. Full scholarships are available to all R.S.G. students. They will be the definers of policy and defenders of liberty — we have come to “turn the world upside down” (Acts 17:6)!'},
+        {t:'h2', text:'River Culinary Institute'},
+        {t:'p', text:'In service of the King: a specialty program laying a solid foundation in culinary and hospitality excellence through biblical perspectives and rigorous training. We are raising up a new breed of culinary and hospitality industry experts!'},
+        {t:'h2', text:'River School of Media'},
+        {t:'p', text:'A hands‑on, immersive training ground for the next generation of digital evangelists — film production, live broadcast, lighting, audio, photography, editing, storytelling, and emerging technologies like artificial intelligence (AI) — all while staying rooted in the power and presence of God.'},
+        {t:'strip', imgs:[['p20-1.jpg','R.U. worship'],['p20-2.jpg','Culinary training'],['p20-4.jpg','Media production'],['p20-5.jpg','Commissioning night']]},
+        {t:'box', blocks:[
+          {t:'p', text:'Start your journey today! Scholarships are available — ask about all of R.U.’s programs of study and apply now for the August 2026 intake.'},
+          {t:'link', text:'APPLY: REVIVAL.COM', href:'https://www.riveruniversity.org/admissions'}
+        ]}
+       ]},
+      {id:'vow', toc:'Vow of Prosperity', page:21, kicker:'DEVOTIONAL · PAGE 21',
+       title:'Vow of Prosperity',
+       blocks:[
+        {t:'photo', src:'p21-0.jpg', alt:'Open Bible'},
+        {t:'box', blocks:[
+          {t:'cap', text:'VOW OF PROSPERITY AND CONFESSION OF FAITH'},
+          {t:'p', text:'Dear Lord: I thank You for Your promises of material abundance for my life. You do not will poverty and need, any more than You will sin and sickness. I am thankful to know Your great salvation (Hebrews 2:3) delivers me not only from my sins, but from their consequences — from all the works of the devil (1 John 3:8) that have been sent to steal, kill, and destroy my heritage (John 10:10).'},
+          {t:'p', text:'When You created material abundance in this earth, You demonstrated that You want Your children to enjoy it and to utilize it. You placed rich treasures here (Genesis 2:9–14) for the prosperity, facility and blessing of Your children who carry out Your will among people.'},
+          {t:'p', text:'Thank You, Lord. Your Word says I shall not lack any good thing (Psalm 34:10). You shall supply all of my need (Philippians 4:19). You wish, above all things, that I prosper and be in health, even as my soul prospers (3 John 2). You have pleasure in the prosperity of Your servants (Psalm 35:27), and You have promised to make me plenteous in goods (Deuteronomy 28:11). I believe that You have commanded Your blessing upon me in all that I set my hand to (Deuteronomy 28:8), and that Christ redeemed me from the curse (Galatians 3:13) of poverty and evil, of lack and destitution.'},
+          {t:'p', text:'I will, from this day, honor You with my substance and with the firstfruits (not leftovers) of all my increase: so shall my barns be filled with plenty (Proverbs 3:9–10). The earth is the Lord’s and the fullness thereof (1 Corinthians 10:26); riches and wealth are the gift of God (Ecclesiastes 5:19). So long as I do not love money (1 Timothy 6:10) or seek to store it up or trust in riches (Mark 10:24), You will make my way prosperous, and I shall have good success (Joshua 1:8).'},
+          {t:'p', text:'I will bring my firstfruits — my first and my best — my tithes and my offerings to You for Your work, as You commanded (Malachi 3:10), and I shall prove Your Word by acting upon it. I believe You will open Heaven’s windows and pour me out blessings and harvests of much more than I bring to You. I understand that loving is giving, and giving is planting, and whatever I sow, I shall also reap — more (Galatians 6:7).'},
+          {t:'p', text:'I will begin planting. And since You are the God of miracles, I know that even if it requires a material miracle, like multiplying the boy’s lunch to feed a multitude, You will do it to guarantee my harvest. Your Word cannot return to You void (Isaiah 55:11) and the Scriptures cannot be broken (John 10:35). Although there is suffering and poverty around me, this is Satan’s work — not Yours.'},
+          {t:'p', text:'I am Your child. You are my Father. I have my roots in Divine Royalty (2 Corinthians 6:16, 1 Peter 2:9). You were rich, yet for my sake You became poor, that I through Your poverty might be rich (2 Corinthians 8:9) — materially as well as physically and spiritually. I am a blessed member of Your Royal Family where prosperity is regained. Amen!'},
+          {t:'cap', text:'EXCERPT FROM “THE MESSAGE THAT WORKS” BY T.L. OSBORN'}
+        ]},
+        {t:'dek', text:'Thank you for your generosity! Our mission has always been souls, and we are occupying until our Lord and Savior, Jesus Christ, returns for His glorious Church. As you invest into the Gospel, your harvest is inevitable because God’s Word is infallible — what God has promised, He will fulfill (2 Corinthians 9:7 AMPC).'},
+        {t:'link', text:'GIVE ONLINE · REVIVAL.COM/GIVING', href:'https://www.revival.com/giving'}
+       ]},
+      {id:'events', toc:'Upcoming Events', page:22, kicker:'PLAN AHEAD · PAGE 22',
+       title:'Upcoming Events',
+       blocks:[
+        {t:'log', rows:[
+          {title:'Fire Conference: Youth Week (ages 13–19)', meta:'JUL 13–17'},
+          {title:'Fire Conference: Kids Week (ages 3–12)', meta:'JUL 13–17'},
+          {title:'Men’s Conference 2026', meta:'SEP 2–5'},
+          {title:'Fall Ministers & Leaders’ Conference', meta:'OCT 18–25'}
+        ]},
+        {t:'cap', text:'REVIVAL.COM/EVENTS · R.M.I. WORLD HEADQUARTERS'},
+        {t:'cap', text:'3738 RIVER INTERNATIONAL DR. TAMPA, FL 33610 · DATES SUBJECT TO CHANGE'},
+        {t:'h2', text:'Healing School Has Expanded'},
+        {t:'p', text:'Healing school has expanded to two, two‑week sessions every month. Classes are 1 p.m. — 6 p.m. daily and admission is free. Doors open at 12:30 PM daily; pre‑registration is required and seating is limited. We want to see you living in God’s divine healing, divine health, and divine life!'},
+        {t:'link', text:'REGISTER: REVIVAL.COM/EVENTS · ALL SESSION DATES', href:'https://events.revival.com/'},
+        {t:'link', text:'MEN’S CONFERENCE · SEP 2–5 · DETAILS & REGISTRATION', href:'https://events.revival.com/event/mens-conference-2026'},
+        {t:'link', text:'FALL MINISTERS’ & LEADERS’ · OCT 18–25 · DETAILS', href:'https://events.revival.com/event/fall-ministers-leaders-conference-2026'}
+       ]},
+      {id:'map', toc:'Property Map', page:23, kicker:'DIRECTORY · PAGE 23',
+       title:'Property Map & Conference Directory',
+       blocks:[
+        {t:'photo', src:'p23-4.jpg', alt:'Campus property map schematic', cap:'PROPERTY MAP · PG. 23'},
+        {t:'link', text:'TAP TO OPEN THE LIVE CAMPUS MAP', href:'/?tab=map'},
+        {t:'leader', rows:[
+          ['Main Auditorium','SUMMER CAMPMEETING · ADULTS / ALL AGES'],
+          ['River Pavilion','YOUTH · 13–19 YEARS'],
+          ['River Kids','6–12 YEARS'],
+          ['River Bears','3–5 YEARS'],
+          ['Parents’ Room · Nursing Mothers’ Room · Nursery','FAMILIES'],
+          ['Studio B — the S B Experience','STUDIO B'],
+          ['2nd Floor Balconies','OVERFLOW SEATING'],
+          ['Activities · Games · Food Trucks · Booths','OUTDOOR FIELD']
+        ]},
+        {t:'box', blocks:[
+          {t:'h3', text:'Fire Week Menu'},
+          {t:'cap', text:'$10 MEAL · DESSERT + BEVERAGE INCL.'},
+          {t:'log', rows:[
+            {title:'Grilled Chicken Peri Peri Sandwich — slap chips, drink included'},
+            {title:'Ropa Vieja Shredded Beef Bowl — mango salsa, cilantro crema, drink included'},
+            {title:'Chopped BBQ Brisket Sandwich — cole slaw'},
+            {title:'Chicken Katsu with Curry Sauce — sticky rice, kimchi, drink included'}
+          ]},
+          {t:'cap', text:'SUNDAY–WEDNESDAY MENU REPEATS THURSDAY–SUNDAY'}
+        ]},
+        {t:'h2', text:'Fulfill the Great Commission'},
+        {t:'p', text:'In addition to the Soul‑winning Script and Gospel Survey, we’ve provided several free resources to help you lead others to Christ — download your copies at revival.com/soulwinningtools, and don’t forget to post your soul‑winning stats at revival.com/poststats.'},
+        {t:'p', text:'Be a part of the S3 Mission. One person cannot save the whole world alone, but together we can reap a great harvest! We are looking for churches, evangelists, ministries, and believers to join us on our mission to reach 100 million souls for Jesus Christ — register at revival.com/JoinS3.'},
+        {t:'p', text:'Free gift — take revival everywhere you go! Download all 22 e‑books from Dr. Rodney Howard‑Browne as a free gift.'},
+        {t:'link', text:'SOUL‑WINNING TOOLS · REVIVAL.COM/SOULWINNINGTOOLS', href:'https://www.revival.com/soulwinningtools'},
+        {t:'link', text:'JOIN THE S3 MISSION · REVIVAL.COM/JOINS3', href:'https://www.revival.com/joins3'},
+        {t:'link', text:'FREE E‑BOOKS & POST STATS · REVIVAL.COM/FREEDOWNLOADS', href:'https://www.revival.com/freedownloads'}
+       ]},
+      {id:'watch', toc:'Ways to Watch', page:24, kicker:'BROADCAST · PAGE 24',
+       title:'Ways to Watch',
+       blocks:[
+        {t:'dek', text:'Through the combined efforts of television, radio, print, and digital platforms, Revival Ministries International and The River Church are reaching over 60 million actual people a month.'},
+        {t:'h2', text:'Online Live Streaming'},
+        {t:'p', text:'Sunday 9:30 AM & 7 PM (ET) on Revival.com, the RevivalApp, the River Church App, the Rodney Howard‑Browne YouTube channel, and the Rodney & Adonica Howard‑Browne Facebook page.'},
+        {t:'link', text:'WATCH LIVE · REVIVALTV.COM', href:'https://www.revivaltv.com/'},
+        {t:'h2', text:'Live Broadcast'},
+        {t:'log', rows:[
+          {title:'CTN Lifestyle Network', meta:'— ctnlifestyle.com for a channel in your area'},
+          {title:'Great Awakening Show', meta:'— Christian Television Network · ctnonline.com'},
+          {title:'Revenue Frontier · DirecTV 92 & 308', meta:'— Sun 9:30 AM & 7 PM ET · Mon–Sat 7 PM ET'},
+          {title:'World Harvest TV', meta:'— Mon–Sat 5:30 AM'}
+        ]},
+        {t:'h2', text:'U.S. Satellite · Direct to Home'},
+        {t:'cols', lines:['MON–SUN · 7P–11P · CHANNELS 92, 308','SUNDAY · 9:30A–1:30P · CHANNEL 218','MON–SUN · 9P–1A PST · CHANNEL 218','SAT & SUN · 1–4A PST']},
+        {t:'h2', text:'International FTA Satellite · 24/7'},
+        {t:'cols', lines:['E65W · CARIBBEAN / CENTRAL AMERICA / LATAM · CH 816','E113 · NORTH AMERICA · CH 2110','E117 · ELEVATE / ORBY TV (USA)','HOTBIRD 13 · EUROPE · TRANSPONDER 81','ASIASAT 7 · ASIA · TRANSPONDER C7H','E7W/8W · MIDDLE EAST / NORTHERN AFRICA','E7B/C · AFRICA · TRANSPONDER H3']},
+        {t:'h2', text:'OTA Broadcast · Affiliates Nationwide'},
+        {t:'dek', text:'Mon–Sun 11P–2A · Sun 9:30A–1:30P (EST/PST dual feed) · check local listings'},
+        {t:'cols', lines:['GREENVILLE SC · WASV-LD 50','CHATTANOOGA TN · WNGS-LD 50','WICHITA KS · WOOT-LD 6','SAN ANTONIO TX · KSMI-LD 30','RAPID CITY SD · KRTX-LD 20','BIRMINGHAM AL · KRPC-LD 33','TAMPA FL · WSWH-LD 22','MINNEAPOLIS MN · WDNP-LD 36','HUNTSVILLE AL · KKTW-LD 19','KNOXVILLE TN · WNAL-LD 27','TULSA OK · WKXT-LD 34','RALEIGH NC · KTUO-LD 22','COLUMBUS OH · WDRH-LD 16','NASHVILLE TN · WOOH-LD 29','LAS VEGAS NV · WWHL-LD 27','DENVER CO · KVGA-LD 51','CHARLESTON SC · KAVC-LD 48','GREENVILLE SC · WLOW-LD 19','JACKSONVILLE FL · WJVF-LD 23','INDIANAPOLIS IN · WSWY-LD 27','CHICO CA · KXCH-LD 19','OKLAHOMA CITY OK · KWRW-LD 33','GREENVILLE NC · WJGC-LD 33','SPRINGFIELD MO · KSFZ-LD 41','JOPLIN MO · KJLN-LD 50','SHREVEPORT LA · KVPO-LD 30','COLUMBUS GA · WXVK-LD 30','GAINESVILLE FL · WFGZ-LD 22','BUFFALO NY · WBUO-LD 30','TOPEKA KS · KTPE-LD 31','COLUMBUS MS · WLMS-LD 25','SIOUX FALLS SD · KSFX-LD 56','FARGO ND · KFGX-LD 35','BISMARCK ND · K28MS-D 46','POCATELLO ID · KPTO-LD 41','SAVANNAH GA · W31FE-D 23','BATON ROUGE LA · WRVG-LD 50']},
+        {t:'h2', text:'Week in Review'},
+        {t:'p', text:'Join Dr. Rodney for the “Week in Review,” a weekly news update for CTN and RTN, in conjunction with River University and the River School of Government — covering world news and current events, and reminding American citizens of their rights under the U.S. Constitution. With censorship taking place at an increasing rate, we urge you to register today on rodneyhowardbrowne.com. Check your local listings for broadcast times.'},
+        {t:'box', rows:[
+          ['FOLLOW','Dr. Rodney — F /rodneyadonicahowardbrowne · X @rhowardbrowne · YT /rodneyhowardbrowne · IG @rodneyhowardbrowne'],
+          ['','Dr. Adonica — X @ahowardbrowne · IG @adonicashowardbrowne'],
+          ['SERVICES','Sunday 9:30 AM & 7 PM (ET) · Monday–Friday 7 PM (ET)'],
+          ['CONTACT','(813) 971‑9999 · fax (813) 971‑0701 · 3738 River International Dr., Tampa, FL 33610 · PO Box 292888 · office Mon 10 AM–5 PM (ET) · Revival.com']
+        ]},
+        {t:'link', text:'ALL WAYS TO WATCH · REVIVAL.COM/TVBROADCAST', href:'https://www.revival.com/tvbroadcast'},
+        {t:'link', text:'WATCH ON YOUTUBE · RODNEY HOWARD-BROWNE', href:'https://www.youtube.com/user/rodneyhowardbrowne'}
+       ]}
     ]};
 </script>
 <script>
@@ -463,7 +697,8 @@
       else if(b.t==='log') h='<div class="nwsLog">'+b.rows.map(function(r){ return '<div><div class="t">'+esc(r.title)+(r.date?' <span>'+esc(r.date)+'</span>':'')+'</div><div class="m">'+esc(r.meta)+'</div></div>'; }).join('')+'</div>';
       else if(b.t==='leader') h='<div class="nwsLdr">'+b.rows.map(function(r){ return '<div><span class="n">'+esc(r[0])+'</span><span class="d"></span><span class="v">'+esc(r[1])+'</span></div>'; }).join('')+(b.total?'<div class="tot"><span class="n">'+esc(b.total[0])+'</span><span style="flex:1;"></span><span class="v">'+esc(b.total[1])+'</span></div>':'')+'</div>';
       else if(b.t==='box') h='<div class="nwsBox"><div class="cap2"></div>'+(b.rows?b.rows.map(function(r){ return '<div class="row"><span class="k">'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>'; }).join(''):(b.blocks||[]).map(nwsBlock).join(''))+'</div>';
-      else if(b.t==='link') h='<a class="nwsLink" href="'+esc(b.href)+'" target="_blank" rel="noopener">'+esc(b.text)+'</a>';
+      else if(b.t==='link') h='<a class="nwsLink" href="'+esc(b.href)+'"'+(b.href.charAt(0)==='/'?'':' target="_blank" rel="noopener"')+'>'+esc(b.text)+'</a>';
+      else if(b.t==='cols') h='<div class="nwsCols">'+b.lines.map(esc).join('<br>')+'</div>';
       return h;
     }
     function buildNews(){
@@ -631,9 +866,21 @@
         }
       });
       el('nwsBack').addEventListener('click', leaveNews);
+      el('nwsFlow').addEventListener('click', function(e){
+        var a=e.target.closest ? e.target.closest('a.nwsLink') : null;
+        if(a) trackEvent('news_link',{href:a.getAttribute('href')});
+      });
       /* ---- media viewer: gallery slider + pinch zoom + Instagram context ---- */
       var IG_BY_SECTION={ 'tour':'celebrateamericadc', 'dc':'celebrateamericadc' };
       var IG_DEFAULT='rmihq';
+      var BOOK_LINKS={
+        '12 Qualifications and Responsibilities of Leadership':'https://store.revival.com/products/12-qualifications-and-responsibilities-of-leadership',
+        'This Is Your Jubilee':'https://store.revival.com/products/the-acceptable-year-of-the-lord-jubilee',
+        'Prayer and Fasting':'https://store.revival.com/products/the-marks-of-a-good-pastor-copy',
+        'The Gift of Faith':'https://store.revival.com/products/the-gift-of-faith',
+        'The Five Pillars of Establishment':'https://store.revival.com/products/the-five-pillars-of-establishment',
+        'The Marks of a Good Pastor':'https://store.revival.com/products/the-marks-of-a-good-pastor'
+      };
       var gal=[], galIdx=0, gz={s:1,tx:0,ty:0}, galSec='';
       function galApply(){ el('nwsLightImg').style.transform='translate('+gz.tx+'px,'+gz.ty+'px) scale('+gz.s+')'; }
       function galReset(){ gz={s:1,tx:0,ty:0}; galApply(); }
@@ -646,9 +893,14 @@
         el('nwsLightPrev').disabled=galIdx<=0;
         el('nwsLightNext').disabled=galIdx>=gal.length-1;
         el('nwsLightPrev').style.display=el('nwsLightNext').style.display=(gal.length>1?'flex':'none');
-        var handle=IG_BY_SECTION[galSec]||IG_DEFAULT;
-        el('nwsLightIg').href='https://instagram.com/'+handle;
-        el('nwsLightIgT').textContent='MORE ON INSTAGRAM · @'+handle.toUpperCase();
+        if(galSec==='books'||galSec==='everywhere'){
+          el('nwsLightIg').href=BOOK_LINKS[it.alt]||'https://store.revival.com/collections/books';
+          el('nwsLightIgT').textContent=BOOK_LINKS[it.alt] ? 'BUY THIS BOOK · REVIVAL STORE' : 'BROWSE BOOKS · REVIVAL STORE';
+        } else {
+          var handle=IG_BY_SECTION[galSec]||IG_DEFAULT;
+          el('nwsLightIg').href='https://instagram.com/'+handle;
+          el('nwsLightIgT').textContent='MORE ON INSTAGRAM · @'+handle.toUpperCase();
+        }
         el('nwsLightIg').style.display='inline-flex';
         galReset();
       }
