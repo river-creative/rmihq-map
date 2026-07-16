@@ -888,13 +888,14 @@
       trackEvent('news_font',{font:f});
     }
     function savePos(){ try{ localStorage.setItem('fc_news_pos', String(el('nwsScroll').scrollTop)); }catch(e){} }
+    function nwsStandalone(){ return (window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true; }
     function leaveNews(){
       savePos();
-      /* iOS standalone: history.back() can restore a jettisoned document as a
-         blank white screen (force-quit territory). Always hard-navigate home
-         in the installed app; keep back() only for normal browser tabs. */
-      var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
-      if(!standalone && history.length>1 && document.referrer.indexOf(location.origin)===0) history.back();
+      /* iOS standalone: history restore of a jettisoned document = dead white
+         webview. Use replace() so standalone history stays depth-1 and the
+         edge-swipe back gesture has nothing to restore. */
+      if(nwsStandalone()){ location.replace('/'); return; }
+      if(history.length>1 && document.referrer.indexOf(location.origin)===0) history.back();
       else location.href='/';
     }
     function initNews(){
@@ -926,7 +927,11 @@
       el('nwsBack').addEventListener('click', leaveNews);
       el('nwsFlow').addEventListener('click', function(e){
         var a=e.target.closest ? e.target.closest('a') : null;
-        if(a && a.getAttribute('href')) trackEvent('news_link',{href:a.getAttribute('href')});
+        if(a && a.getAttribute('href')){
+          var href=a.getAttribute('href');
+          trackEvent('news_link',{href:href});
+          if(href.charAt(0)==='/' && nwsStandalone()){ e.preventDefault(); savePos(); location.replace(href); }
+        }
       });
       /* ---- media viewer: gallery slider + pinch zoom + Instagram context ---- */
       var IG_BY_SECTION={ 'tour':'celebrateamericadc', 'dc':'celebrateamericadc' };
@@ -1064,7 +1069,10 @@
     /* silent auto-update: reading position persists via savePos, so a reload is invisible */
     if('serviceWorker' in navigator){
       navigator.serviceWorker.addEventListener('message', function(ev){
-        var d=ev.data||{}; if(d.nav && typeof d.nav==='string'){ savePos(); location.href=d.nav; }
+        var d=ev.data||{};
+        if(d.nav && typeof d.nav==='string'){
+          setTimeout(function(){ savePos(); if(nwsStandalone()) location.replace(d.nav); else location.href=d.nav; }, 250);
+        }
       });
       (function(){
         var pending=false, hadCtrl=!!navigator.serviceWorker.controller, lastTouch=Date.now();

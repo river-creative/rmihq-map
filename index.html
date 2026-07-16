@@ -2443,7 +2443,7 @@
         '</span>'+
         '<span style="background:var(--sh-org);color:#fff;font-size:11.5px;font-weight:700;border-radius:999px;padding:8px 13px;flex:0 0 auto;">Read</span>'+
         (opened?'':'<span style="position:absolute;top:0;right:0;background:var(--sh-org);color:#fff;font-family:ui-monospace,monospace;font-size:7px;letter-spacing:1px;padding:3px 8px 4px;border-radius:0 0 0 8px;">NEW</span>');
-      press.addEventListener('click', function(){ location.href='/newspaper.html?src=today'; });
+      press.addEventListener('click', function(){ if(isStandalone()) location.replace('/newspaper.html?src=today'); else location.href='/newspaper.html?src=today'; });
       (pw||c).appendChild(press);
     }
 
@@ -2595,7 +2595,13 @@
     var swReg=null;
     if('serviceWorker' in navigator){
       navigator.serviceWorker.addEventListener('message', function(ev){
-        var d=ev.data||{}; if(d.nav && typeof d.nav==='string'){ location.href=d.nav; }
+        var d=ev.data||{};
+        if(d.nav && typeof d.nav==='string'){
+          /* small delay: navigating synchronously while iOS is still resuming the
+             page can kill the webview; replace() keeps standalone history depth-1
+             so the edge-swipe gesture can never restore a jettisoned document */
+          setTimeout(function(){ if(isStandalone()) location.replace(d.nav); else location.href=d.nav; }, 250);
+        }
       });
       navigator.serviceWorker.register('/sw.js').then(function(r){ swReg=r; refreshAlertsRow(); maybeAskAlerts(); })
         .catch(function(){ refreshAlertsRow(); });
@@ -2997,7 +3003,7 @@
     el('shMenuAlerts').addEventListener('click', function(){ openAlerts(); });
     el('shAskGo').addEventListener('click', function(){ closeAsk(); toggleAlerts(); });
     el('shAlertsClose').addEventListener('click', function(){ closeAlerts(); });
-    el('shMenuNews').addEventListener('click', function(){ location.href='/newspaper.html?src=menu'; });
+    el('shMenuNews').addEventListener('click', function(){ if(isStandalone()) location.replace('/newspaper.html?src=menu'); else location.href='/newspaper.html?src=menu'; });
     refreshNewsRows();
     el('alMaster').addEventListener('click', function(){ toggleAlerts(); });
     el('alYouth').addEventListener('click', function(){ setGroup('youth', !hasGroup('youth')); });
