@@ -890,7 +890,11 @@
     function savePos(){ try{ localStorage.setItem('fc_news_pos', String(el('nwsScroll').scrollTop)); }catch(e){} }
     function leaveNews(){
       savePos();
-      if(history.length>1 && document.referrer.indexOf(location.origin)===0) history.back();
+      /* iOS standalone: history.back() can restore a jettisoned document as a
+         blank white screen (force-quit territory). Always hard-navigate home
+         in the installed app; keep back() only for normal browser tabs. */
+      var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+      if(!standalone && history.length>1 && document.referrer.indexOf(location.origin)===0) history.back();
       else location.href='/';
     }
     function initNews(){
